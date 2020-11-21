@@ -1,0 +1,5 @@
+require ["fileinto", "mailbox"];
+if address "From" "someone@example.org"
+{
+    fileinto :create "Someone";
+}
