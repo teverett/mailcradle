@@ -13,7 +13,7 @@ public class KMailSorterConfiguration {
 	/**
 	 * filename
 	 */
-	public static String propertiesFile = "kMailSorter.properties";
+	public static String propertiesFile = "kmailsorter.properties";
 
 	/**
 	 * singleton getter
