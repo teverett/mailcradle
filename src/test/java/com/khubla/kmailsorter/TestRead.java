@@ -12,9 +12,8 @@ public class TestRead {
 	@Test
 	public void test1() {
 		try {
-			final InputStream inputStream = TestRead.class.getResourceAsStream("/example1.txt");
-			assertNotNull(inputStream);
-			final Mailsort mailsort = MailsortMarshaller.importRules(inputStream);
+			final File file = new File("src/test/resources/example1.txt");
+			final Mailsort mailsort = MailsortMarshaller.importRules(file);
 			/*
 			 * mailsort
 			 */
@@ -27,9 +26,8 @@ public class TestRead {
 	@Test
 	public void test2() {
 		try {
-			final InputStream inputStream = TestRead.class.getResourceAsStream("/example2.txt");
-			assertNotNull(inputStream);
-			final Mailsort mailsort = MailsortMarshaller.importRules(inputStream);
+			final File file = new File("src/test/resources/example2.txt");
+			final Mailsort mailsort = MailsortMarshaller.importRules(file);
 			/*
 			 * mailsort
 			 */
@@ -42,9 +40,8 @@ public class TestRead {
 	@Test
 	public void test3() {
 		try {
-			final InputStream inputStream = TestRead.class.getResourceAsStream("/example3.txt");
-			assertNotNull(inputStream);
-			final Mailsort mailsort = MailsortMarshaller.importRules(inputStream);
+			final File file = new File("src/test/resources/example3.txt");
+			final Mailsort mailsort = MailsortMarshaller.importRules(file);
 			/*
 			 * mailsort
 			 */
@@ -57,9 +54,8 @@ public class TestRead {
 	@Test
 	public void test4() {
 		try {
-			final InputStream inputStream = TestRead.class.getResourceAsStream("/example4.txt");
-			assertNotNull(inputStream);
-			final Mailsort mailsort = MailsortMarshaller.importRules(inputStream);
+			final File file = new File("src/test/resources/example4.txt");
+			final Mailsort mailsort = MailsortMarshaller.importRules(file);
 			/*
 			 * mailsort
 			 */
@@ -72,9 +68,8 @@ public class TestRead {
 	@Test
 	public void test5() {
 		try {
-			final InputStream inputStream = TestRead.class.getResourceAsStream("/example5.txt");
-			assertNotNull(inputStream);
-			final Mailsort mailsort = MailsortMarshaller.importRules(inputStream);
+			final File file = new File("src/test/resources/example5.txt");
+			final Mailsort mailsort = MailsortMarshaller.importRules(file);
 			/*
 			 * mailsort
 			 */

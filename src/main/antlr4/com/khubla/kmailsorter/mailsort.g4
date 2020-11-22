@@ -89,10 +89,15 @@ listrelation
 
 action
    : moveaction
+   | forwardaction
    ;
 
 moveaction
    : 'moveto' string ';'
+   ;
+
+forwardaction
+   : 'forwardto' string ';'
    ;
 
 identifier

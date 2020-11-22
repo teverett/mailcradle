@@ -4,12 +4,18 @@ import java.io.*;
 import java.util.*;
 
 import org.antlr.v4.runtime.*;
+import org.apache.logging.log4j.*;
 
 import com.khubla.kmailsorter.domain.*;
 import com.khubla.kmailsorter.listener.*;
 
 public class MailsortMarshaller {
-	public static Mailsort importRules(InputStream inputStream) throws IOException {
+	/**
+	 * logger
+	 */
+	private static final Logger logger = LogManager.getLogger(MailsortMarshaller.class);
+
+	public static Mailsort importRules(File file) throws IOException {
 		/*
 		 * list of imported files
 		 */
@@ -17,15 +23,19 @@ public class MailsortMarshaller {
 		/*
 		 * import
 		 */
-		return importRules(inputStream, imported);
+		return importRules(file, imported);
 	}
 
-	private static Mailsort importRules(InputStream inputStream, List<String> imported) throws IOException {
-		if (null != inputStream) {
+	private static Mailsort importRules(File file, List<String> imported) throws IOException {
+		if (null != file) {
+			/*
+			 * output
+			 */
+			System.out.println("Reading: " + file.getAbsolutePath());
 			/*
 			 * make Lexer
 			 */
-			final Lexer lexer = new mailsortLexer(CharStreams.fromStream(inputStream));
+			final Lexer lexer = new mailsortLexer(CharStreams.fromStream(new FileInputStream(file)));
 			/*
 			 * get a TokenStream on the Lexer
 			 */
@@ -59,9 +69,13 @@ public class MailsortMarshaller {
 		for (final String importName : mailsort.getImports()) {
 			if (false == imported.contains(importName)) {
 				imported.add(importName);
-				final FileInputStream fis = new FileInputStream(importName);
-				final Mailsort subFile = importRules(fis, imported);
-				mailsort.merge(subFile);
+				final File file = new File(importName);
+				if (file.exists()) {
+					final Mailsort subFile = importRules(file, imported);
+					mailsort.merge(subFile);
+				} else {
+					logger.fatal("Unable to import file: " + importName);
+				}
 			}
 		}
 	}
