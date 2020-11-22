@@ -9,6 +9,7 @@ public class StringListener extends AbstractListener {
 	public void enterString(sieveParser.StringContext ctx) {
 		if (null != ctx.QUOTEDSTRING()) {
 			string = ctx.QUOTEDSTRING().getText();
+			string = string.substring(1, string.length() - 1);
 		}
 		if (null != ctx.multiline()) {
 			final MultilineListener multilineListener = new MultilineListener();

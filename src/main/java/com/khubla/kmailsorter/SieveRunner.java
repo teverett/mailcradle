@@ -31,8 +31,8 @@ public class SieveRunner {
 	 * @throws MessagingException
 	 */
 	private void runCommand(Message message, Command command) throws MessagingException {
-		logger.info("Running command: " + command.getName() + " on message " + message.getMessageNumber());
-		final SieveCommand sieveCommand = SieveCommandFactory.getCommand(command.getName());
+		logger.info("Running command: " + command.getCommandType().toString() + " on message " + message.getMessageNumber());
+		final SieveCommand sieveCommand = SieveCommandFactory.getCommand(command.getCommandType());
 		if (null != sieveCommand) {
 			sieveCommand.execute(message, command);
 		}

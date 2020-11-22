@@ -1,12 +1,12 @@
-package com.khubla.kmailsorter.command;
+package com.khubla.kmailsorter.action;
 
 import javax.mail.*;
 
 import com.khubla.kmailsorter.domain.*;
 
-public class RequireSieveCommand implements SieveCommand {
+public class DiscardSieveActionType implements SieveAction {
 	@Override
 	public void execute(Message message, Command command) throws MessagingException {
-		// we good
+		// TODO Auto-generated method stub
 	}
 }

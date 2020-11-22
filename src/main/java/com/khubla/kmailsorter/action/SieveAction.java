@@ -1,9 +1,9 @@
-package com.khubla.kmailsorter.command;
+package com.khubla.kmailsorter.action;
 
 import javax.mail.*;
 
 import com.khubla.kmailsorter.domain.*;
 
-public interface SieveCommand {
+public interface SieveAction {
 	void execute(Message message, Command command) throws MessagingException;
 }

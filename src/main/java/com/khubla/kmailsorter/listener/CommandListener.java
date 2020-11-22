@@ -15,7 +15,7 @@ public class CommandListener extends AbstractListener {
 		String name = null;
 		if (null != ctx.IDENTIFIER()) {
 			name = ctx.IDENTIFIER().getText();
-			command.setName(name);
+			command.setCommandType(name);
 		}
 		/*
 		 * args
