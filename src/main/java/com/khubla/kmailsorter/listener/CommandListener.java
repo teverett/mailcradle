@@ -1,6 +1,7 @@
 package com.khubla.kmailsorter.listener;
 
 import com.khubla.kmailsorter.*;
+import com.khubla.kmailsorter.command.*;
 import com.khubla.kmailsorter.domain.*;
 
 public class CommandListener extends AbstractListener {
@@ -15,7 +16,7 @@ public class CommandListener extends AbstractListener {
 		String name = null;
 		if (null != ctx.IDENTIFIER()) {
 			name = ctx.IDENTIFIER().getText();
-			command.setCommandType(name);
+			command.setCommandType(CommandType.fromString(name));
 		}
 		/*
 		 * args

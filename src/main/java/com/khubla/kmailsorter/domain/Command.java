@@ -32,20 +32,4 @@ public class Command {
 	public void setCommandType(CommandType commandType) {
 		this.commandType = commandType;
 	}
-
-	public void setCommandType(String commandType) {
-		switch (commandType) {
-			case "if":
-				this.commandType = CommandType.if_;
-				break;
-			case "require":
-				this.commandType = CommandType.require;
-				break;
-			case "stop":
-				this.commandType = CommandType.stop;
-				break;
-			default:
-				this.commandType = null;
-		}
-	}
 }
