@@ -16,4 +16,8 @@ public class Sieve {
 	public Map<String, Command> getCommands() {
 		return commands;
 	}
+
+	public int size() {
+		return commands.size();
+	}
 }

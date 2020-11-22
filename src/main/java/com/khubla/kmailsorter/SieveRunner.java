@@ -18,10 +18,30 @@ public class SieveRunner {
 		final Session session = Session.getDefaultInstance(System.getProperties(), null);
 		final Store store = session.getStore("imaps");
 		store.connect(KMailSorterConfiguration.getInstance().getImapHost(), KMailSorterConfiguration.getInstance().getImapUsername(), KMailSorterConfiguration.getInstance().getImapPassword());
-		return store.getDefaultFolder();
+		final Folder root = store.getDefaultFolder();
+		return root.getFolder("INBOX");
 	}
 
-	private void runRules(Folder inbox, Sieve sieve) {
+	/**
+	 * run a single sieve command
+	 *
+	 * @param inbox IMAP inbox
+	 * @param sieve sieve rules
+	 */
+	private void runCommand(Folder inbox, Command command) {
+		logger.info("Running command: " + command.getName());
+	}
+
+	/**
+	 * run all sieve commands
+	 *
+	 * @param inbox IMAP inbox
+	 * @param sieve sieve rules
+	 */
+	private void runCommmands(Folder inbox, Sieve sieve) {
+		for (final Command command : sieve.getCommands().values()) {
+			runCommand(inbox, command);
+		}
 	}
 
 	public void runSieveFile(File sieveFile) {
@@ -32,17 +52,27 @@ public class SieveRunner {
 			 */
 			final Sieve sieve = SieveMarshaller.importSieveRules(new FileInputStream(sieveFile));
 			if (null != sieve) {
-				System.out.println("Read sieve file: " + sieveFile.getName());
+				System.out.println("Read sieve file: " + sieveFile.getAbsolutePath() + " which contains " + sieve.size() + " commands");
 			}
 			/*
 			 * get inbox
 			 */
 			inbox = getInbox();
-			/*
-			 * run rules
-			 */
-			runRules(inbox, sieve);
+			if (null != inbox) {
+				inbox.open(Folder.READ_WRITE);
+				if (inbox.isOpen()) {
+					/*
+					 * run sieve commands
+					 */
+					runCommmands(inbox, sieve);
+				} else {
+					System.out.println("Could not open inbox at: " + KMailSorterConfiguration.getInstance().getImapHost());
+				}
+			} else {
+				System.out.println("Could not connect to inbox at: " + KMailSorterConfiguration.getInstance().getImapHost());
+			}
 		} catch (final Exception e) {
+			e.printStackTrace();
 			logger.error(e);
 		} finally {
 			if (null != inbox) {
