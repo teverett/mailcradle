@@ -30,7 +30,7 @@ public class MessageReader {
 			case exists:
 				return null;
 			case address:
-				return null;
+				return message.getFrom().toString();
 			case false_:
 				return null;
 			case not:
