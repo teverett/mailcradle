@@ -23,7 +23,23 @@ public class MessageReader {
 					return header[0];
 				}
 				return null;
+			case allof:
+				return null;
+			case anyof:
+				return null;
+			case exists:
+				return null;
 			case address:
+				return null;
+			case false_:
+				return null;
+			case not:
+				return null;
+			case true_:
+				return null;
+			case size:
+				return null;
+			case envelope:
 				return null;
 			default:
 				return null;
