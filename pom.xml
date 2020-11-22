@@ -15,7 +15,8 @@
 		<javamail.version>1.6.2</javamail.version>
 		<commons-cli.version>1.4</commons-cli.version>
 		<commons-configuration2.version>2.7</commons-configuration2.version>
-
+		<commons-beanutils.version>1.9.4</commons-beanutils.version>
+		<log4j.version>2.13.3</log4j.version>
 	</properties>
 	<developers>
 		<developer>
@@ -43,6 +44,11 @@
 	</organization>
 	<dependencies>
 		<dependency>
+			<groupId>commons-beanutils</groupId>
+			<artifactId>commons-beanutils</artifactId>
+			<version>${commons-beanutils.version}</version>
+		</dependency>
+		<dependency>
 			<groupId>org.apache.commons</groupId>
 			<artifactId>commons-configuration2</artifactId>
 			<version>${commons-configuration2.version}</version>
@@ -67,6 +73,16 @@
 			<groupId>org.antlr</groupId>
 			<artifactId>antlr4-runtime</artifactId>
 			<version>${antlr.version}</version>
+		</dependency>
+		<dependency>
+			<groupId>org.apache.logging.log4j</groupId>
+			<artifactId>log4j-api</artifactId>
+			<version>${log4j.version}</version>
+		</dependency>
+		<dependency>
+			<groupId>org.apache.logging.log4j</groupId>
+			<artifactId>log4j-core</artifactId>
+			<version>${log4j.version}</version>
 		</dependency>
 	</dependencies>
 	<build>

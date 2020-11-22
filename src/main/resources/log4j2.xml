@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Configuration status="warn" strict="true" name="XMLConfigTest" packages="org.apache.logging.log4j.test">
+	<Properties>
+		<Property name="filename">kmailsorter.log</Property>
+	</Properties>
+	<Filter type="ThresholdFilter" level="trace" />
+
+	<Appenders>
+		<Appender type="Console" name="STDOUT">
+			<Layout type="PatternLayout" pattern="%m MDC%X%n" />
+		</Appender>
+		<Appender type="File" name="File" fileName="${filename}">
+			<Layout type="PatternLayout">
+				<Pattern>%d %p %C{1.} [%t] %m%n</Pattern>
+			</Layout>
+		</Appender>
+	</Appenders>
+	<Loggers>
+		<Logger name="com.khubla.kmailsorter" level="debug" additivity="false">
+			<AppenderRef ref="File" />
+		</Logger>
+		<Logger name="org.apache.commons.configuration2" level="debug" additivity="false">
+			<AppenderRef ref="File" />
+		</Logger>
+		<Root level="FATAL">
+			<AppenderRef ref="STDOUT" />
+		</Root>
+	</Loggers>
+</Configuration>
+

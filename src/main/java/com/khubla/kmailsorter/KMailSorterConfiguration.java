@@ -4,6 +4,7 @@ import org.apache.commons.configuration2.*;
 import org.apache.commons.configuration2.builder.*;
 import org.apache.commons.configuration2.builder.fluent.*;
 import org.apache.commons.configuration2.convert.*;
+import org.apache.logging.log4j.*;
 
 public class KMailSorterConfiguration {
 	/**
@@ -14,6 +15,10 @@ public class KMailSorterConfiguration {
 	 * filename
 	 */
 	public static String propertiesFile = "kmailsorter.properties";
+	/**
+	 * logger
+	 */
+	private static final Logger logger = LogManager.getLogger(KMailSorterConfiguration.class);
 
 	/**
 	 * singleton getter
@@ -86,6 +91,7 @@ public class KMailSorterConfiguration {
 			imapPassword = configuration.get(String.class, "imap.password");
 			sieveFile = configuration.get(String.class, "sievefile");
 		} catch (final Exception e) {
+			logger.error(e);
 			throw e;
 		}
 	}

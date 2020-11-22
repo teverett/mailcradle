@@ -1,5 +1,7 @@
 package com.khubla.kmailsorter;
 
+import java.io.*;
+
 import org.apache.commons.cli.*;
 
 public class Main {
@@ -40,7 +42,22 @@ public class Main {
 				 */
 				KMailSorterConfiguration.propertiesFile = configFilename;
 			} else {
-				throw new Exception("File was not supplied");
+				throw new Exception("Config file was not supplied");
+			}
+			/*
+			 * get the sieve file
+			 */
+			final String sieveFilename = KMailSorterConfiguration.getInstance().getSieveFile();
+			if (null != sieveFilename) {
+				File sieveFile = new File(sieveFilename);
+				if (sieveFile.exists()) {
+					SieveRunner sieveRunner = new SieveRunner();
+					sieveRunner.runSieveFile(sieveFile);
+				} else {
+					throw new Exception("Sieve file '" + sieveFilename + "' does not exist");
+				}
+			} else {
+				throw new Exception("Sieve file was not supplied");
 			}
 		} catch (final Exception e) {
 			e.printStackTrace();
