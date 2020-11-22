@@ -1,5 +1,7 @@
 package com.khubla.kmailsorter.comparison;
 
+import com.khubla.kmailsorter.comparison.impl.*;
+
 public class SieveComparisonFactory {
 	public static SieveComparison getComparison(ComparisonType comparisonType) {
 		switch (comparisonType) {

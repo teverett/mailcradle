@@ -1,5 +1,7 @@
 package com.khubla.kmailsorter.action;
 
+import com.khubla.kmailsorter.action.impl.*;
+
 public class SieveActionFactory {
 	public static SieveAction getAction(SieveActionType sieveActionType) {
 		switch (sieveActionType) {
