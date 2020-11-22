@@ -16,11 +16,14 @@ public class TermListener extends AbstractListener {
 			final BodyTermListener bodyTermListener = new BodyTermListener();
 			bodyTermListener.enterBodyterm(ctx.bodyterm());
 			term = bodyTermListener.term;
-		}
-		if (null != ctx.headerterm()) {
+		} else if (null != ctx.headerterm()) {
 			final HeaderTermListener headerTermListener = new HeaderTermListener();
 			headerTermListener.enterHeaderterm(ctx.headerterm());
 			term = headerTermListener.term;
+		} else if (null != ctx.fromterm()) {
+			final FromTermListener fromTermListener = new FromTermListener();
+			fromTermListener.enterFromterm(ctx.fromterm());
+			term = fromTermListener.term;
 		}
 	}
 }

@@ -62,6 +62,7 @@ listcondition
 
 term
    : subjecterm
+   | fromterm
    | bodyterm
    | headerterm
    ;
@@ -74,6 +75,9 @@ bodyterm
    : 'body'
    ;
 
+fromterm
+   : 'from'
+   ;
 headerterm
    : 'header' '[' string ']'
    ;
