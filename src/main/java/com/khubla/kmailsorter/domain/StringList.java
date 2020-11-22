@@ -18,6 +18,10 @@ public class StringList {
 		return name;
 	}
 
+	public boolean in(String name) {
+		return list.contains(name);
+	}
+
 	public void setList(List<String> list) {
 		this.list = list;
 	}

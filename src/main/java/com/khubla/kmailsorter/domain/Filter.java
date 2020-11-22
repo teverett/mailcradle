@@ -1,5 +1,6 @@
 package com.khubla.kmailsorter.domain;
 
+import java.io.*;
 import java.util.*;
 
 import javax.mail.*;
@@ -21,11 +22,12 @@ public class Filter {
 	 *
 	 * @param message current message
 	 * @throws MessagingException messaging exception
+	 * @throws IOException
 	 */
-	public void execute(Message message) throws MessagingException {
+	public void execute(Message message, Mailsort mailsort) throws MessagingException, IOException {
 		boolean conditionsPass = true;
 		for (final Condition condition : conditions) {
-			if (false == condition.evaluate(message)) {
+			if (false == condition.evaluate(message, mailsort)) {
 				conditionsPass = false;
 				break;
 			}
@@ -35,7 +37,7 @@ public class Filter {
 		 */
 		if (true == conditionsPass) {
 			for (final Action action : actions) {
-				action.execute(message);
+				action.execute(message, mailsort);
 			}
 		}
 	}

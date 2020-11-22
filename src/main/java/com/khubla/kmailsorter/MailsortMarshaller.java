@@ -7,6 +7,7 @@ import org.antlr.v4.runtime.*;
 import org.apache.logging.log4j.*;
 
 import com.khubla.kmailsorter.domain.*;
+import com.khubla.kmailsorter.domain.condition.*;
 import com.khubla.kmailsorter.listener.*;
 
 public class MailsortMarshaller {
@@ -14,6 +15,25 @@ public class MailsortMarshaller {
 	 * logger
 	 */
 	private static final Logger logger = LogManager.getLogger(MailsortMarshaller.class);
+
+	/**
+	 * check that all lists referred to exist
+	 *
+	 * @param mailsort Mailsort
+	 */
+	private static void checkLists(Mailsort mailsort) {
+		for (final Filter filter : mailsort.getFilters()) {
+			for (final Condition condition : filter.getConditions()) {
+				if (condition instanceof ListCondition) {
+					final String listname = ((ListCondition) condition).getListname();
+					final StringList stringList = mailsort.getList(listname);
+					if (null == stringList) {
+						throw new RuntimeException("List " + listname + " is referred to but does not exist");
+					}
+				}
+			}
+		}
+	}
 
 	public static Mailsort importRules(File file) throws IOException {
 		/*
@@ -23,7 +43,15 @@ public class MailsortMarshaller {
 		/*
 		 * import
 		 */
-		return importRules(file, imported);
+		final Mailsort ret = importRules(file, imported);
+		/*
+		 * check list names
+		 */
+		checkLists(ret);
+		/*
+		 * done
+		 */
+		return ret;
 	}
 
 	private static Mailsort importRules(File file, List<String> imported) throws IOException {

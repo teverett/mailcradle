@@ -1,5 +1,7 @@
 package com.khubla.kmailsorter.domain;
 
+import java.io.*;
+
 import javax.mail.*;
 
 public abstract class Condition {
@@ -11,7 +13,7 @@ public abstract class Condition {
 	 * @param message Message to evaluate on
 	 * @throws MessagingException oops
 	 */
-	abstract public boolean evaluate(Message message) throws MessagingException;
+	abstract public boolean evaluate(Message message, Mailsort mailsort) throws MessagingException, IOException;
 
 	public Term getTerm() {
 		return term;

@@ -1,5 +1,7 @@
 package com.khubla.kmailsorter.domain.condition;
 
+import java.io.*;
+
 import javax.mail.*;
 
 import com.khubla.kmailsorter.domain.*;
@@ -8,15 +10,33 @@ public class TermCondition extends Condition {
 	/**
 	 * value to compare to
 	 */
-	String value;
+	private String value;
 	/**
 	 * relation to use
 	 */
-	TermRelation termRelation;
+	private TermRelation termRelation;
 
 	@Override
-	public boolean evaluate(Message message) throws MessagingException {
-		throw new RuntimeException("Not Implemented");
+	public boolean evaluate(Message message, Mailsort mailsort) throws MessagingException, IOException {
+		final String[] strs = getTerm().resolve(message);
+		switch (termRelation) {
+			case is:
+				for (final String str : strs) {
+					if (value.compareTo(str) == 0) {
+						return true;
+					}
+				}
+				return false;
+			case contains:
+				for (final String str : strs) {
+					if (value.contains(str)) {
+						return true;
+					}
+				}
+				return false;
+			default:
+				return false;
+		}
 	}
 
 	public TermRelation getTermRelation() {

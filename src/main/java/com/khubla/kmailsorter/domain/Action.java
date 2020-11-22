@@ -9,5 +9,5 @@ public abstract class Action {
 	 * @param message Message to execute with
 	 * @throws MessagingException oops
 	 */
-	abstract public void execute(Message message) throws MessagingException;
+	abstract public void execute(Message message, Mailsort mailsort) throws MessagingException;
 }

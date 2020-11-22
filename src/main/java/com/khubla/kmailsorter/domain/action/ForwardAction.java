@@ -17,7 +17,7 @@ public class ForwardAction extends Action {
 	private String address;
 
 	@Override
-	public void execute(Message message) throws MessagingException {
+	public void execute(Message message, Mailsort mailsort) throws MessagingException {
 		logger.info("Forwarding message " + message.getMessageNumber() + " to address: " + address);
 		throw new RuntimeException("Not Implemented");
 	}

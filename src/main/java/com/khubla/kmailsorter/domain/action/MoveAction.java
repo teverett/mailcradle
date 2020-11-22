@@ -17,7 +17,7 @@ public class MoveAction extends Action {
 	private String folderName;
 
 	@Override
-	public void execute(Message message) throws MessagingException {
+	public void execute(Message message, Mailsort mailsort) throws MessagingException {
 		logger.info("Moving message " + message.getMessageNumber() + " to folder: " + folderName);
 		throw new RuntimeException("Not Implemented");
 	}
