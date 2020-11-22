@@ -9,6 +9,8 @@ public class SieveComparisonFactory {
 				return new IsSieveComparison();
 			case over:
 				return new OverSieveComparison();
+			case under:
+				return new UnderSieveComparison();
 			case matches:
 				return new MatchesSieveComparison();
 			case contains:

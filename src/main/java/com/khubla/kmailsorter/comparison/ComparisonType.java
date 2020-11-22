@@ -1,7 +1,7 @@
 package com.khubla.kmailsorter.comparison;
 
 public enum ComparisonType {
-	contains, is, over, matches;
+	contains, is, over, under, matches;
 
 	public static ComparisonType fromString(String str) {
 		switch (str) {
@@ -11,6 +11,8 @@ public enum ComparisonType {
 				return ComparisonType.is;
 			case ":over":
 				return ComparisonType.over;
+			case ":under":
+				return ComparisonType.under;
 			case ":matches":
 				return ComparisonType.matches;
 			default:
