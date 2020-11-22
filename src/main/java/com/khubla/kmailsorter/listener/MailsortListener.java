@@ -29,6 +29,16 @@ public class MailsortListener extends AbstractListener {
 					mailsort.addList(listListener.stringList);
 				}
 			}
+			/*
+			 * imports
+			 */
+			if (null != ctx.import_()) {
+				for (final Import_Context import_Context : ctx.import_()) {
+					final ImportListener importListener = new ImportListener();
+					importListener.enterImport_(import_Context);
+					mailsort.addImport(importListener.filename);
+				}
+			}
 		}
 	}
 }

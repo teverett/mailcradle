@@ -1,0 +1,5 @@
+
+if (header["From"] contains "tom@khubla.com") {
+	moveto "INBOX.Family";
+};
+

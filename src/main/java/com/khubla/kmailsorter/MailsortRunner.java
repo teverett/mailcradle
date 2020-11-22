@@ -48,7 +48,7 @@ public class MailsortRunner {
 			 */
 			final Mailsort mailsort = MailsortMarshaller.importRules(new FileInputStream(mailsortFile));
 			if (null != mailsort) {
-				System.out.println("Read mailsort file: " + mailsortFile.getAbsolutePath() + " which contains " + mailsort.size() + " commands");
+				System.out.println("Read mailsort file: " + mailsortFile.getAbsolutePath() + " which contains " + mailsort.size() + " filters");
 			}
 			/*
 			 * get inbox

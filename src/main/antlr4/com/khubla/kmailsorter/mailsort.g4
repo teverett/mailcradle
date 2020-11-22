@@ -32,7 +32,11 @@ OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 grammar mailsort;
 
 mailsort
-   : (list | filter)+
+   : (list | filter | import_)+
+   ;
+
+import_
+   : 'import' string ';'
    ;
 
 list
@@ -90,8 +94,6 @@ action
 moveaction
    : 'moveto' string ';'
    ;
-
-
 
 identifier
    : IDENTIFIER
