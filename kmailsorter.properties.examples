@@ -1,5 +1,5 @@
 imap.host=imap://mail.example.com
 imap.username=uuu
 imap.password=ppp
-sievefile=sieve.txt
+mailsortFile=mailsort.txt
 

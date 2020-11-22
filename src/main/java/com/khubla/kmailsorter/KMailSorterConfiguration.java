@@ -48,9 +48,9 @@ public class KMailSorterConfiguration {
 	 */
 	private String imapPassword;
 	/**
-	 * sieve file
+	 * mailsort file
 	 */
-	private String sieveFile;
+	private String mailsortFile;
 
 	/**
 	 * ctor
@@ -70,8 +70,8 @@ public class KMailSorterConfiguration {
 		return imapUsername;
 	}
 
-	public String getSieveFile() {
-		return sieveFile;
+	public String getMailsortFile() {
+		return mailsortFile;
 	}
 
 	private void load(String propertiesFile) throws Exception {
@@ -89,7 +89,7 @@ public class KMailSorterConfiguration {
 			imapHost = configuration.get(String.class, "imap.host");
 			imapUsername = configuration.get(String.class, "imap.username");
 			imapPassword = configuration.get(String.class, "imap.password");
-			sieveFile = configuration.get(String.class, "sievefile");
+			mailsortFile = configuration.get(String.class, "mailsortFile");
 		} catch (final Exception e) {
 			logger.error(e);
 			throw e;
@@ -108,7 +108,7 @@ public class KMailSorterConfiguration {
 		this.imapUsername = imapUsername;
 	}
 
-	public void setSieveFile(String sieveFile) {
-		this.sieveFile = sieveFile;
+	public void setMailsortFile(String mailsortFile) {
+		this.mailsortFile = mailsortFile;
 	}
 }

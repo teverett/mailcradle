@@ -1,0 +1,6 @@
+
+if (header["from"] contains "@beer.com") {
+
+	moveto "Trash";
+};
+

@@ -1,5 +1,6 @@
-require ["fileinto", "mailbox"];
-if address "From" "someone@example.org"
-{
-    fileinto :create "Someone";
-}
+
+if (body contains "$") {
+
+	moveto "Trash";
+};
+

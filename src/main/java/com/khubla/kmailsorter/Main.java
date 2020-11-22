@@ -45,19 +45,19 @@ public class Main {
 				throw new Exception("Config file was not supplied");
 			}
 			/*
-			 * get the sieve file
+			 * get the mailsort file
 			 */
-			final String sieveFilename = KMailSorterConfiguration.getInstance().getSieveFile();
-			if (null != sieveFilename) {
-				final File sieveFile = new File(sieveFilename);
-				if (sieveFile.exists()) {
-					final SieveRunner sieveRunner = new SieveRunner();
-					sieveRunner.runSieveFile(sieveFile);
+			final String mailsortFilename = KMailSorterConfiguration.getInstance().getMailsortFile();
+			if (null != mailsortFilename) {
+				final File mailsortFile = new File(mailsortFilename);
+				if (mailsortFile.exists()) {
+					final MailsortRunner mailsortRunner = new MailsortRunner();
+					mailsortRunner.runMailsortFile(mailsortFile);
 				} else {
-					throw new Exception("Sieve file '" + sieveFilename + "' does not exist");
+					throw new Exception("Mailsort file '" + mailsortFile + "' does not exist");
 				}
 			} else {
-				throw new Exception("Sieve file was not supplied");
+				throw new Exception("Mailsort file was not supplied");
 			}
 		} catch (final Exception e) {
 			e.printStackTrace();

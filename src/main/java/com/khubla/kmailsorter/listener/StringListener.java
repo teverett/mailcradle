@@ -6,15 +6,10 @@ public class StringListener extends AbstractListener {
 	public String string;
 
 	@Override
-	public void enterString(sieveParser.StringContext ctx) {
-		if (null != ctx.QUOTEDSTRING()) {
-			string = ctx.QUOTEDSTRING().getText();
+	public void enterString(mailsortParser.StringContext ctx) {
+		if (null != ctx.STRING_LITERAL()) {
+			string = ctx.STRING_LITERAL().getText();
 			string = string.substring(1, string.length() - 1);
-		}
-		if (null != ctx.multiline()) {
-			final MultilineListener multilineListener = new MultilineListener();
-			multilineListener.enterMultiline(ctx.multiline());
-			string = multilineListener.string;
 		}
 	}
 }

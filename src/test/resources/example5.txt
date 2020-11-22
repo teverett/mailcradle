@@ -1,0 +1,9 @@
+
+
+if (header["from"] in  jerks) {
+
+	moveto "Trash";
+};
+
+list jerks "tom@khubla.com", "me@here.com";
+

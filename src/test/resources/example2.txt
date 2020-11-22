@@ -1,0 +1,6 @@
+
+if (subject contains "$") {
+
+	moveto "Trash";
+};
+
