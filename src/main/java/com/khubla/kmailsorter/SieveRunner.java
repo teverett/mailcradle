@@ -6,6 +6,7 @@ import javax.mail.*;
 
 import org.apache.logging.log4j.*;
 
+import com.khubla.kmailsorter.command.*;
 import com.khubla.kmailsorter.domain.*;
 
 public class SieveRunner {
@@ -31,6 +32,10 @@ public class SieveRunner {
 	 */
 	private void runCommand(Message message, Command command) throws MessagingException {
 		logger.info("Running command: " + command.getName() + " on message " + message.getMessageNumber());
+		final SieveCommand sieveCommand = SieveCommandFactory.getCommand(command.getName());
+		if (null != sieveCommand) {
+			sieveCommand.execute(message, command);
+		}
 	}
 
 	/**
