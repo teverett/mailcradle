@@ -27,9 +27,10 @@ public class SieveRunner {
 	 *
 	 * @param inbox IMAP inbox
 	 * @param sieve sieve rules
+	 * @throws MessagingException
 	 */
-	private void runCommand(Folder inbox, Command command) {
-		logger.info("Running command: " + command.getName());
+	private void runCommand(Message message, Command command) throws MessagingException {
+		logger.info("Running command: " + command.getName() + " on message " + message.getMessageNumber());
 	}
 
 	/**
@@ -37,10 +38,16 @@ public class SieveRunner {
 	 *
 	 * @param inbox IMAP inbox
 	 * @param sieve sieve rules
+	 * @throws MessagingException
 	 */
-	private void runCommmands(Folder inbox, Sieve sieve) {
-		for (final Command command : sieve.getCommands().values()) {
-			runCommand(inbox, command);
+	private void runCommmands(Folder inbox, Sieve sieve) throws MessagingException {
+		final int messageCount = inbox.getMessageCount();
+		if (messageCount > 0) {
+			for (final Message messsage : inbox.getMessages()) {
+				for (final Command command : sieve.getCommands()) {
+					runCommand(messsage, command);
+				}
+			}
 		}
 	}
 

@@ -3,17 +3,13 @@ package com.khubla.kmailsorter.domain;
 import java.util.*;
 
 public class Sieve {
-	private final Map<String, Command> commands = new HashMap<String, Command>();
+	private final List<Command> commands = new ArrayList<Command>();
 
 	public void addCommand(Command command) {
-		commands.put(command.getName(), command);
+		commands.add(command);
 	}
 
-	public Command getCommand(String name) {
-		return commands.get(name);
-	}
-
-	public Map<String, Command> getCommands() {
+	public List<Command> getCommands() {
 		return commands;
 	}
 

@@ -8,3 +8,5 @@
 dependency-reduced-pom.xml
 *.versionsBackup
 kmailsorter.properties
+*.iml
+.idea
