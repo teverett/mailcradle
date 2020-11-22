@@ -38,7 +38,7 @@ public class MessageReader {
 			case true_:
 				return null;
 			case size:
-				return null;
+				return Integer.toString(message.getSize());
 			case envelope:
 				return null;
 			default:
