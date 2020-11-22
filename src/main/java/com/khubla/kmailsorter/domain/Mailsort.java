@@ -52,4 +52,17 @@ public class Mailsort {
 	public int size() {
 		return filters.size();
 	}
+
+	/**
+	 * total number of list items
+	 * 
+	 * @return total count
+	 */
+	public int totalListItems() {
+		int ret = 0;
+		for (StringList stringList : lists.values()) {
+			ret += stringList.getList().size();
+		}
+		return ret;
+	}
 }
