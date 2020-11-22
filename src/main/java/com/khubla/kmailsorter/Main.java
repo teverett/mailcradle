@@ -49,9 +49,9 @@ public class Main {
 			 */
 			final String sieveFilename = KMailSorterConfiguration.getInstance().getSieveFile();
 			if (null != sieveFilename) {
-				File sieveFile = new File(sieveFilename);
+				final File sieveFile = new File(sieveFilename);
 				if (sieveFile.exists()) {
-					SieveRunner sieveRunner = new SieveRunner();
+					final SieveRunner sieveRunner = new SieveRunner();
 					sieveRunner.runSieveFile(sieveFile);
 				} else {
 					throw new Exception("Sieve file '" + sieveFilename + "' does not exist");
