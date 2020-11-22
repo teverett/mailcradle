@@ -55,12 +55,12 @@ public class Mailsort {
 
 	/**
 	 * total number of list items
-	 * 
+	 *
 	 * @return total count
 	 */
 	public int totalListItems() {
 		int ret = 0;
-		for (StringList stringList : lists.values()) {
+		for (final StringList stringList : lists.values()) {
 			ret += stringList.getList().size();
 		}
 		return ret;

@@ -27,15 +27,15 @@ public class MailsortRunner {
 	 *
 	 * @param inbox IMAP inbox
 	 * @param mailsort mailsort rules
-	 * @throws MessagingException
+	 * @throws MessagingException potential exception
 	 */
 	private void runFilters(Folder inbox, Mailsort mailsort) throws MessagingException {
 		final int messageCount = inbox.getMessageCount();
 		if (messageCount > 0) {
-			for (final Message messsage : inbox.getMessages()) {
-				// for (final Command command : sieve.getCommands()) {
-				// runCommand(messsage, command);
-				// }
+			for (final Message message : inbox.getMessages()) {
+				for (final Filter filter : mailsort.getFilters()) {
+					filter.execute(message);
+				}
 			}
 		}
 	}

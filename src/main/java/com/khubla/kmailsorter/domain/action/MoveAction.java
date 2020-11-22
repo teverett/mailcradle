@@ -1,15 +1,32 @@
 package com.khubla.kmailsorter.domain.action;
 
+import javax.mail.*;
+
+import org.apache.logging.log4j.*;
+
 import com.khubla.kmailsorter.domain.*;
 
 public class MoveAction extends Action {
-	private String mailboxname;
+	/**
+	 * logger
+	 */
+	private static final Logger logger = LogManager.getLogger(MoveAction.class);
+	/**
+	 * folder name
+	 */
+	private String folderName;
 
-	public String getMailboxname() {
-		return mailboxname;
+	@Override
+	public void execute(Message message) throws MessagingException {
+		logger.info("Moving message " + message.getMessageNumber() + " to folder: " + folderName);
+		throw new RuntimeException("Not Implemented");
 	}
 
-	public void setMailboxname(String mailboxname) {
-		this.mailboxname = mailboxname;
+	public String getFolderName() {
+		return folderName;
+	}
+
+	public void setFolderName(String folderName) {
+		this.folderName = folderName;
 	}
 }
