@@ -2,6 +2,7 @@ package com.khubla.kmailsorter.listener;
 
 import com.khubla.kmailsorter.*;
 import com.khubla.kmailsorter.domain.*;
+import com.khubla.kmailsorter.listener.term.*;
 
 public class TermListener extends AbstractListener {
 	public Term term;
