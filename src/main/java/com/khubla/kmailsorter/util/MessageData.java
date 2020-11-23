@@ -24,7 +24,16 @@ public class MessageData {
 	private final List<HeaderEntry> headers = new ArrayList<HeaderEntry>();
 	private final String id;
 	private final String body;
+	private final Date sendDate;
+	private final Date receiveDate;
 
+	/**
+	 * ctor
+	 *
+	 * @param message Javamail message
+	 * @throws MessagingException exception
+	 * @throws IOException exception
+	 */
 	public MessageData(IMAPMessage message) throws MessagingException, IOException {
 		/*
 		 * id
@@ -60,6 +69,11 @@ public class MessageData {
 			headerEntry.value = header.getValue();
 			headers.add(headerEntry);
 		}
+		/*
+		 * dates
+		 */
+		sendDate = message.getSentDate();
+		receiveDate = message.getReceivedDate();
 	}
 
 	public String getBody() {
@@ -88,6 +102,14 @@ public class MessageData {
 
 	public String getId() {
 		return id;
+	}
+
+	public Date getReceiveDate() {
+		return receiveDate;
+	}
+
+	public Date getSendDate() {
+		return sendDate;
 	}
 
 	public String getSubject() {
