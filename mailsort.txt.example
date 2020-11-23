@@ -1,5 +1,7 @@
-
-if (header["From"] contains "tom@khubla.com") {
-	moveto "INBOX.Family";
+if (github contains from ) {
+	moveto "INBOX.Github";
 };
 
+list github
+
+"@github.com";
