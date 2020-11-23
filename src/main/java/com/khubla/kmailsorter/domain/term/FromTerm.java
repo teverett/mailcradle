@@ -3,6 +3,7 @@ package com.khubla.kmailsorter.domain.term;
 import java.io.*;
 
 import javax.mail.*;
+import javax.mail.internet.*;
 
 import com.khubla.kmailsorter.domain.*;
 
@@ -13,7 +14,9 @@ public class FromTerm extends Term {
 		final String[] ret = new String[fromAddresses.length];
 		int i = 0;
 		for (final Address address : fromAddresses) {
-			ret[i++] = address.toString();
+			if (address instanceof InternetAddress) {
+				ret[i++] = ((InternetAddress) address).getAddress();
+			}
 		}
 		return ret;
 	}
