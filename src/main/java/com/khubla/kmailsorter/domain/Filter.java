@@ -25,7 +25,6 @@ public class Filter {
 	 * @throws IOException
 	 */
 	public void execute(Message message, Mailsort mailsort) throws MessagingException, IOException {
-		System.out.println(message.getSubject());
 		boolean conditionsPass = true;
 		for (final Condition condition : conditions) {
 			if (false == condition.evaluate(message, mailsort)) {
