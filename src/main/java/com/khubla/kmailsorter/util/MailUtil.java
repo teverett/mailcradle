@@ -24,8 +24,8 @@ public class MailUtil {
 		return instance;
 	}
 
-	final Session session;
-	final Store store;
+	private final Session session;
+	private final Store store;
 
 	/**
 	 * ctoe
