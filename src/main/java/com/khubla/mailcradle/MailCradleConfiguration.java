@@ -6,11 +6,11 @@ import org.apache.commons.configuration2.builder.fluent.*;
 import org.apache.commons.configuration2.convert.*;
 import org.apache.logging.log4j.*;
 
-public class KMailSorterConfiguration {
+public class MailCradleConfiguration {
 	/**
 	 * singleton
 	 */
-	private static KMailSorterConfiguration instance;
+	private static MailCradleConfiguration instance;
 	/**
 	 * filename
 	 */
@@ -18,14 +18,14 @@ public class KMailSorterConfiguration {
 	/**
 	 * logger
 	 */
-	private static final Logger logger = LogManager.getLogger(KMailSorterConfiguration.class);
+	private static final Logger logger = LogManager.getLogger(MailCradleConfiguration.class);
 
 	/**
 	 * singleton getter
 	 */
-	public static KMailSorterConfiguration getInstance() {
+	public static MailCradleConfiguration getInstance() {
 		if (null == instance) {
-			instance = new KMailSorterConfiguration();
+			instance = new MailCradleConfiguration();
 			try {
 				instance.load(propertiesFile);
 			} catch (final Exception e) {
@@ -79,7 +79,7 @@ public class KMailSorterConfiguration {
 	/**
 	 * ctor
 	 */
-	private KMailSorterConfiguration() {
+	private MailCradleConfiguration() {
 	}
 
 	public String getImapFolder() {

@@ -14,7 +14,7 @@ public class TestRead {
 	public void test1() {
 		try {
 			final File file = new File("src/test/resources/example1.txt");
-			final Mailcradle mailsort = MailsortMarshaller.importRules(file);
+			final Mailcradle mailsort = MailCradleMarshaller.importRules(file);
 			/*
 			 * mailsort
 			 */
@@ -28,7 +28,7 @@ public class TestRead {
 	public void test2() {
 		try {
 			final File file = new File("src/test/resources/example2.txt");
-			final Mailcradle mailsort = MailsortMarshaller.importRules(file);
+			final Mailcradle mailsort = MailCradleMarshaller.importRules(file);
 			/*
 			 * mailsort
 			 */
@@ -42,7 +42,7 @@ public class TestRead {
 	public void test3() {
 		try {
 			final File file = new File("src/test/resources/example3.txt");
-			final Mailcradle mailsort = MailsortMarshaller.importRules(file);
+			final Mailcradle mailsort = MailCradleMarshaller.importRules(file);
 			/*
 			 * mailsort
 			 */
@@ -56,7 +56,7 @@ public class TestRead {
 	public void test4() {
 		try {
 			final File file = new File("src/test/resources/example4.txt");
-			final Mailcradle mailsort = MailsortMarshaller.importRules(file);
+			final Mailcradle mailsort = MailCradleMarshaller.importRules(file);
 			/*
 			 * mailsort
 			 */
@@ -70,7 +70,7 @@ public class TestRead {
 	public void test5() {
 		try {
 			final File file = new File("src/test/resources/example5.txt");
-			final Mailcradle mailsort = MailsortMarshaller.importRules(file);
+			final Mailcradle mailsort = MailCradleMarshaller.importRules(file);
 			/*
 			 * mailsort
 			 */

@@ -9,11 +9,11 @@ import org.apache.logging.log4j.*;
 import com.khubla.mailcradle.domain.*;
 import com.khubla.mailcradle.imap.*;
 
-public class MailsortRunner {
+public class MailCradleRunner {
 	/**
 	 * logger
 	 */
-	private static final Logger logger = LogManager.getLogger(MailsortRunner.class);
+	private static final Logger logger = LogManager.getLogger(MailCradleRunner.class);
 
 	/**
 	 * run all filter commands
@@ -45,7 +45,7 @@ public class MailsortRunner {
 			/*
 			 * read mailsort file
 			 */
-			final Mailcradle mailsort = MailsortMarshaller.importRules(mailsortFile);
+			final Mailcradle mailsort = MailCradleMarshaller.importRules(mailsortFile);
 			if (null != mailsort) {
 				System.out.println("Read mailsort file: " + mailsortFile.getAbsolutePath() + " which contains " + mailsort.size() + " filters spanning " + mailsort.totalListItems() + " list items");
 			}

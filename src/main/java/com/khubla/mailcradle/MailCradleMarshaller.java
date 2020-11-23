@@ -10,11 +10,11 @@ import com.khubla.mailcradle.domain.*;
 import com.khubla.mailcradle.domain.condition.*;
 import com.khubla.mailcradle.listener.*;
 
-public class MailsortMarshaller {
+public class MailCradleMarshaller {
 	/**
 	 * logger
 	 */
-	private static final Logger logger = LogManager.getLogger(MailsortMarshaller.class);
+	private static final Logger logger = LogManager.getLogger(MailCradleMarshaller.class);
 
 	/**
 	 * check that all lists referred to exist

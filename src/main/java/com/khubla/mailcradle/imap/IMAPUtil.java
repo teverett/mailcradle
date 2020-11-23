@@ -47,14 +47,14 @@ public class IMAPUtil {
 	 */
 	private IMAPUtil() throws MessagingException {
 		final Properties properties = new Properties();
-		properties.put("mail.smtps.host", KMailSorterConfiguration.getInstance().getSmtpHost());
+		properties.put("mail.smtps.host", MailCradleConfiguration.getInstance().getSmtpHost());
 		properties.put("mail.smtps.starttls.enable", "true");
 		properties.put("mail.smtps.auth", "true");
-		properties.put("mail.smtps.port", KMailSorterConfiguration.getInstance().getSmtpPort());
+		properties.put("mail.smtps.port", MailCradleConfiguration.getInstance().getSmtpPort());
 		session = Session.getDefaultInstance(properties, null);
 		store = session.getStore("imaps");
-		logger.info("Logging into " + KMailSorterConfiguration.getInstance().getImapHost() + " as " + KMailSorterConfiguration.getInstance().getImapUsername());
-		store.connect(KMailSorterConfiguration.getInstance().getImapHost(), KMailSorterConfiguration.getInstance().getImapUsername(), KMailSorterConfiguration.getInstance().getImapPassword());
+		logger.info("Logging into " + MailCradleConfiguration.getInstance().getImapHost() + " as " + MailCradleConfiguration.getInstance().getImapUsername());
+		store.connect(MailCradleConfiguration.getInstance().getImapHost(), MailCradleConfiguration.getInstance().getImapUsername(), MailCradleConfiguration.getInstance().getImapPassword());
 	}
 
 	/**
@@ -139,7 +139,7 @@ public class IMAPUtil {
 				 */
 				forwardMessage.setRecipients(Message.RecipientType.TO, recipients);
 				forwardMessage.setSubject(FWD + messages[0].getSubject());
-				forwardMessage.setFrom(new InternetAddress(KMailSorterConfiguration.getInstance().getSmtpFrom()));
+				forwardMessage.setFrom(new InternetAddress(MailCradleConfiguration.getInstance().getSmtpFrom()));
 				/*
 				 * Create the message part
 				 */
@@ -178,7 +178,7 @@ public class IMAPUtil {
 	 */
 	private IMAPFolder getInbox() throws MessagingException {
 		final IMAPFolder root = getRootFolder();
-		return (IMAPFolder) root.getFolder(KMailSorterConfiguration.getInstance().getImapFolder());
+		return (IMAPFolder) root.getFolder(MailCradleConfiguration.getInstance().getImapFolder());
 	}
 
 	/**
@@ -369,7 +369,7 @@ public class IMAPUtil {
 				 */
 				replyMessage.setRecipients(Message.RecipientType.TO, recipients);
 				replyMessage.setSubject(RE + messages[0].getSubject());
-				replyMessage.setFrom(new InternetAddress(KMailSorterConfiguration.getInstance().getSmtpFrom()));
+				replyMessage.setFrom(new InternetAddress(MailCradleConfiguration.getInstance().getSmtpFrom()));
 				/*
 				 * Create the message part
 				 */
@@ -419,7 +419,7 @@ public class IMAPUtil {
 		 */
 		final Transport transport = session.getTransport("smtps");
 		try {
-			transport.connect(KMailSorterConfiguration.getInstance().getSmtpUsername(), KMailSorterConfiguration.getInstance().getImapPassword());
+			transport.connect(MailCradleConfiguration.getInstance().getSmtpUsername(), MailCradleConfiguration.getInstance().getImapPassword());
 			transport.sendMessage(message, recipients);
 		} finally {
 			if (transport.isConnected()) {

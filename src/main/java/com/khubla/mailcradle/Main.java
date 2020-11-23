@@ -12,7 +12,7 @@ public class Main {
 
 	public static void main(String[] args) {
 		try {
-			System.out.println("khubla.com kMailSorter");
+			System.out.println("khubla.com MailCradle");
 			/*
 			 * options
 			 */
@@ -40,24 +40,24 @@ public class Main {
 				/*
 				 * set the name
 				 */
-				KMailSorterConfiguration.propertiesFile = configFilename;
+				MailCradleConfiguration.propertiesFile = configFilename;
 			} else {
 				throw new Exception("Config file was not supplied");
 			}
 			/*
 			 * get the mailsort file
 			 */
-			final String mailsortFilename = KMailSorterConfiguration.getInstance().getMailsortFile();
-			if (null != mailsortFilename) {
-				final File mailsortFile = new File(mailsortFilename);
-				if (mailsortFile.exists()) {
-					final MailsortRunner mailsortRunner = new MailsortRunner();
-					mailsortRunner.runMailsortFile(mailsortFile);
+			final String mailcradleFilename = MailCradleConfiguration.getInstance().getMailsortFile();
+			if (null != mailcradleFilename) {
+				final File mailcradleFile = new File(mailcradleFilename);
+				if (mailcradleFile.exists()) {
+					final MailCradleRunner mailsortRunner = new MailCradleRunner();
+					mailsortRunner.runMailsortFile(mailcradleFile);
 				} else {
-					throw new Exception("Mailsort file '" + mailsortFile + "' does not exist");
+					throw new Exception("MailCradle file '" + mailcradleFile + "' does not exist");
 				}
 			} else {
-				throw new Exception("Mailsort file was not supplied");
+				throw new Exception("MailCradle file was not supplied");
 			}
 		} catch (final Exception e) {
 			e.printStackTrace();
