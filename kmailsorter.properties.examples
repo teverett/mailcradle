@@ -1,5 +1,6 @@
 imap.host=imap://mail.example.com
 imap.username=uuu
 imap.password=ppp
+imap.folder=INBOX
 mailsortFile=mailsort.txt
 

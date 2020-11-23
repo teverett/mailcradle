@@ -19,7 +19,7 @@ public class MailsortRunner {
 		final Store store = session.getStore("imaps");
 		store.connect(KMailSorterConfiguration.getInstance().getImapHost(), KMailSorterConfiguration.getInstance().getImapUsername(), KMailSorterConfiguration.getInstance().getImapPassword());
 		final Folder root = store.getDefaultFolder();
-		return root.getFolder("INBOX");
+		return root.getFolder(KMailSorterConfiguration.getInstance().getImapFolder());
 	}
 
 	/**

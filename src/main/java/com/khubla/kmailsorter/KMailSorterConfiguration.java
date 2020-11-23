@@ -51,11 +51,19 @@ public class KMailSorterConfiguration {
 	 * mailsort file
 	 */
 	private String mailsortFile;
+	/**
+	 * folder
+	 */
+	private String imapFolder;
 
 	/**
 	 * ctor
 	 */
 	private KMailSorterConfiguration() {
+	}
+
+	public String getImapFolder() {
+		return imapFolder;
 	}
 
 	public String getImapHost() {
@@ -89,11 +97,16 @@ public class KMailSorterConfiguration {
 			imapHost = configuration.get(String.class, "imap.host");
 			imapUsername = configuration.get(String.class, "imap.username");
 			imapPassword = configuration.get(String.class, "imap.password");
+			imapFolder = configuration.get(String.class, "imap.folder");
 			mailsortFile = configuration.get(String.class, "mailsortFile");
 		} catch (final Exception e) {
 			logger.error(e);
 			throw e;
 		}
+	}
+
+	public void setImapFolder(String imapFolder) {
+		this.imapFolder = imapFolder;
 	}
 
 	public void setImapHost(String imapHost) {
