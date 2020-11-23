@@ -35,7 +35,7 @@ public class MailUtil {
 	private MailUtil() throws MessagingException {
 		session = Session.getDefaultInstance(System.getProperties(), null);
 		store = session.getStore("imaps");
-		logger.info("Logging into  " + KMailSorterConfiguration.getInstance().getImapHost() + " as " + KMailSorterConfiguration.getInstance().getImapUsername());
+		logger.info("Logging into " + KMailSorterConfiguration.getInstance().getImapHost() + " as " + KMailSorterConfiguration.getInstance().getImapUsername());
 		store.connect(KMailSorterConfiguration.getInstance().getImapHost(), KMailSorterConfiguration.getInstance().getImapUsername(), KMailSorterConfiguration.getInstance().getImapPassword());
 	}
 
