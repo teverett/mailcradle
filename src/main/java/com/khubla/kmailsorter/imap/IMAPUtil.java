@@ -69,9 +69,9 @@ public class IMAPUtil {
 		IMAPFolder inboxFolder = null;
 		try {
 			if (set) {
-				logger.info("Flagging to message " + uid + " with flag" + flagname);
+				logger.info("Flagging to message " + uid + " with flag " + flagname);
 			} else {
-				logger.info("Unflagging to message " + uid + " from flag" + flagname);
+				logger.info("Unflagging to message " + uid + " from flag " + flagname);
 			}
 			/*
 			 * inbox
