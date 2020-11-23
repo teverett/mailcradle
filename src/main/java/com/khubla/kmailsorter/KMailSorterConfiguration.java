@@ -67,6 +67,14 @@ public class KMailSorterConfiguration {
 	 * SMTP password
 	 */
 	private String smtpPassword;
+	/**
+	 * SMTP from
+	 */
+	private String smtpFrom;
+	/**
+	 * SMTP port
+	 */
+	private Integer smtpPort;
 
 	/**
 	 * ctor
@@ -94,12 +102,20 @@ public class KMailSorterConfiguration {
 		return mailsortFile;
 	}
 
+	public String getSmtpFrom() {
+		return smtpFrom;
+	}
+
 	public String getSmtpHost() {
 		return smtpHost;
 	}
 
 	public String getSmtpPassword() {
 		return smtpPassword;
+	}
+
+	public Integer getSmtpPort() {
+		return smtpPort;
 	}
 
 	public String getSmtpUsername() {
@@ -126,6 +142,8 @@ public class KMailSorterConfiguration {
 			smtpHost = configuration.get(String.class, "smtp.host");
 			smtpUsername = configuration.get(String.class, "smtp.username");
 			smtpPassword = configuration.get(String.class, "smtp.password");
+			smtpFrom = configuration.get(String.class, "smtp.from");
+			smtpPort = configuration.get(Integer.class, "smtp.port");
 		} catch (final Exception e) {
 			logger.error(e);
 			throw e;
@@ -152,12 +170,20 @@ public class KMailSorterConfiguration {
 		this.mailsortFile = mailsortFile;
 	}
 
+	public void setSmtpFrom(String smtpFrom) {
+		this.smtpFrom = smtpFrom;
+	}
+
 	public void setSmtpHost(String smtpHost) {
 		this.smtpHost = smtpHost;
 	}
 
 	public void setSmtpPassword(String smtpPassword) {
 		this.smtpPassword = smtpPassword;
+	}
+
+	public void setSmtpPort(Integer smtpPort) {
+		this.smtpPort = smtpPort;
 	}
 
 	public void setSmtpUsername(String smtpUsername) {

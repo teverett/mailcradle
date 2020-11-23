@@ -5,6 +5,7 @@ imap.folder=INBOX
 smtp.host=mail.example.com
 smtp.username=uuu
 smtp.password=ppp
-
+smtp.from=me@example.com
+smtp.port=465
 mailsortFile=mailsort.txt
 

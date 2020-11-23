@@ -1,8 +1,10 @@
 package com.khubla.kmailsorter.util;
 
 import java.io.*;
+import java.util.*;
 
 import javax.mail.*;
+import javax.mail.internet.*;
 import javax.mail.search.*;
 
 import org.apache.logging.log4j.*;
@@ -11,6 +13,13 @@ import com.khubla.kmailsorter.*;
 import com.sun.mail.imap.*;
 
 public class MailUtil {
+	/**
+	 * FWD
+	 */
+	private final static String FWD = "fwd: ";
+	/**
+	 * singleton
+	 */
 	private static MailUtil instance = null;
 	/**
 	 * logger
@@ -28,15 +37,86 @@ public class MailUtil {
 	private final Store store;
 
 	/**
-	 * ctoe
+	 * ctor
 	 *
 	 * @throws MessagingException MessagingException
 	 */
 	private MailUtil() throws MessagingException {
-		session = Session.getDefaultInstance(System.getProperties(), null);
+		final Properties properties = new Properties();
+		properties.put("mail.smtps.host", KMailSorterConfiguration.getInstance().getSmtpHost());
+		properties.put("mail.smtps.starttls.enable", "true");
+		properties.put("mail.smtps.auth", "true");
+		properties.put("mail.smtps.port", KMailSorterConfiguration.getInstance().getSmtpPort());
+		session = Session.getDefaultInstance(properties, null);
 		store = session.getStore("imaps");
 		logger.info("Logging into " + KMailSorterConfiguration.getInstance().getImapHost() + " as " + KMailSorterConfiguration.getInstance().getImapUsername());
 		store.connect(KMailSorterConfiguration.getInstance().getImapHost(), KMailSorterConfiguration.getInstance().getImapUsername(), KMailSorterConfiguration.getInstance().getImapPassword());
+	}
+
+	/**
+	 * forward a message to an address
+	 *
+	 * @param message Message
+	 * @param emailAddress emailAddress
+	 * @throws MessagingException MessagingException
+	 */
+	public void forwardMessage(String uid, String emailAddress) throws MessagingException {
+		IMAPFolder inboxFolder = null;
+		try {
+			logger.info("Forwarding message " + uid + " to address " + emailAddress);
+			/*
+			 * inbox
+			 */
+			inboxFolder = getInbox();
+			inboxFolder.open(Folder.READ_ONLY);
+			/*
+			 * message
+			 */
+			final SearchTerm searchTerm = new MessageIDTerm(uid);
+			final Message[] messages = inboxFolder.search(searchTerm);
+			if ((null != messages) && (messages.length == 1)) {
+				/*
+				 * create message
+				 */
+				final Message forwardMessage = new MimeMessage(session);
+				/*
+				 * recipient
+				 */
+				final InternetAddress[] recipients = InternetAddress.parse(emailAddress);
+				/*
+				 * Fill in header
+				 */
+				forwardMessage.setRecipients(Message.RecipientType.TO, recipients);
+				forwardMessage.setSubject(FWD + messages[0].getSubject());
+				forwardMessage.setFrom(new InternetAddress(KMailSorterConfiguration.getInstance().getSmtpFrom()));
+				/*
+				 * Create the message part
+				 */
+				final MimeBodyPart messageBodyPart = new MimeBodyPart();
+				final Multipart multipart = new MimeMultipart();
+				/*
+				 * set content
+				 */
+				messageBodyPart.setContent(messages[0], "message/rfc822");
+				multipart.addBodyPart(messageBodyPart);
+				/*
+				 * Associate multi-part with message
+				 */
+				forwardMessage.setContent(multipart);
+				forwardMessage.saveChanges();
+				/*
+				 * send
+				 */
+				smtpSend(forwardMessage, recipients);
+			}
+		} finally {
+			if (null != inboxFolder) {
+				if (inboxFolder.isOpen()) {
+					inboxFolder.close(true);
+				}
+				inboxFolder = null;
+			}
+		}
 	}
 
 	/**
@@ -199,6 +279,28 @@ public class MailUtil {
 			if (null != rootFolder) {
 				// root does not contain messages so we neither open nor close it
 				rootFolder = null;
+			}
+		}
+	}
+
+	/**
+	 * do an SMTP send
+	 *
+	 * @param message message to send
+	 * @param recipients recipients to send to
+	 * @throws MessagingException exception
+	 */
+	private void smtpSend(Message message, InternetAddress[] recipients) throws MessagingException {
+		/*
+		 * send
+		 */
+		final Transport transport = session.getTransport("smtps");
+		try {
+			transport.connect(KMailSorterConfiguration.getInstance().getSmtpUsername(), KMailSorterConfiguration.getInstance().getImapPassword());
+			transport.sendMessage(message, recipients);
+		} finally {
+			if (transport.isConnected()) {
+				transport.close();
 			}
 		}
 	}
