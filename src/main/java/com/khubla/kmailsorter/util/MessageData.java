@@ -26,6 +26,8 @@ public class MessageData {
 	private final String body;
 	private final Date sendDate;
 	private final Date receiveDate;
+	private final int size;
+	private final Flags flags;
 
 	/**
 	 * ctor
@@ -74,10 +76,22 @@ public class MessageData {
 		 */
 		sendDate = message.getSentDate();
 		receiveDate = message.getReceivedDate();
+		/**
+		 * size
+		 */
+		size = message.getSize();
+		/*
+		 * flags
+		 */
+		flags = message.getFlags();
 	}
 
 	public String getBody() {
 		return body;
+	}
+
+	public Flags getFlags() {
+		return flags;
 	}
 
 	public String[] getFrom() {
@@ -110,6 +124,10 @@ public class MessageData {
 
 	public Date getSendDate() {
 		return sendDate;
+	}
+
+	public int getSize() {
+		return size;
 	}
 
 	public String getSubject() {

@@ -1,7 +1,8 @@
-package com.khubla.kmailsorter.listener;
+package com.khubla.kmailsorter.listener.action;
 
 import com.khubla.kmailsorter.*;
 import com.khubla.kmailsorter.domain.*;
+import com.khubla.kmailsorter.listener.*;
 
 public class ActionListener extends AbstractListener {
 	public Action action;
@@ -31,6 +32,22 @@ public class ActionListener extends AbstractListener {
 			final ReplyActionListener replyActionListener = new ReplyActionListener();
 			replyActionListener.enterReplyaction(ctx.replyaction());
 			action = replyActionListener.action;
+		}
+		/**
+		 * flag
+		 */
+		if (null != ctx.flagaction()) {
+			final FlagActionListener flagActionListener = new FlagActionListener();
+			flagActionListener.enterFlagaction(ctx.flagaction());
+			action = flagActionListener.action;
+		}
+		/**
+		 * unflag
+		 */
+		if (null != ctx.unflagaction()) {
+			final UnflagActionListener unflagActionListener = new UnflagActionListener();
+			unflagActionListener.enterUnflagaction(ctx.unflagaction());
+			action = unflagActionListener.action;
 		}
 	}
 }

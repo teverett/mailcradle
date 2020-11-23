@@ -1,7 +1,8 @@
-package com.khubla.kmailsorter.listener;
+package com.khubla.kmailsorter.listener.action;
 
 import com.khubla.kmailsorter.*;
 import com.khubla.kmailsorter.domain.action.*;
+import com.khubla.kmailsorter.listener.*;
 
 public class ForwardActionListener extends AbstractListener {
 	public ForwardAction action;

@@ -1,7 +1,8 @@
-package com.khubla.kmailsorter.listener;
+package com.khubla.kmailsorter.listener.condition;
 
 import com.khubla.kmailsorter.*;
 import com.khubla.kmailsorter.domain.condition.*;
+import com.khubla.kmailsorter.listener.*;
 
 public class ListConditionListener extends AbstractListener {
 	public ListCondition condition;

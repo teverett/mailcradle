@@ -96,6 +96,16 @@ action
    : moveaction
    | forwardaction
    | replyaction
+   | flagaction
+   | unflagaction
+   ;
+
+flagaction
+   : 'flag' string ';'
+   ;
+
+unflagaction
+   : 'unflag' string ';'
    ;
 
 replyaction

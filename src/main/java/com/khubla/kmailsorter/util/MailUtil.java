@@ -58,6 +58,53 @@ public class MailUtil {
 	}
 
 	/**
+	 * flag or unflag a message
+	 *
+	 * @param uid message
+	 * @param flag flag name
+	 * @param set true to set or false to unset
+	 * @throws MessagingException exception
+	 */
+	public void flagMessage(String uid, String flagname, boolean set) throws MessagingException {
+		IMAPFolder inboxFolder = null;
+		try {
+			if (set) {
+				logger.info("Flagging to message " + uid + " with flag" + flagname);
+			} else {
+				logger.info("Unflagging to message " + uid + " from flag" + flagname);
+			}
+			/*
+			 * inbox
+			 */
+			inboxFolder = getInbox();
+			inboxFolder.open(Folder.READ_WRITE);
+			/*
+			 * message
+			 */
+			final SearchTerm searchTerm = new MessageIDTerm(uid);
+			final Message[] messages = inboxFolder.search(searchTerm);
+			if ((null != messages) && (messages.length == 1)) {
+				if (set) {
+					switch (flagname) {
+						case "flagged":
+							messages[0].setFlag(Flags.Flag.FLAGGED, set);
+							break;
+						default:
+							break;
+					}
+				}
+			}
+		} finally {
+			if (null != inboxFolder) {
+				if (inboxFolder.isOpen()) {
+					inboxFolder.close(true);
+				}
+				inboxFolder = null;
+			}
+		}
+	}
+
+	/**
 	 * forward a message to an address
 	 *
 	 * @param message Message
