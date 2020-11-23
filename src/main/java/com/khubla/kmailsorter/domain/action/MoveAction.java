@@ -20,7 +20,7 @@ public class MoveAction extends Action {
 	@Override
 	public void execute(MessageData messageData, Mailsort mailsort) throws MessagingException {
 		logger.info("Moving message " + messageData.getId() + " to folder: " + folderName);
-		MailUtil.moveMessage(messageData.getId(), folderName);
+		MailUtil.getInstance().moveMessage(messageData.getId(), folderName);
 	}
 
 	public String getFolderName() {

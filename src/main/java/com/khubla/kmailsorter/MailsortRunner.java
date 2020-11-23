@@ -24,10 +24,10 @@ public class MailsortRunner {
 	 * @throws IOException
 	 */
 	private void runFilters(Mailsort mailsort) throws MessagingException, IOException {
-		final int messageCount = MailUtil.getMessageCount();
-		if (messageCount > 0) {
-			for (int i = 1; i < (messageCount + 1); i++) {
-				final MessageData messageData = MailUtil.getMessageData(i);
+		final String[] uids = MailUtil.getInstance().getUIDs();
+		if (uids.length > 0) {
+			for (final String uid : uids) {
+				final MessageData messageData = MailUtil.getInstance().getMessageData(uid);
 				for (final Filter filter : mailsort.getFilters()) {
 					filter.execute(messageData, mailsort);
 				}

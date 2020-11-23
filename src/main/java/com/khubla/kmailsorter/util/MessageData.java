@@ -6,6 +6,8 @@ import java.util.*;
 import javax.mail.*;
 import javax.mail.internet.*;
 
+import com.sun.mail.imap.*;
+
 /**
  * local cached message data
  *
@@ -20,14 +22,14 @@ public class MessageData {
 	private final String subject;
 	private final String[] from;
 	private final List<HeaderEntry> headers = new ArrayList<HeaderEntry>();
-	private final int id;
+	private final String id;
 	private final String body;
 
-	public MessageData(Message message) throws MessagingException, IOException {
+	public MessageData(IMAPMessage message) throws MessagingException, IOException {
 		/*
 		 * id
 		 */
-		id = message.getMessageNumber();
+		id = message.getMessageID();
 		/*
 		 * subject
 		 */
@@ -84,7 +86,7 @@ public class MessageData {
 		return headers;
 	}
 
-	public int getId() {
+	public String getId() {
 		return id;
 	}
 
