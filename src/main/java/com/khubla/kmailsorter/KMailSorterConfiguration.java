@@ -36,15 +36,15 @@ public class KMailSorterConfiguration {
 	}
 
 	/**
-	 * imap host
+	 * IMAP host
 	 */
 	private String imapHost;
 	/**
-	 * imap username
+	 * IMAP username
 	 */
 	private String imapUsername;
 	/**
-	 * imap password
+	 * IMAP password
 	 */
 	private String imapPassword;
 	/**
@@ -52,9 +52,21 @@ public class KMailSorterConfiguration {
 	 */
 	private String mailsortFile;
 	/**
-	 * folder
+	 * IMAP folder
 	 */
 	private String imapFolder;
+	/**
+	 * SMTP host
+	 */
+	private String smtpHost;
+	/**
+	 * SMTP username
+	 */
+	private String smtpUsername;
+	/**
+	 * SMTP password
+	 */
+	private String smtpPassword;
 
 	/**
 	 * ctor
@@ -82,6 +94,18 @@ public class KMailSorterConfiguration {
 		return mailsortFile;
 	}
 
+	public String getSmtpHost() {
+		return smtpHost;
+	}
+
+	public String getSmtpPassword() {
+		return smtpPassword;
+	}
+
+	public String getSmtpUsername() {
+		return smtpUsername;
+	}
+
 	private void load(String propertiesFile) throws Exception {
 		try {
 			final Parameters params = new Parameters();
@@ -99,6 +123,9 @@ public class KMailSorterConfiguration {
 			imapPassword = configuration.get(String.class, "imap.password");
 			imapFolder = configuration.get(String.class, "imap.folder");
 			mailsortFile = configuration.get(String.class, "mailsortFile");
+			smtpHost = configuration.get(String.class, "smtp.host");
+			smtpUsername = configuration.get(String.class, "smtp.username");
+			smtpPassword = configuration.get(String.class, "smtp.password");
 		} catch (final Exception e) {
 			logger.error(e);
 			throw e;
@@ -123,5 +150,17 @@ public class KMailSorterConfiguration {
 
 	public void setMailsortFile(String mailsortFile) {
 		this.mailsortFile = mailsortFile;
+	}
+
+	public void setSmtpHost(String smtpHost) {
+		this.smtpHost = smtpHost;
+	}
+
+	public void setSmtpPassword(String smtpPassword) {
+		this.smtpPassword = smtpPassword;
+	}
+
+	public void setSmtpUsername(String smtpUsername) {
+		this.smtpUsername = smtpUsername;
 	}
 }
