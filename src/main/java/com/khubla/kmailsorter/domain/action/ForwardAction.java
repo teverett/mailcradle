@@ -5,6 +5,7 @@ import javax.mail.*;
 import org.apache.logging.log4j.*;
 
 import com.khubla.kmailsorter.domain.*;
+import com.khubla.kmailsorter.util.*;
 
 public class ForwardAction extends Action {
 	/**
@@ -17,8 +18,8 @@ public class ForwardAction extends Action {
 	private String address;
 
 	@Override
-	public void execute(Message message, Mailsort mailsort) throws MessagingException {
-		logger.info("Forwarding message " + message.getMessageNumber() + " to address: " + address);
+	public void execute(MessageData messageData, Mailsort mailsort) throws MessagingException {
+		logger.info("Forwarding message " + messageData.getId() + " to address: " + address);
 		throw new RuntimeException("Not Implemented");
 	}
 

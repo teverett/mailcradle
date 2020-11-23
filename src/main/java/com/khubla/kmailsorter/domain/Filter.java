@@ -5,6 +5,8 @@ import java.util.*;
 
 import javax.mail.*;
 
+import com.khubla.kmailsorter.util.*;
+
 public class Filter {
 	private final List<Condition> conditions = new ArrayList<Condition>();
 	private final List<Action> actions = new ArrayList<Action>();
@@ -24,10 +26,10 @@ public class Filter {
 	 * @throws MessagingException messaging exception
 	 * @throws IOException
 	 */
-	public void execute(Message message, Mailsort mailsort) throws MessagingException, IOException {
+	public void execute(MessageData messageData, Mailsort mailsort) throws MessagingException, IOException {
 		boolean conditionsPass = true;
 		for (final Condition condition : conditions) {
-			if (false == condition.evaluate(message, mailsort)) {
+			if (false == condition.evaluate(messageData, mailsort)) {
 				conditionsPass = false;
 				break;
 			}
@@ -37,7 +39,7 @@ public class Filter {
 		 */
 		if (true == conditionsPass) {
 			for (final Action action : actions) {
-				action.execute(message, mailsort);
+				action.execute(messageData, mailsort);
 			}
 		}
 	}

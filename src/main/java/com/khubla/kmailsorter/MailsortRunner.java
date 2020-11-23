@@ -7,20 +7,13 @@ import javax.mail.*;
 import org.apache.logging.log4j.*;
 
 import com.khubla.kmailsorter.domain.*;
+import com.khubla.kmailsorter.util.*;
 
 public class MailsortRunner {
 	/**
 	 * logger
 	 */
 	private static final Logger logger = LogManager.getLogger(MailsortRunner.class);
-
-	private Folder getInbox() throws MessagingException {
-		final Session session = Session.getDefaultInstance(System.getProperties(), null);
-		final Store store = session.getStore("imaps");
-		store.connect(KMailSorterConfiguration.getInstance().getImapHost(), KMailSorterConfiguration.getInstance().getImapUsername(), KMailSorterConfiguration.getInstance().getImapPassword());
-		final Folder root = store.getDefaultFolder();
-		return root.getFolder(KMailSorterConfiguration.getInstance().getImapFolder());
-	}
 
 	/**
 	 * run all filter commands
@@ -30,19 +23,20 @@ public class MailsortRunner {
 	 * @throws MessagingException potential exception
 	 * @throws IOException
 	 */
-	private void runFilters(Folder inbox, Mailsort mailsort) throws MessagingException, IOException {
-		final int messageCount = inbox.getMessageCount();
+	private void runFilters(Mailsort mailsort) throws MessagingException, IOException {
+		final int messageCount = MailUtil.getMessageCount();
 		if (messageCount > 0) {
-			for (final Message message : inbox.getMessages()) {
+			for (int i = 1; i < (messageCount + 1); i++) {
+				final MessageData messageData = MailUtil.getMessageData(i);
 				for (final Filter filter : mailsort.getFilters()) {
-					filter.execute(message, mailsort);
+					filter.execute(messageData, mailsort);
 				}
 			}
 		}
 	}
 
 	public void runMailsortFile(File mailsortFile) {
-		Folder inbox = null;
+		final Folder inbox = null;
 		try {
 			/*
 			 * read mailsort file
@@ -52,22 +46,9 @@ public class MailsortRunner {
 				System.out.println("Read mailsort file: " + mailsortFile.getAbsolutePath() + " which contains " + mailsort.size() + " filters spanning " + mailsort.totalListItems() + " list items");
 			}
 			/*
-			 * get inbox
+			 * run filters
 			 */
-			inbox = getInbox();
-			if (null != inbox) {
-				inbox.open(Folder.READ_WRITE);
-				if (inbox.isOpen()) {
-					/*
-					 * run filters
-					 */
-					runFilters(inbox, mailsort);
-				} else {
-					System.out.println("Could not open inbox at: " + KMailSorterConfiguration.getInstance().getImapHost());
-				}
-			} else {
-				System.out.println("Could not connect to inbox at: " + KMailSorterConfiguration.getInstance().getImapHost());
-			}
+			runFilters(mailsort);
 		} catch (final Exception e) {
 			e.printStackTrace();
 			logger.error(e);

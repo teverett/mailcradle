@@ -5,6 +5,7 @@ import java.io.*;
 import javax.mail.*;
 
 import com.khubla.kmailsorter.domain.*;
+import com.khubla.kmailsorter.util.*;
 
 public class HeaderTerm extends Term {
 	private String headername;
@@ -14,8 +15,8 @@ public class HeaderTerm extends Term {
 	}
 
 	@Override
-	public String[] resolve(Message message) throws MessagingException, IOException {
-		return message.getHeader(headername);
+	public String[] resolve(MessageData messageData) throws MessagingException, IOException {
+		return messageData.getHeader(headername);
 	}
 
 	public void setHeadername(String headername) {

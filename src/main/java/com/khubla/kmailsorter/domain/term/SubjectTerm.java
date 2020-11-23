@@ -5,10 +5,11 @@ import java.io.*;
 import javax.mail.*;
 
 import com.khubla.kmailsorter.domain.*;
+import com.khubla.kmailsorter.util.*;
 
 public class SubjectTerm extends Term {
 	@Override
-	public String[] resolve(Message message) throws MessagingException, IOException {
-		return new String[] { message.getSubject() };
+	public String[] resolve(MessageData messageData) throws MessagingException, IOException {
+		return new String[] { messageData.getSubject() };
 	}
 }

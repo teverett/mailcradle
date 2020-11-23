@@ -7,6 +7,7 @@ import javax.mail.*;
 import org.apache.logging.log4j.*;
 
 import com.khubla.kmailsorter.domain.*;
+import com.khubla.kmailsorter.util.*;
 
 public class ListCondition extends Condition {
 	/**
@@ -23,7 +24,7 @@ public class ListCondition extends Condition {
 	private ListRelation listRelation;
 
 	@Override
-	public boolean evaluate(Message message, Mailsort mailsort) throws MessagingException, IOException {
+	public boolean evaluate(MessageData messageData, Mailsort mailsort) throws MessagingException, IOException {
 		/*
 		 * get the list
 		 */
@@ -31,7 +32,7 @@ public class ListCondition extends Condition {
 		if (null != stringList) {
 			switch (listRelation) {
 				case contains:
-					final String[] strs = getTerm().resolve(message);
+					final String[] strs = getTerm().resolve(messageData);
 					for (final String str : strs) {
 						if (stringList.contains(str)) {
 							return true;

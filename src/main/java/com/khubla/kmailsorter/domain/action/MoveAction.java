@@ -5,6 +5,7 @@ import javax.mail.*;
 import org.apache.logging.log4j.*;
 
 import com.khubla.kmailsorter.domain.*;
+import com.khubla.kmailsorter.util.*;
 
 public class MoveAction extends Action {
 	/**
@@ -17,9 +18,9 @@ public class MoveAction extends Action {
 	private String folderName;
 
 	@Override
-	public void execute(Message message, Mailsort mailsort) throws MessagingException {
-		logger.info("Moving message " + message.getMessageNumber() + " to folder: " + folderName);
-		throw new RuntimeException("Not Implemented");
+	public void execute(MessageData messageData, Mailsort mailsort) throws MessagingException {
+		logger.info("Moving message " + messageData.getId() + " to folder: " + folderName);
+		MailUtil.moveMessage(messageData.getId(), folderName);
 	}
 
 	public String getFolderName() {
