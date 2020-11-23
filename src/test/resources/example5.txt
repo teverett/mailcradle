@@ -1,6 +1,6 @@
 
 
-if (header["from"] in  jerks) {
+if (jerks contains header["from"]  ) {
 
 	moveto "Trash";
 };

@@ -10,16 +10,21 @@ public class StringList {
 		list.add(string);
 	}
 
+	public boolean contains(String name) {
+		for (final String item : list) {
+			if (item.contains(name)) {
+				return true;
+			}
+		}
+		return false;
+	}
+
 	public List<String> getList() {
 		return list;
 	}
 
 	public String getName() {
 		return name;
-	}
-
-	public boolean in(String name) {
-		return list.contains(name);
 	}
 
 	public void setList(List<String> list) {

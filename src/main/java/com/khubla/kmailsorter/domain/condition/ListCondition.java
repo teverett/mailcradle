@@ -30,10 +30,10 @@ public class ListCondition extends Condition {
 		final StringList stringList = mailsort.getList(listname);
 		if (null != stringList) {
 			switch (listRelation) {
-				case in:
+				case contains:
 					final String[] strs = getTerm().resolve(message);
 					for (final String str : strs) {
-						if (stringList.in(str)) {
+						if (stringList.contains(str)) {
 							return true;
 						}
 					}

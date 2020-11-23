@@ -57,7 +57,7 @@ termcondition
    ;
 
 listcondition
-   : term listrelation identifier
+   : identifier listrelation term
    ;
 
 term
@@ -88,7 +88,7 @@ termrelation
    ;
 
 listrelation
-   : 'in'
+   : 'contains'
    ;
 
 action
