@@ -25,14 +25,18 @@ public class MailsortRunner {
 	 */
 	private void runFilters(Mailsort mailsort) throws MessagingException, IOException {
 		final String[] uids = MailUtil.getInstance().getUIDs();
-		if (uids.length > 0) {
-			for (final String uid : uids) {
-				final MessageData messageData = MailUtil.getInstance().getMessageData(uid);
-				for (final Filter filter : mailsort.getFilters()) {
-					filter.execute(messageData, mailsort);
+		if (null != uids) {
+			System.out.println("Processing " + uids.length + " messages");
+			if (uids.length > 0) {
+				for (final String uid : uids) {
+					final MessageData messageData = MailUtil.getInstance().getMessageData(uid);
+					for (final Filter filter : mailsort.getFilters()) {
+						filter.execute(messageData, mailsort);
+					}
 				}
 			}
 		}
+		System.out.println("Done");
 	}
 
 	public void runMailsortFile(File mailsortFile) {
