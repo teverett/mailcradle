@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <Configuration status="warn" strict="true" name="XMLConfigTest" packages="org.apache.logging.log4j.test">
 	<Properties>
-		<Property name="filename">kmailsorter.log</Property>
+		<Property name="filename">mailcradle.log</Property>
 	</Properties>
 	<Filter type="ThresholdFilter" level="trace" />
 
@@ -16,7 +16,7 @@
 		</Appender>
 	</Appenders>
 	<Loggers>
-		<Logger name="com.khubla.kmailsorter" level="debug" additivity="false">
+		<Logger name="com.khubla.mailcradle" level="debug" additivity="false">
 			<AppenderRef ref="File" />
 		</Logger>
 		<Logger name="org.apache.commons.configuration2" level="debug" additivity="false">
