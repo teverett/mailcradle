@@ -12,7 +12,7 @@ public class StringList {
 
 	public boolean contains(String name) {
 		for (final String item : list) {
-			if (item.contains(name)) {
+			if (name.contains(item)) {
 				return true;
 			}
 		}

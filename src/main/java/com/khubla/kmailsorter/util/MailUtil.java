@@ -45,9 +45,9 @@ public class MailUtil {
 	 * @return Folder
 	 * @throws MessagingException
 	 */
-	private Folder getInbox() throws MessagingException {
-		final Folder root = getRootFolder();
-		return root.getFolder(KMailSorterConfiguration.getInstance().getImapFolder());
+	private IMAPFolder getInbox() throws MessagingException {
+		final IMAPFolder root = getRootFolder();
+		return (IMAPFolder) root.getFolder(KMailSorterConfiguration.getInstance().getImapFolder());
 	}
 
 	/**
@@ -58,7 +58,7 @@ public class MailUtil {
 	 */
 	public int getMessageCount() throws MessagingException {
 		logger.info("Getting message count");
-		Folder inboxFolder = null;
+		IMAPFolder inboxFolder = null;
 		try {
 			inboxFolder = getInbox();
 			inboxFolder.open(Folder.READ_ONLY);
@@ -74,7 +74,7 @@ public class MailUtil {
 	}
 
 	public MessageData getMessageData(String uid) throws MessagingException, IOException {
-		Folder inboxFolder = null;
+		IMAPFolder inboxFolder = null;
 		try {
 			logger.info("Getting MessageData for message: " + uid);
 			inboxFolder = getInbox();
@@ -103,8 +103,8 @@ public class MailUtil {
 	 * @return Folder
 	 * @throws MessagingException MessagingException
 	 */
-	private Folder getRootFolder() throws MessagingException {
-		return store.getDefaultFolder();
+	private IMAPFolder getRootFolder() throws MessagingException {
+		return (IMAPFolder) store.getDefaultFolder();
 	}
 
 	/**
@@ -115,7 +115,7 @@ public class MailUtil {
 	 */
 	public String[] getUIDs() throws MessagingException {
 		logger.info("Getting uids");
-		Folder inboxFolder = null;
+		IMAPFolder inboxFolder = null;
 		try {
 			inboxFolder = getInbox();
 			inboxFolder.open(Folder.READ_ONLY);
@@ -146,9 +146,9 @@ public class MailUtil {
 	 * @throws MessagingException MessagingException
 	 */
 	public void moveMessage(String uid, String folderName) throws MessagingException {
-		Folder rootFolder = null;
-		Folder targetFolder = null;
-		Folder inboxFolder = null;
+		IMAPFolder rootFolder = null;
+		IMAPFolder targetFolder = null;
+		IMAPFolder inboxFolder = null;
 		try {
 			logger.info("Moving message " + uid + " to folder " + folderName);
 			/*
@@ -166,7 +166,7 @@ public class MailUtil {
 				 * target
 				 */
 				rootFolder = getRootFolder();
-				targetFolder = rootFolder.getFolder(folderName);
+				targetFolder = (IMAPFolder) rootFolder.getFolder(folderName);
 				/*
 				 * create target if we need to
 				 */
@@ -179,13 +179,9 @@ public class MailUtil {
 				 */
 				targetFolder.open(Folder.READ_WRITE);
 				/*
-				 * copy message
+				 * move message
 				 */
-				inboxFolder.copyMessages(new Message[] { messages[0] }, targetFolder);
-				/*
-				 * delete message
-				 */
-				messages[0].setFlag(Flags.Flag.DELETED, true);
+				inboxFolder.moveMessages(new Message[] { messages[0] }, targetFolder);
 			}
 		} finally {
 			if (null != inboxFolder) {
