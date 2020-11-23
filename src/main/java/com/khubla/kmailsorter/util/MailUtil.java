@@ -18,6 +18,10 @@ public class MailUtil {
 	 */
 	private final static String FWD = "fwd: ";
 	/**
+	 * RE
+	 */
+	private final static String RE = "re: ";
+	/**
 	 * singleton
 	 */
 	private static MailUtil instance = null;
@@ -279,6 +283,78 @@ public class MailUtil {
 			if (null != rootFolder) {
 				// root does not contain messages so we neither open nor close it
 				rootFolder = null;
+			}
+		}
+	}
+
+	/**
+	 * reply to a message
+	 *
+	 * @param message Message
+	 * @param reply reply text
+	 * @throws MessagingException MessagingException
+	 */
+	public void replyMessage(String uid, String reply) throws MessagingException {
+		IMAPFolder inboxFolder = null;
+		try {
+			logger.info("Replying to message " + uid + " with " + reply);
+			/*
+			 * inbox
+			 */
+			inboxFolder = getInbox();
+			inboxFolder.open(Folder.READ_ONLY);
+			/*
+			 * message
+			 */
+			final SearchTerm searchTerm = new MessageIDTerm(uid);
+			final Message[] messages = inboxFolder.search(searchTerm);
+			if ((null != messages) && (messages.length == 1)) {
+				/*
+				 * create message
+				 */
+				final Message replyMessage = new MimeMessage(session);
+				/*
+				 * recipient
+				 */
+				final InternetAddress[] recipients = (InternetAddress[]) messages[0].getFrom();
+				/*
+				 * Fill in header
+				 */
+				replyMessage.setRecipients(Message.RecipientType.TO, recipients);
+				replyMessage.setSubject(RE + messages[0].getSubject());
+				replyMessage.setFrom(new InternetAddress(KMailSorterConfiguration.getInstance().getSmtpFrom()));
+				/*
+				 * Create the message part
+				 */
+				final Multipart multipart = new MimeMultipart();
+				/*
+				 * set reply
+				 */
+				final MimeBodyPart messageBodyPart1 = new MimeBodyPart();
+				messageBodyPart1.setContent(reply, "text/html");
+				multipart.addBodyPart(messageBodyPart1);
+				/*
+				 * set content
+				 */
+				final MimeBodyPart messageBodyPart2 = new MimeBodyPart();
+				messageBodyPart2.setContent(messages[0], "message/rfc822");
+				multipart.addBodyPart(messageBodyPart2);
+				/*
+				 * Associate multi-part with message
+				 */
+				replyMessage.setContent(multipart);
+				replyMessage.saveChanges();
+				/*
+				 * send
+				 */
+				smtpSend(replyMessage, recipients);
+			}
+		} finally {
+			if (null != inboxFolder) {
+				if (inboxFolder.isOpen()) {
+					inboxFolder.close(true);
+				}
+				inboxFolder = null;
 			}
 		}
 	}

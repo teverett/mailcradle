@@ -24,5 +24,13 @@ public class ActionListener extends AbstractListener {
 			forwardActionListener.enterForwardaction(ctx.forwardaction());
 			action = forwardActionListener.action;
 		}
+		/**
+		 * reply
+		 */
+		if (null != ctx.replyaction()) {
+			final ReplyActionListener replyActionListener = new ReplyActionListener();
+			replyActionListener.enterReplyaction(ctx.replyaction());
+			action = replyActionListener.action;
+		}
 	}
 }

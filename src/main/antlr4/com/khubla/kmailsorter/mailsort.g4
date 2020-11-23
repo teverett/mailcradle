@@ -78,6 +78,7 @@ bodyterm
 fromterm
    : 'from'
    ;
+
 headerterm
    : 'header' '[' string ']'
    ;
@@ -94,6 +95,11 @@ listrelation
 action
    : moveaction
    | forwardaction
+   | replyaction
+   ;
+
+replyaction
+   : 'replywith' string ';'
    ;
 
 moveaction
