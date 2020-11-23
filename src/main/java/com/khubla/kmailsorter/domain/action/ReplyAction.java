@@ -5,7 +5,7 @@ import javax.mail.*;
 import org.apache.logging.log4j.*;
 
 import com.khubla.kmailsorter.domain.*;
-import com.khubla.kmailsorter.util.*;
+import com.khubla.kmailsorter.imap.*;
 
 public class ReplyAction extends Action {
 	/**
@@ -18,10 +18,10 @@ public class ReplyAction extends Action {
 	private String reply;
 
 	@Override
-	public void execute(MessageData messageData, Mailsort mailsort) throws MessagingException {
+	public void execute(IMAPMessageData messageData, Mailsort mailsort) throws MessagingException {
 		System.out.println("Replying to message " + messageData.getId() + " with: " + reply);
 		logger.info("Replying to message " + messageData.getId() + " with: " + reply);
-		MailUtil.getInstance().replyMessage(messageData.getId(), reply);
+		IMAPUtil.getInstance().replyMessage(messageData.getId(), reply);
 	}
 
 	public String getReply() {

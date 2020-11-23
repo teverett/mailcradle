@@ -5,7 +5,7 @@ import java.util.*;
 
 import javax.mail.*;
 
-import com.khubla.kmailsorter.util.*;
+import com.khubla.kmailsorter.imap.*;
 
 public class Filter {
 	private final List<Condition> conditions = new ArrayList<Condition>();
@@ -26,7 +26,7 @@ public class Filter {
 	 * @throws MessagingException messaging exception
 	 * @throws IOException
 	 */
-	public void execute(MessageData messageData, Mailsort mailsort) throws MessagingException, IOException {
+	public void execute(IMAPMessageData messageData, Mailsort mailsort) throws MessagingException, IOException {
 		boolean conditionsPass = true;
 		for (final Condition condition : conditions) {
 			if (false == condition.evaluate(messageData, mailsort)) {

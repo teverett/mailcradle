@@ -1,4 +1,4 @@
-package com.khubla.kmailsorter.util;
+package com.khubla.kmailsorter.imap;
 
 import java.io.*;
 import java.util.*;
@@ -12,7 +12,7 @@ import org.apache.logging.log4j.*;
 import com.khubla.kmailsorter.*;
 import com.sun.mail.imap.*;
 
-public class MailUtil {
+public class IMAPUtil {
 	/**
 	 * FWD
 	 */
@@ -24,15 +24,15 @@ public class MailUtil {
 	/**
 	 * singleton
 	 */
-	private static MailUtil instance = null;
+	private static IMAPUtil instance = null;
 	/**
 	 * logger
 	 */
-	private static final Logger logger = LogManager.getLogger(MailUtil.class);
+	private static final Logger logger = LogManager.getLogger(IMAPUtil.class);
 
-	public static MailUtil getInstance() throws MessagingException {
+	public static IMAPUtil getInstance() throws MessagingException {
 		if (null == instance) {
-			instance = new MailUtil();
+			instance = new IMAPUtil();
 		}
 		return instance;
 	}
@@ -45,7 +45,7 @@ public class MailUtil {
 	 *
 	 * @throws MessagingException MessagingException
 	 */
-	private MailUtil() throws MessagingException {
+	private IMAPUtil() throws MessagingException {
 		final Properties properties = new Properties();
 		properties.put("mail.smtps.host", KMailSorterConfiguration.getInstance().getSmtpHost());
 		properties.put("mail.smtps.starttls.enable", "true");
@@ -204,7 +204,7 @@ public class MailUtil {
 		}
 	}
 
-	public MessageData getMessageData(String uid) throws MessagingException, IOException {
+	public IMAPMessageData getMessageData(String uid) throws MessagingException, IOException {
 		IMAPFolder inboxFolder = null;
 		try {
 			logger.info("Getting MessageData for message: " + uid);
@@ -214,7 +214,7 @@ public class MailUtil {
 			final Message[] messages = inboxFolder.search(searchTerm);
 			if ((null != messages) && (messages.length == 1)) {
 				if (messages[0] instanceof IMAPMessage) {
-					return new MessageData((IMAPMessage) messages[0]);
+					return new IMAPMessageData((IMAPMessage) messages[0]);
 				}
 			}
 			return null;

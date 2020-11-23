@@ -1,4 +1,4 @@
-package com.khubla.kmailsorter.util;
+package com.khubla.kmailsorter.imap;
 
 import java.io.*;
 import java.util.*;
@@ -13,7 +13,7 @@ import com.sun.mail.imap.*;
  *
  * @author tom
  */
-public class MessageData {
+public class IMAPMessageData {
 	public static class HeaderEntry {
 		public String key;
 		public String value;
@@ -36,7 +36,7 @@ public class MessageData {
 	 * @throws MessagingException exception
 	 * @throws IOException exception
 	 */
-	public MessageData(IMAPMessage message) throws MessagingException, IOException {
+	public IMAPMessageData(IMAPMessage message) throws MessagingException, IOException {
 		/*
 		 * id
 		 */

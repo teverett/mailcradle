@@ -5,7 +5,7 @@ import java.io.*;
 import javax.mail.*;
 
 import com.khubla.kmailsorter.domain.*;
-import com.khubla.kmailsorter.util.*;
+import com.khubla.kmailsorter.imap.*;
 
 public class TermCondition extends Condition {
 	/**
@@ -18,7 +18,7 @@ public class TermCondition extends Condition {
 	private TermRelation termRelation;
 
 	@Override
-	public boolean evaluate(MessageData messageData, Mailsort mailsort) throws MessagingException, IOException {
+	public boolean evaluate(IMAPMessageData messageData, Mailsort mailsort) throws MessagingException, IOException {
 		final String[] strs = getTerm().resolve(messageData);
 		switch (termRelation) {
 			case is:

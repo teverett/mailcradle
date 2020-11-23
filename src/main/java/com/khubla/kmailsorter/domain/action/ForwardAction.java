@@ -5,7 +5,7 @@ import javax.mail.*;
 import org.apache.logging.log4j.*;
 
 import com.khubla.kmailsorter.domain.*;
-import com.khubla.kmailsorter.util.*;
+import com.khubla.kmailsorter.imap.*;
 
 public class ForwardAction extends Action {
 	/**
@@ -18,10 +18,10 @@ public class ForwardAction extends Action {
 	private String address;
 
 	@Override
-	public void execute(MessageData messageData, Mailsort mailsort) throws MessagingException {
+	public void execute(IMAPMessageData messageData, Mailsort mailsort) throws MessagingException {
 		System.out.println("Forwarding message " + messageData.getId() + " to address: " + address);
 		logger.info("Forwarding message " + messageData.getId() + " to address: " + address);
-		MailUtil.getInstance().forwardMessage(messageData.getId(), address);
+		IMAPUtil.getInstance().forwardMessage(messageData.getId(), address);
 	}
 
 	public String getAddress() {

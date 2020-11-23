@@ -7,7 +7,7 @@ import javax.mail.*;
 import org.apache.logging.log4j.*;
 
 import com.khubla.kmailsorter.domain.*;
-import com.khubla.kmailsorter.util.*;
+import com.khubla.kmailsorter.imap.*;
 
 public class MailsortRunner {
 	/**
@@ -24,12 +24,12 @@ public class MailsortRunner {
 	 * @throws IOException
 	 */
 	private void runFilters(Mailsort mailsort) throws MessagingException, IOException {
-		final String[] uids = MailUtil.getInstance().getUIDs();
+		final String[] uids = IMAPUtil.getInstance().getUIDs();
 		if (null != uids) {
 			System.out.println("Processing " + uids.length + " messages");
 			if (uids.length > 0) {
 				for (final String uid : uids) {
-					final MessageData messageData = MailUtil.getInstance().getMessageData(uid);
+					final IMAPMessageData messageData = IMAPUtil.getInstance().getMessageData(uid);
 					for (final Filter filter : mailsort.getFilters()) {
 						filter.execute(messageData, mailsort);
 					}

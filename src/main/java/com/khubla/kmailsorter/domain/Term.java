@@ -4,8 +4,8 @@ import java.io.*;
 
 import javax.mail.*;
 
-import com.khubla.kmailsorter.util.*;
+import com.khubla.kmailsorter.imap.*;
 
 public abstract class Term {
-	abstract public String[] resolve(MessageData messageData) throws MessagingException, IOException;
+	abstract public String[] resolve(IMAPMessageData messageData) throws MessagingException, IOException;
 }

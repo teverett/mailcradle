@@ -4,7 +4,7 @@ import java.io.*;
 
 import javax.mail.*;
 
-import com.khubla.kmailsorter.util.*;
+import com.khubla.kmailsorter.imap.*;
 
 public abstract class Condition {
 	private Term term;
@@ -15,7 +15,7 @@ public abstract class Condition {
 	 * @param message Message to evaluate on
 	 * @throws MessagingException oops
 	 */
-	abstract public boolean evaluate(MessageData messageData, Mailsort mailsort) throws MessagingException, IOException;
+	abstract public boolean evaluate(IMAPMessageData messageData, Mailsort mailsort) throws MessagingException, IOException;
 
 	public Term getTerm() {
 		return term;

@@ -7,7 +7,7 @@ import javax.mail.*;
 import org.apache.logging.log4j.*;
 
 import com.khubla.kmailsorter.domain.*;
-import com.khubla.kmailsorter.util.*;
+import com.khubla.kmailsorter.imap.*;
 
 public class ListCondition extends Condition {
 	/**
@@ -24,7 +24,7 @@ public class ListCondition extends Condition {
 	private ListRelation listRelation;
 
 	@Override
-	public boolean evaluate(MessageData messageData, Mailsort mailsort) throws MessagingException, IOException {
+	public boolean evaluate(IMAPMessageData messageData, Mailsort mailsort) throws MessagingException, IOException {
 		/*
 		 * get the list
 		 */
