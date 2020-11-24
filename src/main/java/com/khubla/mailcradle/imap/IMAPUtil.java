@@ -10,6 +10,7 @@ import javax.mail.search.*;
 import org.apache.logging.log4j.*;
 
 import com.khubla.mailcradle.*;
+import com.khubla.mailcradle.progress.*;
 import com.sun.mail.imap.*;
 
 public class IMAPUtil {
@@ -259,7 +260,7 @@ public class IMAPUtil {
 	 * @return array of UIDs
 	 * @throws MessagingException MessagingException
 	 */
-	public String[] getUIDs() throws MessagingException {
+	public String[] getUIDs(ProgressCallback progressCallback) throws MessagingException {
 		logger.info("Getting uids");
 		IMAPFolder inboxFolder = null;
 		try {
@@ -271,6 +272,9 @@ public class IMAPUtil {
 				final Message message = inboxFolder.getMessage(i);
 				if (message instanceof IMAPMessage) {
 					ret[i - 1] = ((IMAPMessage) message).getMessageID();
+				}
+				if (null != progressCallback) {
+					progressCallback.progress();
 				}
 			}
 			return ret;

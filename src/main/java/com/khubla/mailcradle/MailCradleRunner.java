@@ -8,6 +8,7 @@ import org.apache.logging.log4j.*;
 
 import com.khubla.mailcradle.domain.*;
 import com.khubla.mailcradle.imap.*;
+import com.khubla.mailcradle.progress.*;
 
 public class MailCradleRunner {
 	/**
@@ -24,19 +25,27 @@ public class MailCradleRunner {
 	 * @throws IOException
 	 */
 	private void runFilters(Mailcradle mailsort) throws MessagingException, IOException {
-		System.out.println("Reading Message UIDs");
-		final String[] uids = IMAPUtil.getInstance().getUIDs();
+		/*
+		 * progress callback
+		 */
+		final int totalCount = IMAPUtil.getInstance().getMessageCount();
+		ProgressCallback progressCallback = new DefaultProgressCallbackImpl(totalCount);
+		System.out.println("Reading " + totalCount + " Message UIDs");
+		final String[] uids = IMAPUtil.getInstance().getUIDs(progressCallback);
 		if (null != uids) {
-			System.out.println("Processing " + uids.length + " messages");
+			progressCallback = new DefaultProgressCallbackImpl(uids.length);
+			System.out.println("\nProcessing " + uids.length + " messages");
 			if (uids.length > 0) {
 				for (final String uid : uids) {
 					final IMAPMessageData messageData = IMAPUtil.getInstance().getMessageData(uid);
 					for (final Filter filter : mailsort.getFilters()) {
 						filter.execute(messageData, mailsort);
 					}
+					progressCallback.progress();
 				}
 			}
 		}
+		System.out.println();
 		System.out.println("Done");
 	}
 
