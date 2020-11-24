@@ -49,7 +49,8 @@ public class Main {
 			 */
 			final String mailcradleFilename = MailCradleConfiguration.getInstance().getMailsortFile();
 			if (null != mailcradleFilename) {
-				final File mailcradleFile = new File(mailcradleFilename);
+				String root = new File(configFilename).getAbsoluteFile().getParentFile().toString();
+				final File mailcradleFile = new File(root + File.separator + mailcradleFilename);
 				if (mailcradleFile.exists()) {
 					final MailCradleRunner mailsortRunner = new MailCradleRunner();
 					mailsortRunner.runMailsortFile(mailcradleFile);
