@@ -83,7 +83,7 @@ public class MailCradleMarshaller {
 			/*
 			 * process imports
 			 */
-			processImports(mailsorttListener.mailsort, imported);
+			processImports(mailsorttListener.mailsort, imported, file.getAbsoluteFile().getParentFile().toString());
 			/*
 			 * done
 			 */
@@ -93,16 +93,17 @@ public class MailCradleMarshaller {
 		}
 	}
 
-	private static void processImports(Mailcradle mailsort, List<String> imported) throws IOException {
+	private static void processImports(Mailcradle mailsort, List<String> imported, String root) throws IOException {
 		for (final String importName : mailsort.getImports()) {
-			if (false == imported.contains(importName)) {
+			final String filePath = root + File.separator + importName;
+			if (false == imported.contains(filePath)) {
 				imported.add(importName);
-				final File file = new File(importName);
+				final File file = new File(filePath);
 				if (file.exists()) {
 					final Mailcradle subFile = importRules(file, imported);
 					mailsort.merge(subFile);
 				} else {
-					logger.fatal("Unable to import file: " + importName);
+					logger.fatal("Unable to import file: " + file.getAbsolutePath());
 				}
 			}
 		}

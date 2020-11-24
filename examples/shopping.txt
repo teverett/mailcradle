@@ -1,0 +1,13 @@
+
+
+if (shopping contains from) {
+	moveto "INBOX.Shopping";
+};
+
+list shopping 
+
+"@amazon.com", 
+"@ebaycom", 
+"@alibaba.com",
+"@aliexpress.com",
+"@etsy.com";

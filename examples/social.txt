@@ -1,0 +1,10 @@
+
+if (socialmedia contains from) {
+	moveto "INBOX.SocialMedia";
+};
+
+list socialmedia 
+
+"@twitter.com", 
+"@facebook.com", 
+"@instagram.com";
