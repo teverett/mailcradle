@@ -1,3 +1,3 @@
 #! /bin/sh
 
-java -jar target/kmailsorter-1.0.0-SNAPSHOT.jar --config kmailsorter.properties
+java -jar target/mailcradle-1.0.0-SNAPSHOT.jar --config mailcradle.properties
