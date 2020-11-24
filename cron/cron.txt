@@ -1,0 +1,1 @@
+*/5 * * * * /bin/sh /home/tom/mailcradle/run.sh /home/tom/mailsortrules/mailcradle.properties
