@@ -61,8 +61,13 @@ public class IMAPUtil {
 		properties.put("mail.imap.starttls.enable", MailCradleConfiguration.getInstance().getImapTLS());
 		properties.put("mail.imap.port", MailCradleConfiguration.getInstance().getImapPort());
 		properties.put("mail.imap.auth", "true");
+		if (true == MailCradleConfiguration.getInstance().getImapTLS()) {
+			properties.put("mail.store.protocol", "imaps");
+		} else {
+			properties.put("mail.store.protocol", "imap");
+		}
 		session = Session.getDefaultInstance(properties, null);
-		store = session.getStore("imaps");
+		store = session.getStore();
 		logger.info("Logging into " + MailCradleConfiguration.getInstance().getImapHost() + " as " + MailCradleConfiguration.getInstance().getImapUsername());
 		store.connect(MailCradleConfiguration.getInstance().getImapHost(), MailCradleConfiguration.getInstance().getImapUsername(), MailCradleConfiguration.getInstance().getImapPassword());
 	}
