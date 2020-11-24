@@ -1,0 +1,9 @@
+
+// flag emails from important people
+
+if (importantpeople contains from) {
+	flag "flagged";
+};
+
+
+list importantpeople "tom@khubla.com";

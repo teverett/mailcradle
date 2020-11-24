@@ -1,3 +1,7 @@
 
+// Root mail rules file which simply includes other mail rules files
+
 import "shopping.txt";
 import "social.txt";
+import "spam.txt";
+import "important.txt";

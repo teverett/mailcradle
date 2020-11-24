@@ -181,6 +181,10 @@ import "family.txt";
 
 # Example rules
 
+## Example Files
+
+The source tree contains example rule files in the directory [/examples](https://github.com/teverett/mailcradle/tree/master/examples).
+
 ## Example Simple Rules
 
 A rule to move all email from "@github.com" to a folder called "INBOX.github"

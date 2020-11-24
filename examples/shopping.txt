@@ -1,4 +1,5 @@
 
+// A mail rule to move all messages from online shopping sites into a folder
 
 if (shopping contains from) {
 	moveto "INBOX.Shopping";

@@ -1,4 +1,6 @@
 
+// A mail rule to move all messages from social media sites into a folder
+
 if (socialmedia contains from) {
 	moveto "INBOX.SocialMedia";
 };

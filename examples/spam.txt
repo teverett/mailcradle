@@ -1,0 +1,26 @@
+
+// A mail rule remove spam based on header
+if (header["X-Spam-Flag"] is "YES") {
+    moveto "INBOX.Spam";
+};
+
+// A mail rule remove spam by subject line
+if (spamsubjectlines contains subject) {
+	moveto "INBOX.Spam";
+};
+
+list spamsubjectlines 
+
+"additional income",
+"be your own boss",
+"extra income",
+"free hosting",
+"get paid",
+"home based business",
+"home employment",
+"income from home",
+"profit",
+"sale",
+"work at home",
+"work from home",
+"while you sleep";
