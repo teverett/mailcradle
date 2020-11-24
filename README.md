@@ -27,6 +27,8 @@ To build MailCradle:
 
 `java -jar target/mailcradle-1.0.0-SNAPSHOT.jar --config mailcradle.properties`
 
+Typically MailCradle would be run on a regular basis such as every couple minutes from cron.
+
 # Configuration
 
 The mail `mailcradle.properties` contains IMAP login properties, and the name of a mail sorting rules file. You will need to configure the properties file for your SMTP and IMAP server.
@@ -62,7 +64,7 @@ Simple rules take the format
 ```java
 if (<maildata> <condition> <value>) {
 	<actions>
-}
+};
 ```
 
 The maildata fields can be:
@@ -87,7 +89,7 @@ List rules take the format
 ```java
 if (<listname> contains <value>) {
 	<actions>
-}
+};
 ```
 
 List rules require that a named list be defined to use. Lists are defined as:
@@ -144,7 +146,7 @@ flag <flagname>
 
 ### unflag
 
-Remove ab IMAP flag from the message.
+Remove an IMAP flag from the message.
 
 ```java
 unflag <flagname>
@@ -207,7 +209,7 @@ A blackhole for spammers, using the subject field
 list badsubjects "$", "Money", "Free";
 if (badsubjects contains subject) {
 	moveto "INBOX.Trash";
-}
+};
 </pre>
 
 Mark all emails from a special list of senders with the IMAP "flagged" flag.
@@ -216,7 +218,7 @@ Mark all emails from a special list of senders with the IMAP "flagged" flag.
 list importantpeople "person1@example.com", "person2@example.com", "person3@example.com";
 if (importantpeople contains from) {
 	flag "flagged";
-}
+};
 </pre>
 
 Forward all emails from certain domains and then save then in a folder
@@ -226,7 +228,7 @@ list domainlist "@domain1.com", "@domain2.com";
 if (domainlist contains from) {
 	forwardto "address@example.com";
 	moveto "INBOX.AutoForwarded";
-}
+};
 </pre>
 
 
