@@ -116,7 +116,7 @@ Move the message to an IMAP folder
 moveto <foldername>
 ```
 
-**foldername** must be a quoted string such as "me@example.com"
+**foldername** must be a quoted string such as "me@example.com".  If the target IMAP folder does not exists it is created and subscribed to.
 
 ### replywith
 
@@ -204,6 +204,14 @@ An out of office email
 <pre>
 if (from contains "@example.com") {
 	replywith "I am out of office";
+};
+</pre>
+
+Move all messages with the `X-Spam-Flag` header to "YES" to a folder
+
+<pre>
+if (header["X-Spam-Flag"] is "YES") {
+	moveto "INBOX.Spam";
 };
 </pre>
 
