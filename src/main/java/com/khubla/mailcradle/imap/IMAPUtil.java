@@ -47,10 +47,20 @@ public class IMAPUtil {
 	 */
 	private IMAPUtil() throws MessagingException {
 		final Properties properties = new Properties();
+		/*
+		 * SMTP
+		 */
 		properties.put("mail.smtps.host", MailCradleConfiguration.getInstance().getSmtpHost());
-		properties.put("mail.smtps.starttls.enable", "true");
-		properties.put("mail.smtps.auth", "true");
+		properties.put("mail.smtps.starttls.enable", MailCradleConfiguration.getInstance().getSmtpTLS());
 		properties.put("mail.smtps.port", MailCradleConfiguration.getInstance().getSmtpPort());
+		properties.put("mail.smtps.auth", "true");
+		/*
+		 * IMAP
+		 */
+		properties.put("mail.imap.host", MailCradleConfiguration.getInstance().getImapPort());
+		properties.put("mail.imap.starttls.enable", MailCradleConfiguration.getInstance().getImapTLS());
+		properties.put("mail.imap.port", MailCradleConfiguration.getInstance().getImapPort());
+		properties.put("mail.imap.auth", "true");
 		session = Session.getDefaultInstance(properties, null);
 		store = session.getStore("imaps");
 		logger.info("Logging into " + MailCradleConfiguration.getInstance().getImapHost() + " as " + MailCradleConfiguration.getInstance().getImapUsername());

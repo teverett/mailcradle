@@ -75,6 +75,18 @@ public class MailCradleConfiguration {
 	 * SMTP port
 	 */
 	private Integer smtpPort;
+	/**
+	 * IMAP port
+	 */
+	private Integer imapPort;
+	/**
+	 * IMAP TLS
+	 */
+	private Boolean imapTLS;
+	/**
+	 * IMAP TLS
+	 */
+	private Boolean smtpTLS;
 
 	/**
 	 * ctor
@@ -92,6 +104,14 @@ public class MailCradleConfiguration {
 
 	public String getImapPassword() {
 		return imapPassword;
+	}
+
+	public Integer getImapPort() {
+		return imapPort;
+	}
+
+	public Boolean getImapTLS() {
+		return imapTLS;
 	}
 
 	public String getImapUsername() {
@@ -118,6 +138,10 @@ public class MailCradleConfiguration {
 		return smtpPort;
 	}
 
+	public Boolean getSmtpTLS() {
+		return smtpTLS;
+	}
+
 	public String getSmtpUsername() {
 		return smtpUsername;
 	}
@@ -138,12 +162,15 @@ public class MailCradleConfiguration {
 			imapUsername = configuration.get(String.class, "imap.username");
 			imapPassword = configuration.get(String.class, "imap.password");
 			imapFolder = configuration.get(String.class, "imap.folder");
+			imapPort = configuration.get(Integer.class, "imap.port");
+			imapTLS = configuration.get(Boolean.class, "imap.tls");
 			mailsortFile = configuration.get(String.class, "mailsortFile");
 			smtpHost = configuration.get(String.class, "smtp.host");
 			smtpUsername = configuration.get(String.class, "smtp.username");
 			smtpPassword = configuration.get(String.class, "smtp.password");
 			smtpFrom = configuration.get(String.class, "smtp.from");
 			smtpPort = configuration.get(Integer.class, "smtp.port");
+			smtpTLS = configuration.get(Boolean.class, "smtp.tls");
 		} catch (final Exception e) {
 			logger.error(e);
 			throw e;
@@ -160,6 +187,14 @@ public class MailCradleConfiguration {
 
 	public void setImapPassword(String imapPassword) {
 		this.imapPassword = imapPassword;
+	}
+
+	public void setImapPort(Integer imapPort) {
+		this.imapPort = imapPort;
+	}
+
+	public void setImapTLS(Boolean imapTLS) {
+		this.imapTLS = imapTLS;
 	}
 
 	public void setImapUsername(String imapUsername) {
@@ -184,6 +219,10 @@ public class MailCradleConfiguration {
 
 	public void setSmtpPort(Integer smtpPort) {
 		this.smtpPort = smtpPort;
+	}
+
+	public void setSmtpTLS(Boolean smtpTLS) {
+		this.smtpTLS = smtpTLS;
 	}
 
 	public void setSmtpUsername(String smtpUsername) {

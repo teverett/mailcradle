@@ -1,11 +1,19 @@
+
+# IMAP settings
 imap.host=mail.example.com
 imap.username=uuu
 imap.password=ppp
 imap.folder=INBOX
+imap.port=993
+imap.tls=true
+
+# SMTP settings
 smtp.host=mail.example.com
 smtp.username=uuu
 smtp.password=ppp
 smtp.from=me@example.com
 smtp.port=465
-mailsortFile=mailcradle.txt
+smtp.tls=true
 
+# rules file
+mailsortFile=mailcradle.txt
