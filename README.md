@@ -148,7 +148,6 @@ unflag <flagname>
 
 **flagname** must be a quoted string such as "flagged"
 
-
 # Example rules
 
 ## Simple Rules
@@ -173,6 +172,38 @@ An out of office email
 
 <pre>
 if (from contains "@example.com") {
-	moveto "INBOX.Trash";
+	replywith "I am out of office";
 };
 </pre>
+
+## List rules
+
+A blackhole for spammers, using the subject field
+
+<pre>
+list badsubjects "$", "Money", "Free";
+if (badsubjects contains subject) {
+	moveto "INBOX.Trash";
+}
+</pre>
+
+Mark all emails from a special list of senders with the IMAP "flagged" flag.
+
+<pre>
+list importantpeople "person1@example.com", "person2@example.com", "person3@example.com";
+if (importantpeople contains from) {
+	flag "flagged";
+}
+</pre>
+
+Forward all emails from certain domains and then save then in a folder
+
+<pre>
+list domainlist "@domain1.com", "@domain2.com";
+if (domainlist contains from) {
+	forwardto "address@example.com";
+	moveto "INBOX.AutoForwarded";
+}
+</pre>
+
+
