@@ -11,6 +11,11 @@ There is mail that is important, and mail that can be read and responded to late
 
 The sorting process is similar to [winnowing](https://en.wikipedia.org/wiki/Winnowing), and that tool that has been used for centuries to winnow grain is a *cradle*.  Therefore, I named the program MailCradle.  Another name for a cradle is a [winnowing-fan](https://www.google.com/search?q=winnowing+fan), if you're interested to learn a bit about it.
 
+
+# Contributing
+
+MailCradle is a work in progress. Issues and Pull Requests are welcome.
+
 # License
 
 MailCradle is distributed under the 3-Clause BSD license.
