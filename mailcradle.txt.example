@@ -1,7 +1,5 @@
-if (github contains from ) {
+if (githublist contains from ) {
 	moveto "INBOX.Github";
 };
 
-list github
-
-"@github.com";
+list githublist "@github.com";
