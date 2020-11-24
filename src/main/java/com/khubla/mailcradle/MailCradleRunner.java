@@ -24,6 +24,7 @@ public class MailCradleRunner {
 	 * @throws IOException
 	 */
 	private void runFilters(Mailcradle mailsort) throws MessagingException, IOException {
+		System.out.println("Reading Message UIDs");
 		final String[] uids = IMAPUtil.getInstance().getUIDs();
 		if (null != uids) {
 			System.out.println("Processing " + uids.length + " messages");
