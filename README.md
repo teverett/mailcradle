@@ -56,6 +56,7 @@ There are two types of rules that MailCradle can process:
 * Simple Rules
 * List Rules
 
+The full rule syntax in [ANTLR](https://www.antlr.org/) format is [here](https://github.com/teverett/mailcradle/blob/master/src/main/antlr4/com/khubla/mailcradle/mailcradle.g4).
 
 ## Simple Rules
 
