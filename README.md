@@ -158,7 +158,7 @@ Remove an IMAP flag from the message.
 unflag <flagname>
 ```
 
-**flagname** must be a quoted string such as "flagged"
+**flagname** must be a quoted string such as "flagged".  The standard flags which IMAP servers support are enumerated in [RFC 3501](https://tools.ietf.org/html/rfc3501)
 
 
 ## Importing rule files
