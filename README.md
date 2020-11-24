@@ -11,20 +11,168 @@ There is mail that is important, and mail that can be read and responded to late
 
 The sorting process is similar to [winnowing](https://en.wikipedia.org/wiki/Winnowing), and that tool that has been used for centuries to winnow grain is a *cradle*.  Therefore, I named the program MailCradle.  Another name for a cradle is a [winnowing- fan](https://www.google.com/search?q=winnowing+fan), if you're interested to learn a bit about it. 
 
-# Configuration
+# Building MailCradle
 
+MailCradle builds with [maven](https://maven.apache.org/index.html) and requires Java11+.
 
+To build MailCradle:
 
+`mvn clean package`
 
 # Running MailCradle
 
+`java -jar target/mailcradle-1.0.0-SNAPSHOT.jar --config mailcradle.properties`
 
+# Configuration
+
+The mail `mailcradle.properties` contains IMAP login properties, and the name of a mail sorting rules file. You will need to configure the properties file for your SMTP and IMAP server.
+
+Here's an example:
+
+<pre>
+imap.host=mail.example.com
+imap.username=uuu
+imap.password=ppp
+imap.folder=INBOX
+smtp.host=mail.example.com
+smtp.username=uuu
+smtp.password=ppp
+smtp.from=me@example.com
+smtp.port=465
+mailsortFile=mailcradle.txt
+</pre>
+
+
+# Rules
+
+There are two types of rules that mailcradle can process:
+
+* Simple Rules
+* List Rules
+
+
+## Simple Rules
+
+Simple rules take the format 
+
+```java
+if (<maildata> <condition> <value>) {
+	<actions>
+}
+```
+
+The maildata fields can be:
+
+* subject
+* body
+* from
+* header ["fieldname"]
+
+The condition can be:
+
+* contains
+* is
+
+and the value is a string such as "me@here.com".
+
+
+## List Rules
+
+List rules take the format
+
+```java
+if (<listname> contains <value>) {
+	<actions>
+}
+```
+
+List rules require that a named list be defined to use. Lists are defined as:
+
+```java
+list <listname> "value1", "value2", "value3", ... ;
+```
+
+## Actions
+
+There are 5 actions which can be run
+
+### moveto
+
+Move the message to an IMAP folder
+
+```java
+moveto <foldername>
+```
+
+**foldername** must be a quoted string such as "me@example.com"
+
+### replywith
+
+Reply to the message
+
+```java
+replywith <content>
+```
+
+**content** must be a quoted string such as "This mailbox is not monitored"
+
+
+### forwardto
+
+Forward the message to an email address
+
+```java
+forwardto <address>
+```
+
+**address** must be a quoted string such as "someone@example.com"
+
+### flag
+
+Add an IMAP flag to the message.
+
+```java
+flag <flagname>
+```
+
+**flagname** must be a quoted string such as "flagged"
+
+
+### unflag
+
+Remove ab IMAP flag from the message.
+
+```java
+unflag <flagname>
+```
+
+**flagname** must be a quoted string such as "flagged"
 
 
 # Example rules
 
+## Simple Rules
 
+A rule to move all email from "@github.com" to a folder called "INBOX.github"
 
+<pre>
+if (from contains "@github.com") {
+	moveto "INBOX.github";
+};
+</pre>
 
+A rule to move all "Free Money" spam to the trash
 
+<pre>
+if (subject contains "Free Money") {
+	moveto "INBOX.Trash";
+};
+</pre>
 
+An out of office email
+
+<pre>
+if (from contains "@example.com") {
+	moveto "INBOX.Trash";
+};
+</pre>
