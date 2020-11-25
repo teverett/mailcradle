@@ -49,21 +49,5 @@ public class ActionListener extends AbstractListener {
 			unflagActionListener.enterUnflagaction(ctx.unflagaction());
 			action = unflagActionListener.action;
 		}
-		/**
-		 * setheader
-		 */
-		if (null != ctx.setheaderaction()) {
-			final SetHeaderActionListener settHeaderActionListener = new SetHeaderActionListener();
-			settHeaderActionListener.enterSetheaderaction(ctx.setheaderaction());
-			action = settHeaderActionListener.action;
-		}
-		/**
-		 * removeheader
-		 */
-		if (null != ctx.removeheaderaction()) {
-			final RemoveHeaderActionListener removeHeaderActionListener = new RemoveHeaderActionListener();
-			removeHeaderActionListener.enterRemoveheaderaction(ctx.removeheaderaction());
-			action = removeHeaderActionListener.action;
-		}
 	}
 }

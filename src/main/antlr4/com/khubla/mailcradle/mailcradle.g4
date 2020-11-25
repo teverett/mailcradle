@@ -98,16 +98,6 @@ action
    | replyaction
    | flagaction
    | unflagaction
-   | setheaderaction
-   | removeheaderaction
-   ;
-
-setheaderaction
-   : 'setheader' string string
-   ;
-
-removeheaderaction
-   : 'removeheader' string
    ;
 
 flagaction

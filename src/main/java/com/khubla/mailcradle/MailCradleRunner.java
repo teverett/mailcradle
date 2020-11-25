@@ -29,17 +29,26 @@ public class MailCradleRunner {
 		 * progress callback
 		 */
 		final int totalCount = IMAPUtil.getInstance().getMessageCount();
+		/*
+		 * get the uids
+		 */
 		ProgressCallback progressCallback = new DefaultProgressCallbackImpl(totalCount);
 		System.out.println("Reading " + totalCount + " Message UIDs");
 		final String[] uids = IMAPUtil.getInstance().getUIDs(progressCallback);
 		if (null != uids) {
+			/*
+			 * process all uids
+			 */
 			progressCallback = new DefaultProgressCallbackImpl(uids.length);
 			System.out.println("\nProcessing " + uids.length + " messages");
 			if (uids.length > 0) {
 				for (final String uid : uids) {
-					final IMAPMessageData messageData = IMAPUtil.getInstance().getMessageData(uid);
+					/*
+					 * process message
+					 */
+					final IMAPMessageData imapMessageData = IMAPUtil.getInstance().getMessageData(uid);
 					for (final Filter filter : mailsort.getFilters()) {
-						filter.execute(messageData, mailsort);
+						filter.execute(imapMessageData, mailsort);
 					}
 					progressCallback.progress();
 				}
