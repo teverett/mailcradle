@@ -74,6 +74,25 @@ public class IMAPUtil {
 	}
 
 	/**
+	 * get an IMAP message from an open IMAPFolder by uid
+	 *
+	 * @param inboxFolder open IMAP folder
+	 * @param uid message uid
+	 * @return IMAP message
+	 * @throws MessagingException
+	 */
+	private IMAPMessage findMessageByUID(IMAPFolder inboxFolder, String uid) throws MessagingException {
+		final SearchTerm searchTerm = new MessageIDTerm(uid);
+		final Message[] messages = inboxFolder.search(searchTerm);
+		if ((null != messages) && (messages.length == 1)) {
+			if (messages[0] instanceof IMAPMessage) {
+				return (IMAPMessage) messages[0];
+			}
+		}
+		return null;
+	}
+
+	/**
 	 * flag or unflag a message
 	 *
 	 * @param uid message
@@ -97,13 +116,12 @@ public class IMAPUtil {
 			/*
 			 * message
 			 */
-			final SearchTerm searchTerm = new MessageIDTerm(uid);
-			final Message[] messages = inboxFolder.search(searchTerm);
-			if ((null != messages) && (messages.length == 1)) {
+			final IMAPMessage imapMessage = findMessageByUID(inboxFolder, uid);
+			if (null != imapMessage) {
 				if (set) {
 					switch (flagname) {
 						case "flagged":
-							messages[0].setFlag(Flags.Flag.FLAGGED, set);
+							imapMessage.setFlag(Flags.Flag.FLAGGED, set);
 							break;
 						default:
 							break;
@@ -139,9 +157,8 @@ public class IMAPUtil {
 			/*
 			 * message
 			 */
-			final SearchTerm searchTerm = new MessageIDTerm(uid);
-			final Message[] messages = inboxFolder.search(searchTerm);
-			if ((null != messages) && (messages.length == 1)) {
+			final IMAPMessage imapMessage = findMessageByUID(inboxFolder, uid);
+			if (null != imapMessage) {
 				/*
 				 * create message
 				 */
@@ -154,7 +171,7 @@ public class IMAPUtil {
 				 * Fill in header
 				 */
 				forwardMessage.setRecipients(Message.RecipientType.TO, recipients);
-				forwardMessage.setSubject(FWD + messages[0].getSubject());
+				forwardMessage.setSubject(FWD + imapMessage.getSubject());
 				forwardMessage.setFrom(new InternetAddress(MailCradleConfiguration.getInstance().getSmtpFrom()));
 				/*
 				 * Create the message part
@@ -164,7 +181,7 @@ public class IMAPUtil {
 				/*
 				 * set content
 				 */
-				messageBodyPart.setContent(messages[0], "message/rfc822");
+				messageBodyPart.setContent(imapMessage, "message/rfc822");
 				multipart.addBodyPart(messageBodyPart);
 				/*
 				 * Associate multi-part with message
@@ -226,12 +243,9 @@ public class IMAPUtil {
 			logger.info("Getting MessageData for message: " + uid);
 			inboxFolder = getInbox();
 			inboxFolder.open(Folder.READ_ONLY);
-			final SearchTerm searchTerm = new MessageIDTerm(uid);
-			final Message[] messages = inboxFolder.search(searchTerm);
-			if ((null != messages) && (messages.length == 1)) {
-				if (messages[0] instanceof IMAPMessage) {
-					return new IMAPMessageData((IMAPMessage) messages[0]);
-				}
+			final IMAPMessage imapMessage = findMessageByUID(inboxFolder, uid);
+			if (null != imapMessage) {
+				return new IMAPMessageData(imapMessage);
 			}
 			return null;
 		} finally {
@@ -309,9 +323,8 @@ public class IMAPUtil {
 			/*
 			 * message
 			 */
-			final SearchTerm searchTerm = new MessageIDTerm(uid);
-			final Message[] messages = inboxFolder.search(searchTerm);
-			if ((null != messages) && (messages.length == 1)) {
+			final IMAPMessage imapMessage = findMessageByUID(inboxFolder, uid);
+			if (null != imapMessage) {
 				/*
 				 * target
 				 */
@@ -331,7 +344,7 @@ public class IMAPUtil {
 				/*
 				 * move message
 				 */
-				inboxFolder.moveMessages(new Message[] { messages[0] }, targetFolder);
+				inboxFolder.moveMessages(new Message[] { imapMessage }, targetFolder);
 			}
 		} finally {
 			if (null != inboxFolder) {
@@ -375,9 +388,8 @@ public class IMAPUtil {
 			/*
 			 * message
 			 */
-			final SearchTerm searchTerm = new MessageIDTerm(uid);
-			final Message[] messages = inboxFolder.search(searchTerm);
-			if ((null != messages) && (messages.length == 1)) {
+			final IMAPMessage imapMessage = findMessageByUID(inboxFolder, uid);
+			if (null != imapMessage) {
 				/*
 				 * create message
 				 */
@@ -385,12 +397,12 @@ public class IMAPUtil {
 				/*
 				 * recipient
 				 */
-				final InternetAddress[] recipients = (InternetAddress[]) messages[0].getFrom();
+				final InternetAddress[] recipients = (InternetAddress[]) imapMessage.getFrom();
 				/*
 				 * Fill in header
 				 */
 				replyMessage.setRecipients(Message.RecipientType.TO, recipients);
-				replyMessage.setSubject(RE + messages[0].getSubject());
+				replyMessage.setSubject(RE + imapMessage.getSubject());
 				replyMessage.setFrom(new InternetAddress(MailCradleConfiguration.getInstance().getSmtpFrom()));
 				/*
 				 * Create the message part
@@ -406,7 +418,7 @@ public class IMAPUtil {
 				 * set content
 				 */
 				final MimeBodyPart messageBodyPart2 = new MimeBodyPart();
-				messageBodyPart2.setContent(messages[0], "message/rfc822");
+				messageBodyPart2.setContent(imapMessage, "message/rfc822");
 				multipart.addBodyPart(messageBodyPart2);
 				/*
 				 * Associate multi-part with message
