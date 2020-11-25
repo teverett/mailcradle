@@ -353,6 +353,9 @@ public class IMAPUtil {
 		}
 	}
 
+	public void removeHeader(String uid, String header) throws MessagingException {
+	}
+
 	/**
 	 * reply to a message
 	 *
@@ -423,6 +426,9 @@ public class IMAPUtil {
 				inboxFolder = null;
 			}
 		}
+	}
+
+	public void setHeader(String uid, String header, String value) throws MessagingException {
 	}
 
 	/**
