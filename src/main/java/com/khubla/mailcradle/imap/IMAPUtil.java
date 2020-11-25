@@ -367,6 +367,28 @@ public class IMAPUtil {
 	}
 
 	public void removeHeader(String uid, String header) throws MessagingException {
+		IMAPFolder inboxFolder = null;
+		try {
+			/*
+			 * inbox
+			 */
+			inboxFolder = getInbox();
+			inboxFolder.open(Folder.READ_WRITE);
+			/*
+			 * message
+			 */
+			final IMAPMessage imapMessage = findMessageByUID(inboxFolder, uid);
+			if (null != imapMessage) {
+				imapMessage.removeHeader(header);
+			}
+		} finally {
+			if (null != inboxFolder) {
+				if (inboxFolder.isOpen()) {
+					inboxFolder.close(true);
+				}
+				inboxFolder = null;
+			}
+		}
 	}
 
 	/**
@@ -440,7 +462,37 @@ public class IMAPUtil {
 		}
 	}
 
+	/**
+	 * set a message header
+	 *
+	 * @param uid message uid
+	 * @param header header name
+	 * @param value header value to set
+	 * @throws MessagingException potential messaging exception
+	 */
 	public void setHeader(String uid, String header, String value) throws MessagingException {
+		IMAPFolder inboxFolder = null;
+		try {
+			/*
+			 * inbox
+			 */
+			inboxFolder = getInbox();
+			inboxFolder.open(Folder.READ_WRITE);
+			/*
+			 * message
+			 */
+			final IMAPMessage imapMessage = findMessageByUID(inboxFolder, uid);
+			if (null != imapMessage) {
+				imapMessage.setHeader(header, value);
+			}
+		} finally {
+			if (null != inboxFolder) {
+				if (inboxFolder.isOpen()) {
+					inboxFolder.close(true);
+				}
+				inboxFolder = null;
+			}
+		}
 	}
 
 	/**
