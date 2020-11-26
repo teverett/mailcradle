@@ -11,6 +11,7 @@ import org.apache.logging.log4j.*;
 
 import com.khubla.mailcradle.*;
 import com.khubla.mailcradle.progress.*;
+import com.khubla.mailcradle.statefile.*;
 import com.sun.mail.imap.*;
 
 public class IMAPUtil {
@@ -30,6 +31,10 @@ public class IMAPUtil {
 	 * logger
 	 */
 	private static final Logger logger = LogManager.getLogger(IMAPUtil.class);
+	/**
+	 * date keyfor persistent data
+	 */
+	private static final String DATE_KEY = "Date";
 
 	public static IMAPUtil getInstance() throws MessagingException {
 		if (null == instance) {
@@ -38,7 +43,17 @@ public class IMAPUtil {
 		return instance;
 	}
 
+	/**
+	 * state
+	 */
+	private final Statefile statefile = new Statefile();
+	/*
+	 * javamail session
+	 */
 	private final Session session;
+	/**
+	 * javamail store
+	 */
 	private final Store store;
 
 	/**
@@ -214,6 +229,14 @@ public class IMAPUtil {
 		return (IMAPFolder) root.getFolder(MailCradleConfiguration.getInstance().getImapFolder());
 	}
 
+	private Date getLastDate() {
+		final String dd = statefile.get(DATE_KEY);
+		if (null != dd) {
+			return new Date(Long.parseLong(dd));
+		}
+		return null;
+	}
+
 	/**
 	 * get message count
 	 *
@@ -275,7 +298,15 @@ public class IMAPUtil {
 	 * @throws MessagingException MessagingException
 	 */
 	public String[] getUIDs(ProgressCallback progressCallback) throws MessagingException {
-		logger.info("Getting uids");
+		/*
+		 * last time we read the uids
+		 */
+		final Date lastRead = getLastDate();
+		if (null != lastRead) {
+			logger.info("Getting uids since " + lastRead.toString());
+		} else {
+			logger.info("Getting all uids");
+		}
 		IMAPFolder inboxFolder = null;
 		try {
 			inboxFolder = getInbox();
@@ -291,6 +322,13 @@ public class IMAPUtil {
 					progressCallback.progress();
 				}
 			}
+			/*
+			 * save the date
+			 */
+			setLastDate();
+			/*
+			 * done
+			 */
 			return ret;
 		} finally {
 			if (null != inboxFolder) {
@@ -435,6 +473,14 @@ public class IMAPUtil {
 				inboxFolder = null;
 			}
 		}
+	}
+
+	private void setLastDate() {
+		/*
+		 * write state
+		 */
+		statefile.set(DATE_KEY, Long.toString(System.currentTimeMillis()));
+		statefile.write();
 	}
 
 	/**
