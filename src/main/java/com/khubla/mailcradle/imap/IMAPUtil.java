@@ -10,7 +10,6 @@ import javax.mail.search.*;
 import org.apache.logging.log4j.*;
 
 import com.khubla.mailcradle.*;
-import com.khubla.mailcradle.progress.*;
 import com.khubla.mailcradle.statefile.*;
 import com.sun.mail.imap.*;
 
@@ -105,6 +104,24 @@ public class IMAPUtil {
 			}
 		}
 		return null;
+	}
+
+	/**
+	 * find all uids since a certain date
+	 *
+	 * @param inboxFolder folder
+	 * @param date search date
+	 * @return list of uids
+	 * @throws MessagingException exception
+	 */
+	private Message[] findMessagsSinceDate(IMAPFolder inboxFolder, Date date) throws MessagingException {
+		if (null != date) {
+			final SearchTerm st = new ReceivedDateTerm(ComparisonTerm.EQ, date);
+			return inboxFolder.search(st);
+		} else {
+			// all messages
+			return inboxFolder.getMessages();
+		}
 	}
 
 	/**
@@ -297,7 +314,7 @@ public class IMAPUtil {
 	 * @return array of UIDs
 	 * @throws MessagingException MessagingException
 	 */
-	public String[] getUIDs(ProgressCallback progressCallback) throws MessagingException {
+	public String[] getUIDs() throws MessagingException {
 		/*
 		 * last time we read the uids
 		 */
@@ -308,18 +325,16 @@ public class IMAPUtil {
 			logger.info("Getting all uids");
 		}
 		IMAPFolder inboxFolder = null;
+		String[] ret = null;
 		try {
 			inboxFolder = getInbox();
 			inboxFolder.open(Folder.READ_ONLY);
-			final int count = inboxFolder.getMessageCount();
-			final String[] ret = new String[count];
-			for (int i = 1; i < (count + 1); i++) {
-				final Message message = inboxFolder.getMessage(i);
-				if (message instanceof IMAPMessage) {
-					ret[i - 1] = ((IMAPMessage) message).getMessageID();
-				}
-				if (null != progressCallback) {
-					progressCallback.progress();
+			final Message[] messages = findMessagsSinceDate(inboxFolder, lastRead);
+			if (null != messages) {
+				ret = new String[messages.length];
+				int i = 0;
+				for (final Message message : messages) {
+					ret[i++] = ((IMAPMessage) message).getMessageID();
 				}
 			}
 			/*

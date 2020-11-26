@@ -26,21 +26,16 @@ public class MailCradleRunner {
 	 */
 	private void runFilters(Mailcradle mailsort) throws MessagingException, IOException {
 		/*
-		 * progress callback
-		 */
-		final int totalCount = IMAPUtil.getInstance().getMessageCount();
-		/*
 		 * get the uids
 		 */
-		ProgressCallback progressCallback = new DefaultProgressCallbackImpl(totalCount);
-		System.out.println("Reading " + totalCount + " Message UIDs");
-		final String[] uids = IMAPUtil.getInstance().getUIDs(progressCallback);
+		System.out.println("Reading Message UIDs");
+		final String[] uids = IMAPUtil.getInstance().getUIDs();
 		if (null != uids) {
 			/*
 			 * process all uids
 			 */
-			progressCallback = new DefaultProgressCallbackImpl(uids.length);
-			System.out.println("\nProcessing " + uids.length + " messages");
+			final ProgressCallback progressCallback = new DefaultProgressCallbackImpl(uids.length);
+			System.out.println("Processing " + uids.length + " messages");
 			if (uids.length > 0) {
 				for (final String uid : uids) {
 					/*
