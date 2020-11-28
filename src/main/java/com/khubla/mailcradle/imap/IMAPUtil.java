@@ -10,6 +10,7 @@ import javax.mail.search.*;
 import org.apache.logging.log4j.*;
 
 import com.khubla.mailcradle.*;
+import com.khubla.mailcradle.progress.*;
 import com.khubla.mailcradle.statefile.*;
 import com.sun.mail.imap.*;
 
@@ -385,6 +386,32 @@ public class IMAPUtil {
 					folder.close();
 				}
 				folder = null;
+			}
+		}
+	}
+
+	/**
+	 * Iterate messages
+	 *
+	 * @param folderName the folder name
+	 * @param imapMessageCallback the callback
+	 * @throws MessagingException
+	 * @throws IOException
+	 */
+	public void iterateMessages(String folderName, IMAPMessageCallback imapMessageCallback) throws MessagingException, IOException {
+		final String[] uids = getUIDs(folderName);
+		if (null != uids) {
+			/*
+			 * process all uids
+			 */
+			final ProgressCallback progressCallback = new DefaultProgressCallbackImpl(uids.length);
+			System.out.println("Processing " + uids.length + " messages");
+			if (uids.length > 0) {
+				for (final String uid : uids) {
+					final IMAPMessageData imapMessageData = getMessageData(folderName, uid);
+					imapMessageCallback.message(imapMessageData);
+					progressCallback.progress();
+				}
 			}
 		}
 	}

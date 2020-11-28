@@ -8,13 +8,28 @@ import org.apache.logging.log4j.*;
 
 import com.khubla.mailcradle.domain.*;
 import com.khubla.mailcradle.imap.*;
-import com.khubla.mailcradle.progress.*;
 
-public class MailCradleRunner {
+public class MailCradleRunner implements IMAPMessageCallback {
 	/**
 	 * logger
 	 */
 	private static final Logger logger = LogManager.getLogger(MailCradleRunner.class);
+	/**
+	 * the mailsort data
+	 */
+	private Mailcradle mailsort;
+
+	@Override
+	public void message(IMAPMessageData imapMessageData) throws MessagingException, IOException {
+		/*
+		 * process message
+		 */
+		if (null != imapMessageData) {
+			for (final Filter filter : mailsort.getFilters()) {
+				filter.execute(imapMessageData, mailsort);
+			}
+		}
+	}
 
 	private void runFilters(Mailcradle mailsort) throws MessagingException, IOException {
 		for (final String folderName : MailCradleConfiguration.getInstance().getImapFolders()) {
@@ -35,31 +50,7 @@ public class MailCradleRunner {
 		/*
 		 * get the uids
 		 */
-		System.out.println("Reading Message UIDs");
-		final String[] uids = IMAPUtil.getInstance().getUIDs(folderName);
-		if (null != uids) {
-			/*
-			 * process all uids
-			 */
-			final ProgressCallback progressCallback = new DefaultProgressCallbackImpl(uids.length);
-			System.out.println("Processing " + uids.length + " messages");
-			if (uids.length > 0) {
-				for (final String uid : uids) {
-					/*
-					 * process message
-					 */
-					final IMAPMessageData imapMessageData = IMAPUtil.getInstance().getMessageData(folderName, uid);
-					if (null != imapMessageData) {
-						for (final Filter filter : mailsort.getFilters()) {
-							filter.execute(imapMessageData, mailsort);
-						}
-					} else {
-						logger.info("Unable to get message data for uid: " + uid);
-					}
-					progressCallback.progress();
-				}
-			}
-		}
+		IMAPUtil.getInstance().iterateMessages(folderName, this);
 		System.out.println();
 		System.out.println("Done");
 	}
@@ -70,7 +61,7 @@ public class MailCradleRunner {
 			/*
 			 * read mailsort file
 			 */
-			final Mailcradle mailsort = MailCradleMarshaller.importRules(mailsortFile);
+			mailsort = MailCradleMarshaller.importRules(mailsortFile);
 			if (null != mailsort) {
 				System.out.println("Read mailsort file: " + mailsortFile.getAbsolutePath() + " which contains " + mailsort.size() + " filters spanning " + mailsort.totalListItems() + " list items");
 			}
