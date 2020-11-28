@@ -44,7 +44,7 @@ Here's an example:
 imap.host=mail.example.com
 imap.username=uuu
 imap.password=ppp
-imap.folder=INBOX
+imap.folders=INBOX
 smtp.host=mail.example.com
 smtp.username=uuu
 smtp.password=ppp
@@ -52,6 +52,8 @@ smtp.from=me@example.com
 smtp.port=465
 mailsortFile=mailcradle.txt
 </pre>
+
+`imap.folders` is a comma-delimited list
 
 
 # Rules
