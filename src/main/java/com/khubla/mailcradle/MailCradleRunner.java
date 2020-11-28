@@ -18,7 +18,7 @@ public class MailCradleRunner {
 
 	private void runFilters(Mailcradle mailsort) throws MessagingException, IOException {
 		for (final String folderName : MailCradleConfiguration.getInstance().getImapFolders()) {
-			System.out.println("Folder :" + folderName);
+			System.out.println("Folder: " + folderName);
 			runFilters(folderName, mailsort);
 		}
 	}

@@ -65,6 +65,17 @@ term
    | fromterm
    | bodyterm
    | headerterm
+   | toterm
+   | ccterm
+   | bccterm
+   ;
+
+ccterm
+   : 'cc'
+   ;
+
+bccterm
+   : 'bcc'
    ;
 
 subjecterm
@@ -77,6 +88,10 @@ bodyterm
 
 fromterm
    : 'from'
+   ;
+
+toterm
+   : 'to'
    ;
 
 headerterm

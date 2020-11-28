@@ -4,6 +4,7 @@ import java.io.*;
 import java.util.*;
 
 import javax.mail.*;
+import javax.mail.Message.*;
 import javax.mail.internet.*;
 
 import com.sun.mail.imap.*;
@@ -29,6 +30,9 @@ public class IMAPMessageData {
 	private final int size;
 	private final Flags flags;
 	private final String folderName;
+	private final String[] to;
+	private final String[] cc;
+	private final String[] bcc;
 
 	/**
 	 * ctor
@@ -54,13 +58,22 @@ public class IMAPMessageData {
 		 * from
 		 */
 		final Address[] fromAddresses = message.getFrom();
-		from = new String[fromAddresses.length];
-		int i = 0;
-		for (final Address address : fromAddresses) {
-			if (address instanceof InternetAddress) {
-				from[i++] = ((InternetAddress) address).getAddress();
-			}
-		}
+		from = toString(fromAddresses);
+		/*
+		 * to
+		 */
+		final Address[] toAddresses = message.getRecipients(RecipientType.TO);
+		to = toString(toAddresses);
+		/*
+		 * cc
+		 */
+		final Address[] ccAddresses = message.getRecipients(RecipientType.CC);
+		cc = toString(ccAddresses);
+		/*
+		 * bcc
+		 */
+		final Address[] bccAddresses = message.getRecipients(RecipientType.BCC);
+		bcc = toString(bccAddresses);
 		/*
 		 * headers
 		 */
@@ -87,6 +100,10 @@ public class IMAPMessageData {
 		flags = message.getFlags();
 	}
 
+	public String[] getBcc() {
+		return bcc;
+	}
+
 	public String getBody() throws MessagingException, IOException {
 		if (null != body) {
 			/*
@@ -99,6 +116,10 @@ public class IMAPMessageData {
 			body = content.toString();
 		}
 		return body;
+	}
+
+	public String[] getCc() {
+		return cc;
 	}
 
 	public Flags getFlags() {
@@ -161,4 +182,22 @@ public class IMAPMessageData {
 	 * bodyPart.getContent()); } else { result = result + "\n" + bodyPart.getContent(); } } return
 	 * result; }
 	 */
+
+	public String[] getTo() {
+		return to;
+	}
+
+	private String[] toString(Address[] addresses) {
+		if (null != addresses) {
+			final String[] ret = new String[addresses.length];
+			int i = 0;
+			for (final Address address : addresses) {
+				if (address instanceof InternetAddress) {
+					ret[i++] = ((InternetAddress) address).getAddress();
+				}
+			}
+			return ret;
+		}
+		return null;
+	}
 }

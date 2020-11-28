@@ -25,6 +25,18 @@ public class TermListener extends AbstractListener {
 			final FromTermListener fromTermListener = new FromTermListener();
 			fromTermListener.enterFromterm(ctx.fromterm());
 			term = fromTermListener.term;
+		} else if (null != ctx.toterm()) {
+			final ToTermListener toTermListener = new ToTermListener();
+			toTermListener.enterToterm(ctx.toterm());
+			term = toTermListener.term;
+		} else if (null != ctx.ccterm()) {
+			final CCTermListener ccTermListener = new CCTermListener();
+			ccTermListener.enterCcterm(ctx.ccterm());
+			term = ccTermListener.term;
+		} else if (null != ctx.bccterm()) {
+			final BCCTermListener bccTermListener = new BCCTermListener();
+			bccTermListener.enterBccterm(ctx.bccterm());
+			term = bccTermListener.term;
 		}
 	}
 }

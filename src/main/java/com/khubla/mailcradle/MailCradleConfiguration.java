@@ -161,10 +161,7 @@ public class MailCradleConfiguration {
 			imapHost = configuration.get(String.class, "imap.host");
 			imapUsername = configuration.get(String.class, "imap.username");
 			imapPassword = configuration.get(String.class, "imap.password");
-			imapFolders = configuration.get(String.class, "imap.folders").split(",");
-			for (int i = 0; i < imapFolders.length; i++) {
-				imapFolders[i] = imapFolders[i].trim();
-			}
+			imapFolders = configuration.get(String[].class, "imap.folders");
 			imapPort = configuration.get(Integer.class, "imap.port");
 			imapTLS = configuration.get(Boolean.class, "imap.tls");
 			mailsortFile = configuration.get(String.class, "mailsortFile");

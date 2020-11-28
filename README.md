@@ -80,6 +80,9 @@ The maildata fields can be:
 * subject
 * body
 * from
+* to
+* cc
+* bcc
 * header ["fieldname"]
 
 The condition can be:
