@@ -364,6 +364,7 @@ public class IMAPUtil {
 			folder.open(Folder.READ_ONLY);
 			final Message[] messages = findMessagsSinceDate(folder, lastRead);
 			if (null != messages) {
+				System.out.println("Found " + messages.length + " UIDs");
 				ret = new String[messages.length];
 				int i = 0;
 				for (final Message message : messages) {
