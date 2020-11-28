@@ -119,13 +119,13 @@ public class IMAPUtil {
 	 * @return list of uids
 	 * @throws MessagingException exception
 	 */
-	private Message[] findMessagsSinceDate(IMAPFolder inboxFolder, Date date) throws MessagingException {
+	private Message[] findMessagsSinceDate(IMAPFolder folder, Date date) throws MessagingException {
 		if (null != date) {
 			final SearchTerm st = new ReceivedDateTerm(ComparisonTerm.EQ, date);
-			return inboxFolder.search(st);
+			return folder.search(st);
 		} else {
 			// all messages
-			return inboxFolder.getMessages();
+			return folder.getMessages();
 		}
 	}
 
@@ -399,21 +399,61 @@ public class IMAPUtil {
 	 * @throws IOException
 	 */
 	public void iterateMessages(String folderName, IMAPMessageCallback imapMessageCallback) throws MessagingException, IOException {
-		final String[] uids = getUIDs(folderName);
-		if (null != uids) {
+		IMAPFolder folder = null;
+		try {
 			/*
-			 * process all uids
+			 * date
 			 */
-			final ProgressCallback progressCallback = new DefaultProgressCallbackImpl(uids.length);
-			System.out.println("Processing " + uids.length + " messages");
-			if (uids.length > 0) {
-				for (final String uid : uids) {
-					final IMAPMessageData imapMessageData = getMessageData(folderName, uid);
-					imapMessageCallback.message(imapMessageData);
-					progressCallback.progress();
+			final Date lastRead = getLastDate(folderName);
+			if (null != lastRead) {
+				logger.info("Getting uids since " + lastRead.toString());
+			} else {
+				logger.info("Getting all uids");
+			}
+			/*
+			 * folder
+			 */
+			folder = getFolder(folderName);
+			folder.open(Folder.READ_ONLY);
+			/*
+			 * get messages
+			 */
+			final Message[] messages = findMessagsSinceDate(folder, lastRead);
+			if (null != messages) {
+				final ProgressCallback progressCallback = new DefaultProgressCallbackImpl(messages.length);
+				System.out.println("Processing " + messages.length + " messages");
+				for (final Message message : messages) {
+					if (message instanceof IMAPMessage) {
+						final IMAPMessageData imapMessageData = new IMAPMessageData(folderName, (IMAPMessage) message);
+						imapMessageCallback.message(imapMessageData);
+						progressCallback.progress();
+					}
 				}
 			}
+		} finally {
+			if (null != folder) {
+				if (folder.isOpen()) {
+					folder.close(true);
+				}
+				folder = null;
+			}
 		}
+		//
+		// final String[] uids = getUIDs(folderName);
+		// if (null != uids) {
+		// /*
+		// * process all uids
+		// */
+		// final ProgressCallback progressCallback = new DefaultProgressCallbackImpl(uids.length);
+		// System.out.println("Processing " + uids.length + " messages");
+		// if (uids.length > 0) {
+		// for (final String uid : uids) {
+		// final IMAPMessageData imapMessageData = getMessageData(folderName, uid);
+		// imapMessageCallback.message(imapMessageData);
+		// progressCallback.progress();
+		// }
+		// }
+		// }
 	}
 
 	/**
