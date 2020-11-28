@@ -54,7 +54,7 @@ public class MailCradleConfiguration {
 	/**
 	 * IMAP folder
 	 */
-	private String imapFolder;
+	private String[] imapFolders;
 	/**
 	 * SMTP host
 	 */
@@ -94,8 +94,8 @@ public class MailCradleConfiguration {
 	private MailCradleConfiguration() {
 	}
 
-	public String getImapFolder() {
-		return imapFolder;
+	public String[] getImapFolders() {
+		return imapFolders;
 	}
 
 	public String getImapHost() {
@@ -161,7 +161,10 @@ public class MailCradleConfiguration {
 			imapHost = configuration.get(String.class, "imap.host");
 			imapUsername = configuration.get(String.class, "imap.username");
 			imapPassword = configuration.get(String.class, "imap.password");
-			imapFolder = configuration.get(String.class, "imap.folder");
+			imapFolders = configuration.get(String.class, "imap.folders").split(",");
+			for (int i = 0; i < imapFolders.length; i++) {
+				imapFolders[i] = imapFolders[i].trim();
+			}
 			imapPort = configuration.get(Integer.class, "imap.port");
 			imapTLS = configuration.get(Boolean.class, "imap.tls");
 			mailsortFile = configuration.get(String.class, "mailsortFile");
@@ -177,8 +180,8 @@ public class MailCradleConfiguration {
 		}
 	}
 
-	public void setImapFolder(String imapFolder) {
-		this.imapFolder = imapFolder;
+	public void setImapFolders(String[] imapFolders) {
+		this.imapFolders = imapFolders;
 	}
 
 	public void setImapHost(String imapHost) {

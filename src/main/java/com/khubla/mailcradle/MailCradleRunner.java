@@ -16,6 +16,13 @@ public class MailCradleRunner {
 	 */
 	private static final Logger logger = LogManager.getLogger(MailCradleRunner.class);
 
+	private void runFilters(Mailcradle mailsort) throws MessagingException, IOException {
+		for (final String folderName : MailCradleConfiguration.getInstance().getImapFolders()) {
+			System.out.println("Folder :" + folderName);
+			runFilters(folderName, mailsort);
+		}
+	}
+
 	/**
 	 * run all filter commands
 	 *
@@ -24,12 +31,12 @@ public class MailCradleRunner {
 	 * @throws MessagingException potential exception
 	 * @throws IOException
 	 */
-	private void runFilters(Mailcradle mailsort) throws MessagingException, IOException {
+	private void runFilters(String folderName, Mailcradle mailsort) throws MessagingException, IOException {
 		/*
 		 * get the uids
 		 */
 		System.out.println("Reading Message UIDs");
-		final String[] uids = IMAPUtil.getInstance().getUIDs();
+		final String[] uids = IMAPUtil.getInstance().getUIDs(folderName);
 		if (null != uids) {
 			/*
 			 * process all uids
@@ -41,7 +48,7 @@ public class MailCradleRunner {
 					/*
 					 * process message
 					 */
-					final IMAPMessageData imapMessageData = IMAPUtil.getInstance().getMessageData(uid);
+					final IMAPMessageData imapMessageData = IMAPUtil.getInstance().getMessageData(folderName, uid);
 					for (final Filter filter : mailsort.getFilters()) {
 						filter.execute(imapMessageData, mailsort);
 					}

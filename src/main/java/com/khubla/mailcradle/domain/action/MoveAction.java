@@ -15,20 +15,20 @@ public class MoveAction extends Action {
 	/**
 	 * folder name
 	 */
-	private String folderName;
+	private String targetFolderName;
 
 	@Override
 	public void execute(IMAPMessageData messageData, Mailcradle mailsort) throws MessagingException {
-		System.out.println("Moving message " + messageData.getId() + " to folder: " + folderName);
-		logger.info("Moving message " + messageData.getId() + " to folder: " + folderName);
-		IMAPUtil.getInstance().moveMessage(messageData.getId(), folderName);
+		System.out.println("Moving message " + messageData.getId() + " to folder: " + targetFolderName);
+		logger.info("Moving message " + messageData.getId() + " to folder: " + targetFolderName);
+		IMAPUtil.getInstance().moveMessage(messageData.getFolderName(), messageData.getId(), targetFolderName);
 	}
 
-	public String getFolderName() {
-		return folderName;
+	public String getTargetFolderName() {
+		return targetFolderName;
 	}
 
-	public void setFolderName(String folderName) {
-		this.folderName = folderName;
+	public void setTargetFolderName(String targetFolderName) {
+		this.targetFolderName = targetFolderName;
 	}
 }

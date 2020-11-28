@@ -13,7 +13,7 @@ public class MoveActionListener extends AbstractListener {
 		if (null != ctx.string()) {
 			final StringListener stringListener = new StringListener();
 			stringListener.enterString(ctx.string());
-			action.setFolderName(stringListener.string);
+			action.setTargetFolderName(stringListener.string);
 		}
 	}
 }

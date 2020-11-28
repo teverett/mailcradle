@@ -21,7 +21,7 @@ public class ForwardAction extends Action {
 	public void execute(IMAPMessageData messageData, Mailcradle mailsort) throws MessagingException {
 		System.out.println("Forwarding message " + messageData.getId() + " to address: " + address);
 		logger.info("Forwarding message " + messageData.getId() + " to address: " + address);
-		IMAPUtil.getInstance().forwardMessage(messageData.getId(), address);
+		IMAPUtil.getInstance().forwardMessage(messageData.getFolderName(), messageData.getId(), address);
 	}
 
 	public String getAddress() {

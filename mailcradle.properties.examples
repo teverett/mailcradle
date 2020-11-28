@@ -3,7 +3,7 @@
 imap.host=mail.example.com
 imap.username=uuu
 imap.password=ppp
-imap.folder=INBOX
+imap.folders=INBOX
 imap.port=993
 imap.tls=true
 
