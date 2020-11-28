@@ -49,8 +49,12 @@ public class MailCradleRunner {
 					 * process message
 					 */
 					final IMAPMessageData imapMessageData = IMAPUtil.getInstance().getMessageData(folderName, uid);
-					for (final Filter filter : mailsort.getFilters()) {
-						filter.execute(imapMessageData, mailsort);
+					if (null != imapMessageData) {
+						for (final Filter filter : mailsort.getFilters()) {
+							filter.execute(imapMessageData, mailsort);
+						}
+					} else {
+						logger.info("Unable to get message data for uid: " + uid);
 					}
 					progressCallback.progress();
 				}
