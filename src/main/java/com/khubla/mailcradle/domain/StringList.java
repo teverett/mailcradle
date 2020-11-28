@@ -7,7 +7,7 @@ public class StringList {
 	private List<String> list = new ArrayList<String>();
 
 	public void addString(String string) {
-		list.add(string);
+		list.add(string.toLowerCase());
 	}
 
 	public boolean contains(String name) {

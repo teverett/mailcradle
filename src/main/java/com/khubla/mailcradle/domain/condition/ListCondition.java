@@ -33,9 +33,13 @@ public class ListCondition extends Condition {
 			switch (listRelation) {
 				case contains:
 					final String[] strs = getTerm().resolve(messageData);
-					for (final String str : strs) {
-						if (stringList.contains(str)) {
-							return true;
+					if (null != strs) {
+						for (final String str : strs) {
+							if (null != str) {
+								if (stringList.contains(str.toLowerCase())) {
+									return true;
+								}
+							}
 						}
 					}
 					return false;

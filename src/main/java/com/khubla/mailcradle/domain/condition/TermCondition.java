@@ -20,24 +20,31 @@ public class TermCondition extends Condition {
 	@Override
 	public boolean evaluate(IMAPMessageData messageData, Mailcradle mailsort) throws MessagingException, IOException {
 		final String[] strs = getTerm().resolve(messageData);
-		switch (termRelation) {
-			case is:
-				for (final String str : strs) {
-					if (value.compareTo(str) == 0) {
-						return true;
+		if (null != strs) {
+			switch (termRelation) {
+				case is:
+					for (final String str : strs) {
+						if (null != str) {
+							if (value.toLowerCase().compareTo(str.toLowerCase()) == 0) {
+								return true;
+							}
+						}
 					}
-				}
-				return false;
-			case contains:
-				for (final String str : strs) {
-					if (value.contains(str)) {
-						return true;
+					return false;
+				case contains:
+					for (final String str : strs) {
+						if (null != str) {
+							if (value.toLowerCase().contains(str.toLowerCase())) {
+								return true;
+							}
+						}
 					}
-				}
-				return false;
-			default:
-				return false;
+					return false;
+				default:
+					return false;
+			}
 		}
+		return false;
 	}
 
 	public TermRelation getTermRelation() {
