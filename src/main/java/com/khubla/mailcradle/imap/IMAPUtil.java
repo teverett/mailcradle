@@ -87,6 +87,10 @@ public class IMAPUtil {
 		store.connect(MailCradleConfiguration.getInstance().getImapHost(), MailCradleConfiguration.getInstance().getImapUsername(), MailCradleConfiguration.getInstance().getImapPassword());
 	}
 
+	private String DATKey(String folderName) {
+		return MailCradleConfiguration.getInstance().getImapHost() + ":" + folderName + ":" + DATE_KEY;
+	}
+
 	/**
 	 * get an IMAP message from an open IMAPFolder by uid
 	 *
@@ -246,8 +250,8 @@ public class IMAPUtil {
 		return (IMAPFolder) root.getFolder(folderName);
 	}
 
-	private Date getLastDate() {
-		final String dd = statefile.get(DATE_KEY);
+	private Date getLastDate(String folderName) {
+		final String dd = statefile.get(DATKey(folderName));
 		if (null != dd) {
 			return new Date(Long.parseLong(dd));
 		}
@@ -347,7 +351,7 @@ public class IMAPUtil {
 		/*
 		 * last time we read the uids
 		 */
-		final Date lastRead = getLastDate();
+		final Date lastRead = getLastDate(folderName);
 		if (null != lastRead) {
 			logger.info("Getting uids since " + lastRead.toString());
 		} else {
@@ -369,7 +373,7 @@ public class IMAPUtil {
 			/*
 			 * save the date
 			 */
-			setLastDate();
+			setLastDate(folderName);
 			/*
 			 * done
 			 */
@@ -519,11 +523,11 @@ public class IMAPUtil {
 		}
 	}
 
-	private void setLastDate() {
+	private void setLastDate(String folderName) {
 		/*
 		 * write state
 		 */
-		statefile.set(DATE_KEY, Long.toString(System.currentTimeMillis()));
+		statefile.set(DATKey(folderName), Long.toString(System.currentTimeMillis()));
 		statefile.write();
 	}
 

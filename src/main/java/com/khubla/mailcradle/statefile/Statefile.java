@@ -78,7 +78,7 @@ public class Statefile {
 				file.setWritable(true);
 				final Writer writer = new FileWriter(file);
 				for (final String key : state.keySet()) {
-					writer.write(key + EQUALS + state.get(key));
+					writer.write(key + EQUALS + state.get(key) + "\n");
 				}
 				writer.flush();
 				writer.close();
