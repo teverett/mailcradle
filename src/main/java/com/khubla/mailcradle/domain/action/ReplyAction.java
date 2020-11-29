@@ -21,7 +21,7 @@ public class ReplyAction extends Action {
 	public void execute(IMAPMessageData messageData, Mailcradle mailsort) throws MessagingException {
 		System.out.println("Replying to message " + messageData.getId() + " with: " + reply);
 		logger.info("Replying to message " + messageData.getId() + " with: " + reply);
-		IMAPUtil.getInstance().replyMessage(messageData.getFolderName(), messageData.getId(), reply);
+		IMAPUtil.getInstance().replyMessage(messageData.getFolderName(), messageData.getUid(), reply);
 	}
 
 	public String getReply() {

@@ -33,6 +33,7 @@ public class IMAPMessageData {
 	private final String[] to;
 	private final String[] cc;
 	private final String[] bcc;
+	private final long uid;
 
 	/**
 	 * ctor
@@ -41,11 +42,15 @@ public class IMAPMessageData {
 	 * @throws MessagingException exception
 	 * @throws IOException exception
 	 */
-	public IMAPMessageData(String folderName, IMAPMessage message) throws MessagingException, IOException {
+	public IMAPMessageData(String folderName, long uid, IMAPMessage message) throws MessagingException, IOException {
 		/*
 		 * folderName
 		 */
 		this.folderName = folderName;
+		/*
+		 * uid
+		 */
+		this.uid = uid;
 		/*
 		 * id
 		 */
@@ -109,7 +114,7 @@ public class IMAPMessageData {
 			/*
 			 * get the content
 			 */
-			final Object content = IMAPUtil.getInstance().getMessageContent(folderName, id);
+			final Object content = IMAPUtil.getInstance().getMessageContent(folderName, uid);
 			/*
 			 * body
 			 */
@@ -185,6 +190,10 @@ public class IMAPMessageData {
 
 	public String[] getTo() {
 		return to;
+	}
+
+	public long getUid() {
+		return uid;
 	}
 
 	private String[] toString(Address[] addresses) {

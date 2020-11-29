@@ -21,7 +21,7 @@ public class UnflagAction extends Action {
 	public void execute(IMAPMessageData messageData, Mailcradle mailsort) throws MessagingException {
 		System.out.println("Unflagging message " + messageData.getId() + " from: " + flag);
 		logger.info("Unflagging message " + messageData.getId() + " from: " + flag);
-		IMAPUtil.getInstance().flagMessage(messageData.getFolderName(), messageData.getId(), flag, false);
+		IMAPUtil.getInstance().flagMessage(messageData.getFolderName(), messageData.getUid(), flag, false);
 	}
 
 	public String getFlag() {
