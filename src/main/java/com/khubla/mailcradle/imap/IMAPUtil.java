@@ -361,9 +361,9 @@ public class IMAPUtil {
 		 */
 		final Date lastRead = getLastDate(folderName);
 		if (null != lastRead) {
-			logger.info("Getting uids since " + lastRead.toString());
+			logger.info("Getting uids for folder " + folderName + " since " + lastRead.toString());
 		} else {
-			logger.info("Getting all uids");
+			logger.info("Getting all uids for folder " + folderName);
 		}
 		IMAPFolder folder = null;
 		String[] ret = null;
