@@ -148,9 +148,9 @@ public class IMAPUtil {
 		IMAPFolder folder = null;
 		try {
 			if (set) {
-				logger.info("Flagging to message " + uid + " with flag " + flagname);
+				logger.info("Flagging to message " + uid + " in folder " + folderName + " with flag " + flagname);
 			} else {
-				logger.info("Unflagging to message " + uid + " from flag " + flagname);
+				logger.info("Unflagging to message " + uid + " in folder " + folderName + " from flag " + flagname);
 			}
 			/*
 			 * inbox
@@ -192,7 +192,7 @@ public class IMAPUtil {
 	public void forwardMessage(String folderName, long uid, String emailAddress) throws MessagingException {
 		IMAPFolder folder = null;
 		try {
-			logger.info("Forwarding message " + uid + " to address " + emailAddress);
+			logger.info("Forwarding message " + uid + " in folder " + folderName + " to address " + emailAddress);
 			/*
 			 * inbox
 			 */
@@ -277,7 +277,7 @@ public class IMAPUtil {
 	public Object getMessageContent(String folderName, long uid) throws MessagingException, IOException {
 		IMAPFolder inboxFolder = null;
 		try {
-			logger.info("Getting message: " + uid);
+			logger.info("Getting message content for message: " + uid + " in folder " + folderName);
 			inboxFolder = getFolder(folderName);
 			inboxFolder.open(Folder.READ_ONLY);
 			final IMAPMessage imapMessage = findMessageByUID(inboxFolder, uid);
@@ -302,7 +302,7 @@ public class IMAPUtil {
 	 * @throws MessagingException MessagingException
 	 */
 	public int getMessageCount(String folderName) throws MessagingException {
-		logger.info("Getting message count");
+		logger.info("Getting message count for folder: " + folderName);
 		IMAPFolder folder = null;
 		try {
 			folder = getFolder(folderName);
@@ -321,7 +321,7 @@ public class IMAPUtil {
 	public IMAPMessageData getMessageData(String folderName, long uid) throws MessagingException, IOException {
 		IMAPFolder folder = null;
 		try {
-			logger.info("Getting MessageData for message: " + uid);
+			logger.info("Getting MessageData for message: " + uid + " in folder " + folderName);
 			folder = getFolder(folderName);
 			folder.open(Folder.READ_ONLY);
 			final IMAPMessage imapMessage = findMessageByUID(folder, uid);
@@ -413,9 +413,9 @@ public class IMAPUtil {
 			 */
 			final Date lastRead = getLastDate(folderName);
 			if (null != lastRead) {
-				logger.info("Getting uids since " + lastRead.toString());
+				logger.info("Getting uids for folder " + folderName + " since " + lastRead.toString());
 			} else {
-				logger.info("Getting all uids");
+				logger.info("Getting all uids for folder " + folderName);
 			}
 			/*
 			 * folder
@@ -479,7 +479,7 @@ public class IMAPUtil {
 		IMAPFolder targetFolder = null;
 		IMAPFolder folder = null;
 		try {
-			logger.info("Moving message " + uid + " to folder " + targetFolderName);
+			logger.info("Moving message " + uid + " in folder " + folderName + " to folder " + targetFolderName);
 			/*
 			 * inbox
 			 */
@@ -541,7 +541,7 @@ public class IMAPUtil {
 	public void replyMessage(String folderName, long uid, String reply) throws MessagingException {
 		IMAPFolder folder = null;
 		try {
-			logger.info("Replying to message " + uid + " with " + reply);
+			logger.info("Replying to message " + uid + " in folder " + folderName + " with " + reply);
 			/*
 			 * inbox
 			 */
