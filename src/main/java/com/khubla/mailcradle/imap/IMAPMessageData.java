@@ -114,7 +114,7 @@ public class IMAPMessageData {
 			/*
 			 * get the content
 			 */
-			final Object content = IMAPUtil.getInstance().getMessageContent(folderName, uid);
+			final Object content = FolderFactory.getInstance().getFolder(folderName).getMessageContent(uid);
 			/*
 			 * body
 			 */

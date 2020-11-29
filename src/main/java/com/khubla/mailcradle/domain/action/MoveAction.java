@@ -21,7 +21,7 @@ public class MoveAction extends Action {
 	public void execute(IMAPMessageData messageData, Mailcradle mailsort) throws MessagingException {
 		System.out.println("Moving message " + messageData.getId() + " to folder: " + targetFolderName);
 		logger.info("Moving message " + messageData.getId() + " to folder: " + targetFolderName);
-		IMAPUtil.getInstance().moveMessage(messageData.getFolderName(), messageData.getUid(), targetFolderName);
+		FolderFactory.getInstance().getFolder(messageData.getFolderName()).moveMessage(messageData.getUid(), targetFolderName);
 	}
 
 	public String getTargetFolderName() {

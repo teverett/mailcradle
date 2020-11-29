@@ -9,7 +9,7 @@ import org.apache.logging.log4j.*;
 import com.khubla.mailcradle.domain.*;
 import com.khubla.mailcradle.imap.*;
 
-public class MailCradleRunner implements IMAPMessageCallback, IMAPEventNotification {
+public class MailCradleRunner implements IMAPMessageCallback {
 	/**
 	 * logger
 	 */
@@ -36,14 +36,6 @@ public class MailCradleRunner implements IMAPMessageCallback, IMAPEventNotificat
 		if (null != mailsort) {
 			System.out.println("Read mailsort file: " + mailsortFile.getAbsolutePath() + " which contains " + mailsort.size() + " filters spanning " + mailsort.totalListItems() + " list items");
 		}
-	}
-
-	@Override
-	public void event(Message[] messages) throws MessagingException, IOException {
-		/*
-		 * run filters
-		 */
-		IMAPUtil.getInstance().iterateMessages(messages, this);
 	}
 
 	/**
@@ -84,7 +76,7 @@ public class MailCradleRunner implements IMAPMessageCallback, IMAPEventNotificat
 			/*
 			 * idle
 			 */
-			IMAPUtil.getInstance().idle("INBOX", this);
+			FolderFactory.getInstance().getFolder(inbox).idle(this);
 		} catch (final Exception e) {
 			e.printStackTrace();
 			logger.error(e);
@@ -103,7 +95,7 @@ public class MailCradleRunner implements IMAPMessageCallback, IMAPEventNotificat
 		/*
 		 * get the uids
 		 */
-		IMAPUtil.getInstance().iterateMessages(folderName, this);
+		FolderFactory.getInstance().getFolder(folderName).iterateMessages(this);
 		System.out.println();
 		System.out.println("Done");
 	}

@@ -16,7 +16,7 @@ public class IMAPKeepaliveRunnable implements Runnable {
 	/**
 	 * logger
 	 */
-	private static final Logger logger = LogManager.getLogger(IMAPUtil.class);
+	private static final Logger logger = LogManager.getLogger(IMAPFolderUtil.class);
 	/**
 	 * keepalive time (ms)
 	 */
