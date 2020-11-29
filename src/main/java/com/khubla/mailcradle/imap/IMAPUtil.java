@@ -5,13 +5,11 @@ import java.util.*;
 
 import javax.mail.*;
 import javax.mail.internet.*;
-import javax.mail.search.*;
 
 import org.apache.logging.log4j.*;
 
 import com.khubla.mailcradle.*;
 import com.khubla.mailcradle.progress.*;
-import com.khubla.mailcradle.statefile.*;
 import com.sun.mail.imap.*;
 
 public class IMAPUtil {
@@ -31,10 +29,6 @@ public class IMAPUtil {
 	 * logger
 	 */
 	private static final Logger logger = LogManager.getLogger(IMAPUtil.class);
-	/**
-	 * date keyfor persistent data
-	 */
-	private static final String DATE_KEY = "Date";
 
 	public static IMAPUtil getInstance() throws MessagingException {
 		if (null == instance) {
@@ -43,10 +37,6 @@ public class IMAPUtil {
 		return instance;
 	}
 
-	/**
-	 * state
-	 */
-	private final Statefile statefile = new Statefile();
 	/*
 	 * javamail session
 	 */
@@ -88,10 +78,6 @@ public class IMAPUtil {
 		store.connect(MailCradleConfiguration.getInstance().getImapHost(), MailCradleConfiguration.getInstance().getImapUsername(), MailCradleConfiguration.getInstance().getImapPassword());
 	}
 
-	private String DATKey(String folderName) {
-		return MailCradleConfiguration.getInstance().getImapHost() + ":" + folderName + ":" + DATE_KEY;
-	}
-
 	/**
 	 * get an IMAP message from an open IMAPFolder by uid
 	 *
@@ -119,24 +105,6 @@ public class IMAPUtil {
 	}
 
 	/**
-	 * find all uids since a certain date
-	 *
-	 * @param inboxFolder folder
-	 * @param date search date
-	 * @return list of uids
-	 * @throws MessagingException exception
-	 */
-	private Message[] findMessagsSinceDate(IMAPFolder folder, Date date) throws MessagingException {
-		if (null != date) {
-			final SearchTerm st = new ReceivedDateTerm(ComparisonTerm.GT, date);
-			return folder.search(st);
-		} else {
-			// all messages
-			return folder.getMessages();
-		}
-	}
-
-	/**
 	 * flag or unflag a message
 	 *
 	 * @param uid message
@@ -145,7 +113,7 @@ public class IMAPUtil {
 	 * @throws MessagingException exception
 	 */
 	public void flagMessage(String folderName, long uid, String flagname, boolean set) throws MessagingException {
-		IMAPFolder folder = null;
+		IMAPFolder imapFolder = null;
 		try {
 			if (set) {
 				logger.info("Flagging to message " + uid + " in folder " + folderName + " with flag " + flagname);
@@ -155,12 +123,12 @@ public class IMAPUtil {
 			/*
 			 * inbox
 			 */
-			folder = getFolder(folderName);
-			folder.open(Folder.READ_WRITE);
+			imapFolder = getFolder(folderName);
+			imapFolder.open(Folder.READ_WRITE);
 			/*
 			 * message
 			 */
-			final IMAPMessage imapMessage = findMessageByUID(folder, uid);
+			final IMAPMessage imapMessage = findMessageByUID(imapFolder, uid);
 			if (null != imapMessage) {
 				if (set) {
 					switch (flagname) {
@@ -173,11 +141,11 @@ public class IMAPUtil {
 				}
 			}
 		} finally {
-			if (null != folder) {
-				if (folder.isOpen()) {
-					folder.close(true);
+			if (null != imapFolder) {
+				if (imapFolder.isOpen()) {
+					imapFolder.close(true);
 				}
-				folder = null;
+				imapFolder = null;
 			}
 		}
 	}
@@ -190,18 +158,18 @@ public class IMAPUtil {
 	 * @throws MessagingException MessagingException
 	 */
 	public void forwardMessage(String folderName, long uid, String emailAddress) throws MessagingException {
-		IMAPFolder folder = null;
+		IMAPFolder imapFolder = null;
 		try {
 			logger.info("Forwarding message " + uid + " in folder " + folderName + " to address " + emailAddress);
 			/*
 			 * inbox
 			 */
-			folder = getFolder(folderName);
-			folder.open(Folder.READ_ONLY);
+			imapFolder = getFolder(folderName);
+			imapFolder.open(Folder.READ_ONLY);
 			/*
 			 * message
 			 */
-			final IMAPMessage imapMessage = findMessageByUID(folder, uid);
+			final IMAPMessage imapMessage = findMessageByUID(imapFolder, uid);
 			if (null != imapMessage) {
 				/*
 				 * create message
@@ -238,11 +206,11 @@ public class IMAPUtil {
 				smtpSend(forwardMessage, recipients);
 			}
 		} finally {
-			if (null != folder) {
-				if (folder.isOpen()) {
-					folder.close(true);
+			if (null != imapFolder) {
+				if (imapFolder.isOpen()) {
+					imapFolder.close(true);
 				}
-				folder = null;
+				imapFolder = null;
 			}
 		}
 	}
@@ -258,14 +226,6 @@ public class IMAPUtil {
 		return (IMAPFolder) root.getFolder(folderName);
 	}
 
-	private Date getLastDate(String folderName) {
-		final String dd = statefile.get(DATKey(folderName));
-		if (null != dd) {
-			return new Date(Long.parseLong(dd));
-		}
-		return null;
-	}
-
 	/**
 	 * get the message content of a message
 	 *
@@ -275,22 +235,22 @@ public class IMAPUtil {
 	 * @throws IOException
 	 */
 	public Object getMessageContent(String folderName, long uid) throws MessagingException, IOException {
-		IMAPFolder inboxFolder = null;
+		IMAPFolder imapFolder = null;
 		try {
 			logger.info("Getting message content for message: " + uid + " in folder " + folderName);
-			inboxFolder = getFolder(folderName);
-			inboxFolder.open(Folder.READ_ONLY);
-			final IMAPMessage imapMessage = findMessageByUID(inboxFolder, uid);
+			imapFolder = getFolder(folderName);
+			imapFolder.open(Folder.READ_ONLY);
+			final IMAPMessage imapMessage = findMessageByUID(imapFolder, uid);
 			if (null != imapMessage) {
 				return imapMessage.getContent();
 			}
 			return null;
 		} finally {
-			if (null != inboxFolder) {
-				if (inboxFolder.isOpen()) {
-					inboxFolder.close();
+			if (null != imapFolder) {
+				if (imapFolder.isOpen()) {
+					imapFolder.close();
 				}
-				inboxFolder = null;
+				imapFolder = null;
 			}
 		}
 	}
@@ -303,38 +263,38 @@ public class IMAPUtil {
 	 */
 	public int getMessageCount(String folderName) throws MessagingException {
 		logger.info("Getting message count for folder: " + folderName);
-		IMAPFolder folder = null;
+		IMAPFolder imapFolder = null;
 		try {
-			folder = getFolder(folderName);
-			folder.open(Folder.READ_ONLY);
-			return folder.getMessageCount();
+			imapFolder = getFolder(folderName);
+			imapFolder.open(Folder.READ_ONLY);
+			return imapFolder.getMessageCount();
 		} finally {
-			if (null != folder) {
-				if (folder.isOpen()) {
-					folder.close();
+			if (null != imapFolder) {
+				if (imapFolder.isOpen()) {
+					imapFolder.close();
 				}
-				folder = null;
+				imapFolder = null;
 			}
 		}
 	}
 
 	public IMAPMessageData getMessageData(String folderName, long uid) throws MessagingException, IOException {
-		IMAPFolder folder = null;
+		IMAPFolder imapFolder = null;
 		try {
 			logger.info("Getting MessageData for message: " + uid + " in folder " + folderName);
-			folder = getFolder(folderName);
-			folder.open(Folder.READ_ONLY);
-			final IMAPMessage imapMessage = findMessageByUID(folder, uid);
+			imapFolder = getFolder(folderName);
+			imapFolder.open(Folder.READ_ONLY);
+			final IMAPMessage imapMessage = findMessageByUID(imapFolder, uid);
 			if (null != imapMessage) {
-				return new IMAPMessageData(folderName, folder.getUID(imapMessage), imapMessage);
+				return new IMAPMessageData(folderName, imapFolder.getUID(imapMessage), imapMessage);
 			}
 			return null;
 		} finally {
-			if (null != folder) {
-				if (folder.isOpen()) {
-					folder.close();
+			if (null != imapFolder) {
+				if (imapFolder.isOpen()) {
+					imapFolder.close();
 				}
-				folder = null;
+				imapFolder = null;
 			}
 		}
 	}
@@ -356,21 +316,12 @@ public class IMAPUtil {
 	 * @throws MessagingException MessagingException
 	 */
 	public String[] getUIDs(String folderName) throws MessagingException {
-		/*
-		 * last time we read the uids
-		 */
-		final Date lastRead = getLastDate(folderName);
-		if (null != lastRead) {
-			logger.info("Getting uids for folder " + folderName + " since " + lastRead.toString());
-		} else {
-			logger.info("Getting all uids for folder " + folderName);
-		}
-		IMAPFolder folder = null;
+		IMAPFolder imapFolder = null;
 		String[] ret = null;
 		try {
-			folder = getFolder(folderName);
-			folder.open(Folder.READ_ONLY);
-			final Message[] messages = findMessagsSinceDate(folder, lastRead);
+			imapFolder = getFolder(folderName);
+			imapFolder.open(Folder.READ_ONLY);
+			final Message[] messages = imapFolder.getMessages();
 			if (null != messages) {
 				System.out.println("Found " + messages.length + " UIDs");
 				ret = new String[messages.length];
@@ -380,19 +331,66 @@ public class IMAPUtil {
 				}
 			}
 			/*
-			 * save the date
-			 */
-			setLastDate(folderName);
-			/*
 			 * done
 			 */
 			return ret;
 		} finally {
-			if (null != folder) {
-				if (folder.isOpen()) {
-					folder.close();
+			if (null != imapFolder) {
+				if (imapFolder.isOpen()) {
+					imapFolder.close();
 				}
-				folder = null;
+				imapFolder = null;
+			}
+		}
+	}
+
+	/**
+	 * idle the thread waiting for events
+	 *
+	 * @param imapFolder folder for events
+	 * @param imapNotification notification callback
+	 * @throws MessagingException
+	 */
+	public void idle(String folderName, IMAPEventNotification imapEventNotification) throws MessagingException {
+		IMAPFolder imapFolder = null;
+		Thread keepAliveThread = null;
+		try {
+			/*
+			 * folder
+			 */
+			imapFolder = getFolder(folderName);
+			imapFolder.open(Folder.READ_ONLY);
+			/*
+			 * Spin the keepAliveThread
+			 */
+			keepAliveThread = new Thread(new IMAPKeepaliveRunnable(imapFolder));
+			keepAliveThread.start();
+			/*
+			 * spin on idle
+			 */
+			while (!Thread.interrupted()) {
+				try {
+					imapFolder.idle();
+					imapEventNotification.event();
+				} catch (final Exception e) {
+					logger.error("Exception during idle", e);
+				}
+			}
+		} finally {
+			/*
+			 * done w folder
+			 */
+			if (null != imapFolder) {
+				if (imapFolder.isOpen()) {
+					imapFolder.close(true);
+				}
+				imapFolder = null;
+			}
+			/*
+			 * Shutdown keep alive thread
+			 */
+			if (keepAliveThread.isAlive()) {
+				keepAliveThread.interrupt();
 			}
 		}
 	}
@@ -406,65 +404,36 @@ public class IMAPUtil {
 	 * @throws IOException
 	 */
 	public void iterateMessages(String folderName, IMAPMessageCallback imapMessageCallback) throws MessagingException, IOException {
-		IMAPFolder folder = null;
+		IMAPFolder imapFolder = null;
 		try {
-			/*
-			 * date
-			 */
-			final Date lastRead = getLastDate(folderName);
-			if (null != lastRead) {
-				logger.info("Getting uids for folder " + folderName + " since " + lastRead.toString());
-			} else {
-				logger.info("Getting all uids for folder " + folderName);
-			}
 			/*
 			 * folder
 			 */
-			folder = getFolder(folderName);
-			folder.open(Folder.READ_ONLY);
+			imapFolder = getFolder(folderName);
+			imapFolder.open(Folder.READ_ONLY);
 			/*
 			 * get messages
 			 */
-			final Message[] messages = findMessagsSinceDate(folder, lastRead);
+			final Message[] messages = imapFolder.getMessages();
 			if (null != messages) {
 				final ProgressCallback progressCallback = new DefaultProgressCallbackImpl(messages.length);
 				System.out.println("Processing " + messages.length + " messages");
 				for (final Message message : messages) {
 					if (message instanceof IMAPMessage) {
-						final IMAPMessageData imapMessageData = new IMAPMessageData(folderName, folder.getUID(message), (IMAPMessage) message);
+						final IMAPMessageData imapMessageData = new IMAPMessageData(folderName, imapFolder.getUID(message), (IMAPMessage) message);
 						imapMessageCallback.message(imapMessageData);
 						progressCallback.progress();
 					}
 				}
 			}
-			/*
-			 * save the date
-			 */
-			setLastDate(folderName);
 		} finally {
-			if (null != folder) {
-				if (folder.isOpen()) {
-					folder.close(true);
+			if (null != imapFolder) {
+				if (imapFolder.isOpen()) {
+					imapFolder.close(true);
 				}
-				folder = null;
+				imapFolder = null;
 			}
 		}
-		//
-		// final String[] uids = getUIDs(folderName);
-		// if (null != uids) {
-		// /*
-		// * process all uids
-		// */
-		// final ProgressCallback progressCallback = new DefaultProgressCallbackImpl(uids.length);
-		// System.out.println("Processing " + uids.length + " messages");
-		// if (uids.length > 0) {
-		// for (final String uid : uids) {
-		// final IMAPMessageData imapMessageData = getMessageData(folderName, uid);
-		// imapMessageCallback.message(imapMessageData);
-		// progressCallback.progress();
-		// }
-		// }
-		// }
 	}
 
 	/**
@@ -600,14 +569,6 @@ public class IMAPUtil {
 				folder = null;
 			}
 		}
-	}
-
-	private void setLastDate(String folderName) {
-		/*
-		 * write state
-		 */
-		statefile.set(DATKey(folderName), Long.toString(System.currentTimeMillis()));
-		statefile.write();
 	}
 
 	/**

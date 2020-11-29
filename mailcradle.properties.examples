@@ -3,9 +3,11 @@
 imap.host=mail.example.com
 imap.username=uuu
 imap.password=ppp
+imap.inbox=INBOX
 imap.folders=INBOX
 imap.port=993
 imap.tls=true
+imap.keepaliveminutes=5
 
 # SMTP settings
 smtp.host=mail.example.com

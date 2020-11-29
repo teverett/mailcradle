@@ -52,8 +52,8 @@ public class Main {
 				final String root = new File(configFilename).getAbsoluteFile().getParentFile().toString();
 				final File mailcradleFile = new File(root + File.separator + mailcradleFilename);
 				if (mailcradleFile.exists()) {
-					final MailCradleRunner mailsortRunner = new MailCradleRunner();
-					mailsortRunner.runMailsortFile(mailcradleFile);
+					final MailCradleRunner mailsortRunner = new MailCradleRunner(mailcradleFile);
+					mailsortRunner.run();
 				} else {
 					throw new Exception("MailCradle file '" + mailcradleFile + "' does not exist");
 				}

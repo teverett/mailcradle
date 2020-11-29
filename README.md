@@ -32,8 +32,6 @@ To build MailCradle:
 
 `java -jar target/mailcradle-1.0.0-SNAPSHOT.jar --config=mailcradle.properties`
 
-Typically MailCradle would be run on a regular basis such as every couple minutes from cron. There is an example crontab configuration in [/cron/](https://github.com/teverett/mailcradle/tree/master/cron)
-
 # Configuration
 
 The mail `mailcradle.properties` contains IMAP login properties, and the name of a mail sorting rules file. You will need to configure the properties file for your SMTP and IMAP server.
