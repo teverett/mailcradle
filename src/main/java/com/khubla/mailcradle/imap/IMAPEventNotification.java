@@ -5,5 +5,5 @@ import java.io.*;
 import javax.mail.*;
 
 public interface IMAPEventNotification {
-	void event() throws MessagingException, IOException;
+	void event(Message[] messages) throws MessagingException, IOException;
 }

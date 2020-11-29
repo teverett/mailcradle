@@ -4,6 +4,7 @@ import java.io.*;
 import java.util.*;
 
 import javax.mail.*;
+import javax.mail.event.*;
 import javax.mail.internet.*;
 
 import org.apache.logging.log4j.*;
@@ -359,19 +360,37 @@ public class IMAPUtil {
 			 * folder
 			 */
 			imapFolder = getFolder(folderName);
-			imapFolder.open(Folder.READ_ONLY);
 			/*
 			 * Spin the keepAliveThread
 			 */
 			keepAliveThread = new Thread(new IMAPKeepaliveRunnable(imapFolder));
 			keepAliveThread.start();
 			/*
+			 * listener
+			 */
+			imapFolder.addMessageCountListener(new MessageCountListener() {
+				@Override
+				public void messagesAdded(MessageCountEvent messageCountEvent) {
+					try {
+						imapEventNotification.event(messageCountEvent.getMessages());
+					} catch (MessagingException | IOException e) {
+						e.printStackTrace();
+					}
+				}
+
+				@Override
+				public void messagesRemoved(MessageCountEvent messageCountEvent) {
+				}
+			});
+			/*
 			 * spin on idle
 			 */
 			while (!Thread.interrupted()) {
 				try {
-					imapFolder.idle();
-					imapEventNotification.event();
+					if (false == imapFolder.isOpen()) {
+						imapFolder.open(Folder.READ_ONLY);
+					}
+					imapFolder.idle(true);
 				} catch (final Exception e) {
 					logger.error("Exception during idle", e);
 				}
@@ -391,6 +410,37 @@ public class IMAPUtil {
 			 */
 			if (keepAliveThread.isAlive()) {
 				keepAliveThread.interrupt();
+			}
+		}
+	}
+
+	public void iterateMessages(Message[] messages, IMAPMessageCallback imapMessageCallback) throws MessagingException, IOException {
+		for (final Message message : messages) {
+			IMAPFolder imapFolder = null;
+			try {
+				/*
+				 * folder
+				 */
+				imapFolder = (IMAPFolder) message.getFolder();
+				if (null != imapFolder) {
+					if (false == imapFolder.isOpen()) {
+						imapFolder.open(Folder.READ_ONLY);
+					}
+					/*
+					 * get messages
+					 */
+					if (message instanceof IMAPMessage) {
+						final IMAPMessageData imapMessageData = new IMAPMessageData(imapFolder.getFullName(), imapFolder.getUID(message), (IMAPMessage) message);
+						imapMessageCallback.message(imapMessageData);
+					}
+				}
+			} finally {
+				if (null != imapFolder) {
+					if (imapFolder.isOpen()) {
+						imapFolder.close(true);
+					}
+					imapFolder = null;
+				}
 			}
 		}
 	}

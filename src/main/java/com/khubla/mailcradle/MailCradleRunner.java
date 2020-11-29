@@ -39,11 +39,11 @@ public class MailCradleRunner implements IMAPMessageCallback, IMAPEventNotificat
 	}
 
 	@Override
-	public void event() throws MessagingException, IOException {
+	public void event(Message[] messages) throws MessagingException, IOException {
 		/*
 		 * run filters
 		 */
-		runFilters(inbox);
+		IMAPUtil.getInstance().iterateMessages(messages, this);
 	}
 
 	/**
