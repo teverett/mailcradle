@@ -128,7 +128,7 @@ public class IMAPUtil {
 	 */
 	private Message[] findMessagsSinceDate(IMAPFolder folder, Date date) throws MessagingException {
 		if (null != date) {
-			final SearchTerm st = new SentDateTerm(ComparisonTerm.GT, date);
+			final SearchTerm st = new ReceivedDateTerm(ComparisonTerm.GT, date);
 			return folder.search(st);
 		} else {
 			// all messages
