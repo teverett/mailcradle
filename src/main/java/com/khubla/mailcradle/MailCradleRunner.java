@@ -1,6 +1,7 @@
 package com.khubla.mailcradle;
 
 import java.io.*;
+import java.util.*;
 
 import javax.mail.*;
 
@@ -46,8 +47,19 @@ public class MailCradleRunner implements IMAPMessageCallback {
 	 */
 	private void filterAllFolders() throws MessagingException, IOException {
 		for (final String folderName : MailCradleConfiguration.getInstance().getImapFolders()) {
-			System.out.println("Folder: " + folderName);
-			runFilters(folderName);
+			if (folderName.endsWith(".*")) {
+				String fn = folderName.substring(0, folderName.length() - 2);
+				runFilters(fn);
+				IMAPFolderUtil imapFolderUtil = FolderFactory.getInstance().getFolder(fn);
+				List<String> subFolders = imapFolderUtil.getChildFolders();
+				if (null != subFolders) {
+					for (String name : subFolders) {
+						runFilters(name);
+					}
+				}
+			} else {
+				runFilters(folderName);
+			}
 		}
 	}
 
@@ -92,6 +104,7 @@ public class MailCradleRunner implements IMAPMessageCallback {
 	 * @throws IOException
 	 */
 	private void runFilters(String folderName) throws MessagingException, IOException {
+		System.out.println("Folder: " + folderName);
 		/*
 		 * get the uids
 		 */
