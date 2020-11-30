@@ -4,6 +4,7 @@ import java.io.*;
 import java.util.*;
 
 import javax.mail.*;
+import javax.mail.Flags.*;
 import javax.mail.internet.*;
 
 import org.apache.logging.log4j.*;
@@ -368,9 +369,13 @@ public class IMAPFolderUtil implements Closeable {
 			System.out.println("Processing " + messages.length + " messages");
 			for (final Message message : messages) {
 				if (message instanceof IMAPMessage) {
-					final IMAPMessageData imapMessageData = new IMAPMessageData(folderName, imapFolder.getUID(message), (IMAPMessage) message);
-					imapMessageCallback.message(imapMessageData);
-					progressCallback.progress();
+					if (false == message.getFlags().contains(Flag.DELETED)) {
+						final IMAPMessageData imapMessageData = new IMAPMessageData(folderName, imapFolder.getUID(message), (IMAPMessage) message);
+						imapMessageCallback.message(imapMessageData);
+						progressCallback.progress();
+					} else {
+						logger.info("Ignoring deleted message " + message.getMessageNumber() + " in folder " + this.folderName);
+					}
 				}
 			}
 		}
@@ -391,8 +396,12 @@ public class IMAPFolderUtil implements Closeable {
 				 * get messages
 				 */
 				if (message instanceof IMAPMessage) {
-					final IMAPMessageData imapMessageData = new IMAPMessageData(imapFolder.getFullName(), imapFolder.getUID(message), (IMAPMessage) message);
-					imapMessageCallback.message(imapMessageData);
+					if (false == message.getFlags().contains(Flag.DELETED)) {
+						final IMAPMessageData imapMessageData = new IMAPMessageData(imapFolder.getFullName(), imapFolder.getUID(message), (IMAPMessage) message);
+						imapMessageCallback.message(imapMessageData);
+					} else {
+						logger.info("Ignoring deleted message " + message.getMessageNumber() + " in folder " + this.folderName);
+					}
 				}
 			}
 		}
