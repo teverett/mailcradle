@@ -459,6 +459,7 @@ public class IMAPFolderUtil implements Closeable {
 					 */
 					imapFolder.copyMessages(new Message[] { imapMessage }, targetFolder);
 					imapMessage.setFlag(Flags.Flag.DELETED, true);
+					imapFolder.expunge();
 				}
 			}
 		} finally {
