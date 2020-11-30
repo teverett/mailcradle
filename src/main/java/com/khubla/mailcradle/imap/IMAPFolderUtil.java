@@ -14,7 +14,7 @@ import com.sun.mail.imap.*;
 
 /**
  * a wrapper for an IMAPFolder
- * 
+ *
  * @author tom
  */
 public class IMAPFolderUtil implements Closeable {
@@ -439,11 +439,17 @@ public class IMAPFolderUtil implements Closeable {
 				/*
 				 * check capabilities
 				 */
-				if (true == this.store.hasCapability("MOVE")) {
+				if (true == store.hasCapability("MOVE")) {
 					/*
 					 * move message
 					 */
 					imapFolder.moveMessages(new Message[] { imapMessage }, targetFolder);
+				} else {
+					/*
+					 * copy and mark as deleted
+					 */
+					imapFolder.copyMessages(new Message[] { imapMessage }, targetFolder);
+					imapMessage.setFlag(Flags.Flag.DELETED, true);
 				}
 			}
 		} finally {
