@@ -48,12 +48,12 @@ public class MailCradleRunner implements IMAPMessageCallback {
 	private void filterAllFolders() throws MessagingException, IOException {
 		for (final String folderName : MailCradleConfiguration.getInstance().getImapFolders()) {
 			if (folderName.endsWith(".*")) {
-				String fn = folderName.substring(0, folderName.length() - 2);
+				final String fn = folderName.substring(0, folderName.length() - 2);
 				runFilters(fn);
-				IMAPFolderUtil imapFolderUtil = FolderFactory.getInstance().getFolder(fn);
-				List<String> subFolders = imapFolderUtil.getChildFolders();
+				final IMAPFolderUtil imapFolderUtil = FolderFactory.getInstance().getFolder(fn);
+				final List<String> subFolders = imapFolderUtil.getChildFolders();
 				if (null != subFolders) {
-					for (String name : subFolders) {
+					for (final String name : subFolders) {
 						runFilters(name);
 					}
 				}
@@ -108,7 +108,12 @@ public class MailCradleRunner implements IMAPMessageCallback {
 		/*
 		 * get the uids
 		 */
-		FolderFactory.getInstance().getFolder(folderName).iterateMessages(this);
+		final IMAPFolderUtil imapFolderUtil = FolderFactory.getInstance().getFolder(folderName);
+		imapFolderUtil.iterateMessages(this);
+		/*
+		 * on servers that don't support move, we have copy & delete, so need an expunge
+		 */
+		imapFolderUtil.expunge();
 		System.out.println();
 		System.out.println("Done");
 	}

@@ -95,6 +95,23 @@ public class IMAPFolderUtil implements Closeable {
 		}
 	}
 
+	/**
+	 * expunge the folder
+	 *
+	 * @throws MessagingException
+	 */
+	public void expunge() throws MessagingException {
+		logger.info("Expunging " + folderName);
+		/*
+		 * inbox
+		 */
+		final IMAPFolder imapFolder = getFolder();
+		/*
+		 * expunge
+		 */
+		imapFolder.expunge();
+	}
+
 	private IMAPMessage findMessageByUID(IMAPFolder folder, long uid) throws MessagingException {
 		final Message message = folder.getMessageByUID(uid);
 		if (message instanceof IMAPMessage) {
@@ -192,6 +209,22 @@ public class IMAPFolderUtil implements Closeable {
 			 */
 			smtpSend(forwardMessage, recipients);
 		}
+	}
+
+	public List<String> getChildFolders() throws MessagingException {
+		return getChildFolders(getFolder());
+	}
+
+	private List<String> getChildFolders(IMAPFolder imapFolder) throws MessagingException {
+		final List<String> ret = new ArrayList<String>();
+		final Folder[] folders = imapFolder.list();
+		if ((null != folders) && (folders.length > 0)) {
+			for (final Folder folder : folders) {
+				ret.add(folder.getFullName());
+				ret.addAll(getChildFolders((IMAPFolder) folder));
+			}
+		}
+		return ret;
 	}
 
 	/**
@@ -374,7 +407,7 @@ public class IMAPFolderUtil implements Closeable {
 						imapMessageCallback.message(imapMessageData);
 						progressCallback.progress();
 					} else {
-						logger.info("Ignoring deleted message " + message.getMessageNumber() + " in folder " + this.folderName);
+						logger.info("Ignoring deleted message " + message.getMessageNumber() + " in folder " + folderName);
 					}
 				}
 			}
@@ -400,7 +433,7 @@ public class IMAPFolderUtil implements Closeable {
 						final IMAPMessageData imapMessageData = new IMAPMessageData(imapFolder.getFullName(), imapFolder.getUID(message), (IMAPMessage) message);
 						imapMessageCallback.message(imapMessageData);
 					} else {
-						logger.info("Ignoring deleted message " + message.getMessageNumber() + " in folder " + this.folderName);
+						logger.info("Ignoring deleted message " + message.getMessageNumber() + " in folder " + folderName);
 					}
 				}
 			}
@@ -459,7 +492,6 @@ public class IMAPFolderUtil implements Closeable {
 					 */
 					imapFolder.copyMessages(new Message[] { imapMessage }, targetFolder);
 					imapMessage.setFlag(Flags.Flag.DELETED, true);
-					imapFolder.expunge();
 				}
 			}
 		} finally {
@@ -556,21 +588,5 @@ public class IMAPFolderUtil implements Closeable {
 				transport.close();
 			}
 		}
-	}
-
-	private List<String> getChildFolders(IMAPFolder imapFolder) throws MessagingException {
-		List<String> ret = new ArrayList<String>();
-		Folder[] folders = imapFolder.list();
-		if ((null != folders) && (folders.length > 0)) {
-			for (Folder folder : folders) {
-				ret.add(folder.getFullName());
-				ret.addAll(getChildFolders((IMAPFolder) folder));
-			}
-		}
-		return ret;
-	}
-
-	public List<String> getChildFolders() throws MessagingException {
-		return getChildFolders(this.getFolder());
 	}
 }
