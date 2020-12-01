@@ -112,6 +112,23 @@ public class IMAPFolderUtil implements Closeable {
 		imapFolder.expunge();
 	}
 
+	/**
+	 * filter out messages that are deleted or expunged
+	 *
+	 * @param imapMessage
+	 * @return true if ok to process message, false if deleted, expunged, etc
+	 * @throws MessagingException
+	 */
+	private boolean filter(IMAPMessage imapMessage) throws MessagingException {
+		if (imapMessage.getFlags().contains(Flag.DELETED)) {
+			return false;
+		}
+		if (imapMessage.isExpunged()) {
+			return false;
+		}
+		return true;
+	}
+
 	private IMAPMessage findMessageByUID(IMAPFolder folder, long uid) throws MessagingException {
 		final Message message = folder.getMessageByUID(uid);
 		if (message instanceof IMAPMessage) {
@@ -402,7 +419,7 @@ public class IMAPFolderUtil implements Closeable {
 			System.out.println("Processing " + messages.length + " messages");
 			for (final Message message : messages) {
 				if (message instanceof IMAPMessage) {
-					if (false == message.getFlags().contains(Flag.DELETED)) {
+					if (true == filter((IMAPMessage) message)) {
 						final IMAPMessageData imapMessageData = new IMAPMessageData(folderName, imapFolder.getUID(message), (IMAPMessage) message);
 						imapMessageCallback.message(imapMessageData);
 						progressCallback.progress();
@@ -414,6 +431,14 @@ public class IMAPFolderUtil implements Closeable {
 		}
 	}
 
+	/**
+	 * iterate over an array of Message objects
+	 *
+	 * @param messages Javamail Message objects
+	 * @param imapMessageCallback callback
+	 * @throws MessagingException
+	 * @throws IOException
+	 */
 	public void iterateMessages(Message[] messages, IMAPMessageCallback imapMessageCallback) throws MessagingException, IOException {
 		for (final Message message : messages) {
 			IMAPFolder imapFolder = null;
@@ -429,7 +454,7 @@ public class IMAPFolderUtil implements Closeable {
 				 * get messages
 				 */
 				if (message instanceof IMAPMessage) {
-					if (false == message.getFlags().contains(Flag.DELETED)) {
+					if (true == filter((IMAPMessage) message)) {
 						final IMAPMessageData imapMessageData = new IMAPMessageData(imapFolder.getFullName(), imapFolder.getUID(message), (IMAPMessage) message);
 						imapMessageCallback.message(imapMessageData);
 					} else {
