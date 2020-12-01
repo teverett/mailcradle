@@ -161,13 +161,15 @@ public class IMAPFolderUtil implements Closeable {
 		 */
 		final IMAPMessage imapMessage = findMessageByUID(imapFolder, uid);
 		if (null != imapMessage) {
-			if (set) {
-				switch (flagname) {
-					case "flagged":
-						imapMessage.setFlag(Flags.Flag.FLAGGED, set);
-						break;
-					default:
-						break;
+			if (true == filter(imapMessage)) {
+				if (set) {
+					switch (flagname) {
+						case "flagged":
+							imapMessage.setFlag(Flags.Flag.FLAGGED, set);
+							break;
+						default:
+							break;
+					}
 				}
 			}
 		}
@@ -192,39 +194,41 @@ public class IMAPFolderUtil implements Closeable {
 		 */
 		final IMAPMessage imapMessage = findMessageByUID(imapFolder, uid);
 		if (null != imapMessage) {
-			/*
-			 * create message
-			 */
-			final Message forwardMessage = new MimeMessage(session);
-			/*
-			 * recipient
-			 */
-			final InternetAddress[] recipients = InternetAddress.parse(emailAddress);
-			/*
-			 * Fill in header
-			 */
-			forwardMessage.setRecipients(Message.RecipientType.TO, recipients);
-			forwardMessage.setSubject(FWD + imapMessage.getSubject());
-			forwardMessage.setFrom(new InternetAddress(MailCradleConfiguration.getInstance().getSmtpFrom()));
-			/*
-			 * Create the message part
-			 */
-			final MimeBodyPart messageBodyPart = new MimeBodyPart();
-			final Multipart multipart = new MimeMultipart();
-			/*
-			 * set content
-			 */
-			messageBodyPart.setContent(imapMessage, "message/rfc822");
-			multipart.addBodyPart(messageBodyPart);
-			/*
-			 * Associate multi-part with message
-			 */
-			forwardMessage.setContent(multipart);
-			forwardMessage.saveChanges();
-			/*
-			 * send
-			 */
-			smtpSend(forwardMessage, recipients);
+			if (true == filter(imapMessage)) {
+				/*
+				 * create message
+				 */
+				final Message forwardMessage = new MimeMessage(session);
+				/*
+				 * recipient
+				 */
+				final InternetAddress[] recipients = InternetAddress.parse(emailAddress);
+				/*
+				 * Fill in header
+				 */
+				forwardMessage.setRecipients(Message.RecipientType.TO, recipients);
+				forwardMessage.setSubject(FWD + imapMessage.getSubject());
+				forwardMessage.setFrom(new InternetAddress(MailCradleConfiguration.getInstance().getSmtpFrom()));
+				/*
+				 * Create the message part
+				 */
+				final MimeBodyPart messageBodyPart = new MimeBodyPart();
+				final Multipart multipart = new MimeMultipart();
+				/*
+				 * set content
+				 */
+				messageBodyPart.setContent(imapMessage, "message/rfc822");
+				multipart.addBodyPart(messageBodyPart);
+				/*
+				 * Associate multi-part with message
+				 */
+				forwardMessage.setContent(multipart);
+				forwardMessage.saveChanges();
+				/*
+				 * send
+				 */
+				smtpSend(forwardMessage, recipients);
+			}
 		}
 	}
 
@@ -487,36 +491,38 @@ public class IMAPFolderUtil implements Closeable {
 			 */
 			final IMAPMessage imapMessage = findMessageByUID(imapFolder, uid);
 			if (null != imapMessage) {
-				/*
-				 * target
-				 */
-				rootFolder = getRootFolder();
-				targetFolder = (IMAPFolder) rootFolder.getFolder(targetFolderName);
-				/*
-				 * create target if we need to
-				 */
-				if (false == targetFolder.exists()) {
-					targetFolder.create(Folder.HOLDS_MESSAGES | Folder.HOLDS_FOLDERS);
-					targetFolder.setSubscribed(true);
-				}
-				/*
-				 * open target
-				 */
-				targetFolder.open(Folder.READ_WRITE);
-				/*
-				 * check capabilities
-				 */
-				if (true == store.hasCapability("MOVE")) {
+				if (true == filter(imapMessage)) {
 					/*
-					 * move message
+					 * target
 					 */
-					imapFolder.moveMessages(new Message[] { imapMessage }, targetFolder);
-				} else {
+					rootFolder = getRootFolder();
+					targetFolder = (IMAPFolder) rootFolder.getFolder(targetFolderName);
 					/*
-					 * copy and mark as deleted
+					 * create target if we need to
 					 */
-					imapFolder.copyMessages(new Message[] { imapMessage }, targetFolder);
-					imapMessage.setFlag(Flags.Flag.DELETED, true);
+					if (false == targetFolder.exists()) {
+						targetFolder.create(Folder.HOLDS_MESSAGES | Folder.HOLDS_FOLDERS);
+						targetFolder.setSubscribed(true);
+					}
+					/*
+					 * open target
+					 */
+					targetFolder.open(Folder.READ_WRITE);
+					/*
+					 * check capabilities
+					 */
+					if (true == store.hasCapability("MOVE")) {
+						/*
+						 * move message
+						 */
+						imapFolder.moveMessages(new Message[] { imapMessage }, targetFolder);
+					} else {
+						/*
+						 * copy and mark as deleted
+						 */
+						imapFolder.copyMessages(new Message[] { imapMessage }, targetFolder);
+						imapMessage.setFlag(Flags.Flag.DELETED, true);
+					}
 				}
 			}
 		} finally {
@@ -551,45 +557,47 @@ public class IMAPFolderUtil implements Closeable {
 		 */
 		final IMAPMessage imapMessage = findMessageByUID(imapFolder, uid);
 		if (null != imapMessage) {
-			/*
-			 * create message
-			 */
-			final Message replyMessage = new MimeMessage(session);
-			/*
-			 * recipient
-			 */
-			final InternetAddress[] recipients = (InternetAddress[]) imapMessage.getFrom();
-			/*
-			 * Fill in header
-			 */
-			replyMessage.setRecipients(Message.RecipientType.TO, recipients);
-			replyMessage.setSubject(RE + imapMessage.getSubject());
-			replyMessage.setFrom(new InternetAddress(MailCradleConfiguration.getInstance().getSmtpFrom()));
-			/*
-			 * Create the message part
-			 */
-			final Multipart multipart = new MimeMultipart();
-			/*
-			 * set reply
-			 */
-			final MimeBodyPart messageBodyPart1 = new MimeBodyPart();
-			messageBodyPart1.setContent(reply, "text/html");
-			multipart.addBodyPart(messageBodyPart1);
-			/*
-			 * set content
-			 */
-			final MimeBodyPart messageBodyPart2 = new MimeBodyPart();
-			messageBodyPart2.setContent(imapMessage, "message/rfc822");
-			multipart.addBodyPart(messageBodyPart2);
-			/*
-			 * Associate multi-part with message
-			 */
-			replyMessage.setContent(multipart);
-			replyMessage.saveChanges();
-			/*
-			 * send
-			 */
-			smtpSend(replyMessage, recipients);
+			if (true == filter(imapMessage)) {
+				/*
+				 * create message
+				 */
+				final Message replyMessage = new MimeMessage(session);
+				/*
+				 * recipient
+				 */
+				final InternetAddress[] recipients = (InternetAddress[]) imapMessage.getFrom();
+				/*
+				 * Fill in header
+				 */
+				replyMessage.setRecipients(Message.RecipientType.TO, recipients);
+				replyMessage.setSubject(RE + imapMessage.getSubject());
+				replyMessage.setFrom(new InternetAddress(MailCradleConfiguration.getInstance().getSmtpFrom()));
+				/*
+				 * Create the message part
+				 */
+				final Multipart multipart = new MimeMultipart();
+				/*
+				 * set reply
+				 */
+				final MimeBodyPart messageBodyPart1 = new MimeBodyPart();
+				messageBodyPart1.setContent(reply, "text/html");
+				multipart.addBodyPart(messageBodyPart1);
+				/*
+				 * set content
+				 */
+				final MimeBodyPart messageBodyPart2 = new MimeBodyPart();
+				messageBodyPart2.setContent(imapMessage, "message/rfc822");
+				multipart.addBodyPart(messageBodyPart2);
+				/*
+				 * Associate multi-part with message
+				 */
+				replyMessage.setContent(multipart);
+				replyMessage.saveChanges();
+				/*
+				 * send
+				 */
+				smtpSend(replyMessage, recipients);
+			}
 		}
 	}
 
