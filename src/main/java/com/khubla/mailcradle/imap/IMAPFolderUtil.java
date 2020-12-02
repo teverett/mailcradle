@@ -312,7 +312,6 @@ public class IMAPFolderUtil implements Closeable {
 		logger.info("Getting message count for folder: " + folderName);
 		IMAPFolder imapFolder = null;
 		imapFolder = getFolder();
-		imapFolder.open(Folder.READ_ONLY);
 		return imapFolder.getMessageCount();
 	}
 
@@ -387,12 +386,12 @@ public class IMAPFolderUtil implements Closeable {
 			/*
 			 * Spin the keepAliveThread
 			 */
-			keepAliveThread = new Thread(new IMAPKeepaliveRunnable(imapFolder));
+			keepAliveThread = new Thread(new IMAPKeepaliveRunnable(imapFolder.getFullName()));
 			keepAliveThread.start();
 			/*
 			 * listener
 			 */
-			imapFolder.addMessageCountListener(new IMAPMessageCountListener(this, imapMessageCallback));
+			imapFolder.addMessageCountListener(new IMAPMessageCountListener(imapFolder.getFullName(), imapMessageCallback));
 			/*
 			 * spin on idle
 			 */

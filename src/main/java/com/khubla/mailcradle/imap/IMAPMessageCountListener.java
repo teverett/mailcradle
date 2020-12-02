@@ -21,12 +21,12 @@ public class IMAPMessageCountListener implements MessageCountListener {
 	/**
 	 * parent folder
 	 */
-	private final IMAPFolderUtil imapFolderUtil;
+	private final String folderName;
 
-	public IMAPMessageCountListener(IMAPFolderUtil imapFolderUtil, IMAPMessageCallback imapMessageCallback) {
+	public IMAPMessageCountListener(String folderName, IMAPMessageCallback imapMessageCallback) {
 		super();
 		this.imapMessageCallback = imapMessageCallback;
-		this.imapFolderUtil = imapFolderUtil;
+		this.folderName = folderName;
 	}
 
 	@Override
@@ -36,6 +36,7 @@ public class IMAPMessageCountListener implements MessageCountListener {
 				/*
 				 * reconnect is necessary
 				 */
+				final IMAPFolderUtil imapFolderUtil = FolderFactory.getInstance().getFolder(folderName);
 				imapFolderUtil.connect();
 				for (final Message message : messageCountEvent.getMessages()) {
 					final IMAPMessageData imapMessageData = imapFolderUtil.getMessageData((IMAPMessage) message);

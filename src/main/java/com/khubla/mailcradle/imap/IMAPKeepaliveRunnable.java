@@ -5,7 +5,6 @@ import javax.mail.*;
 import org.apache.logging.log4j.*;
 
 import com.khubla.mailcradle.*;
-import com.sun.mail.imap.*;
 
 /**
  * https://stackoverflow.com/questions/4155412/javamail-keeping-imapfolder-idle-alive
@@ -22,10 +21,10 @@ public class IMAPKeepaliveRunnable implements Runnable {
 	/*
 	 * folder
 	 */
-	private final IMAPFolder imapFolder;
+	private final String folderName;
 
-	public IMAPKeepaliveRunnable(IMAPFolder imapFolder) {
-		this.imapFolder = imapFolder;
+	public IMAPKeepaliveRunnable(String folderName) {
+		this.folderName = folderName;
 		keepalive = 1000 * 60 * MailCradleConfiguration.getInstance().getImapKeepaliveMinutes();
 	}
 
@@ -33,7 +32,7 @@ public class IMAPKeepaliveRunnable implements Runnable {
 	public void run() {
 		while (!Thread.interrupted()) {
 			try {
-				logger.info("Keepalive.  Message count: " + imapFolder.getMessageCount());
+				logger.info("Keepalive.  Message count: " + FolderFactory.getInstance().getFolder(folderName).getMessageCount());
 				Thread.sleep(keepalive);
 			} catch (final InterruptedException e) {
 				logger.warn("InterruptedException exception while keeping alive the IDLE connection", e);
