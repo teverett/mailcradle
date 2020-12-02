@@ -38,7 +38,7 @@ public class IMAPFolderUtil implements Closeable {
 	/**
 	 * javamail store
 	 */
-	private final IMAPStore store;
+	private IMAPStore store;
 	/**
 	 * foldername
 	 */
@@ -76,9 +76,7 @@ public class IMAPFolderUtil implements Closeable {
 			properties.put("mail.store.protocol", "imap");
 		}
 		session = Session.getDefaultInstance(properties, null);
-		store = (IMAPStore) session.getStore();
-		logger.info("Logging into " + MailCradleConfiguration.getInstance().getImapHost() + " as " + MailCradleConfiguration.getInstance().getImapUsername());
-		store.connect(MailCradleConfiguration.getInstance().getImapHost(), MailCradleConfiguration.getInstance().getImapUsername(), MailCradleConfiguration.getInstance().getImapPassword());
+		connect();
 	}
 
 	@Override
@@ -92,6 +90,21 @@ public class IMAPFolderUtil implements Closeable {
 				}
 			}
 			thisFolder = null;
+		}
+	}
+
+	/**
+	 * connect, or reconnect, tp server
+	 *
+	 * @throws MessagingException
+	 */
+	public void connect() throws MessagingException {
+		if (null == store) {
+			store = (IMAPStore) session.getStore();
+		}
+		if (false == store.isConnected()) {
+			logger.info("Logging into " + MailCradleConfiguration.getInstance().getImapHost() + " as " + MailCradleConfiguration.getInstance().getImapUsername());
+			store.connect(MailCradleConfiguration.getInstance().getImapHost(), MailCradleConfiguration.getInstance().getImapUsername(), MailCradleConfiguration.getInstance().getImapPassword());
 		}
 	}
 

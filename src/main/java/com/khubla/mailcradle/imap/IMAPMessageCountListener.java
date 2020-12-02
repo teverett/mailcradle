@@ -33,6 +33,10 @@ public class IMAPMessageCountListener implements MessageCountListener {
 	public void messagesAdded(MessageCountEvent messageCountEvent) {
 		try {
 			if (null != messageCountEvent) {
+				/*
+				 * reconnect is necessary
+				 */
+				imapFolderUtil.connect();
 				for (final Message message : messageCountEvent.getMessages()) {
 					final IMAPMessageData imapMessageData = imapFolderUtil.getMessageData((IMAPMessage) message);
 					if (null != imapMessageData) {
