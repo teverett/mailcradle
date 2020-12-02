@@ -36,6 +36,7 @@ public class IMAPKeepaliveRunnable implements Runnable {
 				logger.info("Keepalive.  Message count: " + imapFolder.getMessageCount());
 				Thread.sleep(keepalive);
 			} catch (final InterruptedException e) {
+				logger.warn("InterruptedException exception while keeping alive the IDLE connection", e);
 				/*
 				 * Ignore, just aborting the thread...
 				 */
@@ -43,7 +44,7 @@ public class IMAPKeepaliveRunnable implements Runnable {
 				/*
 				 * Shouldn't really happen...
 				 */
-				logger.warn("Unexpected exception while keeping alive the IDLE connection", e);
+				logger.warn("MessagingException exception while keeping alive the IDLE connection", e);
 			}
 		}
 	}
