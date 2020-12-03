@@ -18,10 +18,11 @@ public class ForwardAction extends Action {
 	private String address;
 
 	@Override
-	public void execute(IMAPMessageData messageData, Mailcradle mailsort) throws MessagingException {
+	public boolean execute(IMAPMessageData messageData, Mailcradle mailsort) throws MessagingException {
 		System.out.println("Forwarding message " + messageData.getId() + " to address: " + address);
 		logger.info("Forwarding message " + messageData.getId() + " to address: " + address);
 		FolderFactory.getInstance().getFolder(messageData.getFolderName()).forwardMessage(messageData.getUid(), address);
+		return true;
 	}
 
 	public String getAddress() {

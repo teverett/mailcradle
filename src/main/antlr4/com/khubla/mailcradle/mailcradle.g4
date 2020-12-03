@@ -113,6 +113,11 @@ action
    | replyaction
    | flagaction
    | unflagaction
+   | stopaction
+   ;
+
+stopaction
+   : 'stop' ';'
    ;
 
 flagaction

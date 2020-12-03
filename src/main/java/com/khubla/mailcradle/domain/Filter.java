@@ -39,7 +39,11 @@ public class Filter {
 		 */
 		if (true == conditionsPass) {
 			for (final Action action : actions) {
-				action.execute(messageData, mailsort);
+				final boolean continueProcessiing = action.execute(messageData, mailsort);
+				if (false == continueProcessiing) {
+					// we done!
+					break;
+				}
 			}
 		}
 	}

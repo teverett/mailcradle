@@ -49,5 +49,13 @@ public class ActionListener extends AbstractListener {
 			unflagActionListener.enterUnflagaction(ctx.unflagaction());
 			action = unflagActionListener.action;
 		}
+		/**
+		 * stop
+		 */
+		if (null != ctx.stopaction()) {
+			final StopActionListener stopActionListener = new StopActionListener();
+			stopActionListener.enterStopaction(ctx.stopaction());
+			action = stopActionListener.action;
+		}
 	}
 }

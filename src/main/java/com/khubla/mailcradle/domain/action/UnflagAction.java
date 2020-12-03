@@ -18,10 +18,11 @@ public class UnflagAction extends Action {
 	private String flag;
 
 	@Override
-	public void execute(IMAPMessageData messageData, Mailcradle mailsort) throws MessagingException {
+	public boolean execute(IMAPMessageData messageData, Mailcradle mailsort) throws MessagingException {
 		System.out.println("Unflagging message " + messageData.getId() + " from: " + flag);
 		logger.info("Unflagging message " + messageData.getId() + " from: " + flag);
 		FolderFactory.getInstance().getFolder(messageData.getFolderName()).flagMessage(messageData.getUid(), flag, false);
+		return true;
 	}
 
 	public String getFlag() {

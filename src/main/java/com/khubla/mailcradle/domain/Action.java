@@ -10,6 +10,7 @@ public abstract class Action {
 	 *
 	 * @param message Message to execute with
 	 * @throws MessagingException oops
+	 * @return true if continue processing rules, false if we want to stop processing rules
 	 */
-	abstract public void execute(IMAPMessageData messageData, Mailcradle mailsort) throws MessagingException;
+	abstract public boolean execute(IMAPMessageData messageData, Mailcradle mailsort) throws MessagingException;
 }

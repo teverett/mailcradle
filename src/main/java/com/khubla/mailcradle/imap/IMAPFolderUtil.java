@@ -400,7 +400,7 @@ public class IMAPFolderUtil implements Closeable {
 					/*
 					 * make sure we're connected and folder is open
 					 */
-					this.connect();
+					connect();
 					/*
 					 * make sure the folder is open
 					 */

@@ -18,10 +18,11 @@ public class FlagAction extends Action {
 	private String flag;
 
 	@Override
-	public void execute(IMAPMessageData messageData, Mailcradle mailsort) throws MessagingException {
+	public boolean execute(IMAPMessageData messageData, Mailcradle mailsort) throws MessagingException {
 		System.out.println("Flagging message " + messageData.getId() + " with: " + flag);
 		logger.info("Flagging message " + messageData.getId() + " with: " + flag);
 		FolderFactory.getInstance().getFolder(messageData.getFolderName()).flagMessage(messageData.getUid(), flag, true);
+		return true;
 	}
 
 	public String getFlag() {

@@ -18,10 +18,11 @@ public class ReplyAction extends Action {
 	private String reply;
 
 	@Override
-	public void execute(IMAPMessageData messageData, Mailcradle mailsort) throws MessagingException {
+	public boolean execute(IMAPMessageData messageData, Mailcradle mailsort) throws MessagingException {
 		System.out.println("Replying to message " + messageData.getId() + " with: " + reply);
 		logger.info("Replying to message " + messageData.getId() + " with: " + reply);
 		FolderFactory.getInstance().getFolder(messageData.getFolderName()).replyMessage(messageData.getUid(), reply);
+		return true;
 	}
 
 	public String getReply() {
