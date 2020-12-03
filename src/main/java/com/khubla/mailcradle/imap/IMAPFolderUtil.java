@@ -397,6 +397,17 @@ public class IMAPFolderUtil implements Closeable {
 			 */
 			while (!Thread.interrupted()) {
 				try {
+					/*
+					 * make sure we're connected and folder is open
+					 */
+					this.connect();
+					/*
+					 * make sure the folder is open
+					 */
+					imapFolder = getFolder();
+					/*
+					 * idle
+					 */
 					imapFolder.idle(true);
 				} catch (final Exception e) {
 					logger.error("Exception during idle", e);
