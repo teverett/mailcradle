@@ -68,6 +68,10 @@ public class MailCradleConfiguration {
 	 */
 	private long imapCrawlIntervalHours;
 	/**
+	 * IMAP crawl rate. 1 message per every imapCrawlRateSeconds seconds
+	 */
+	private long imapCrawlRateSeconds;
+	/**
 	 * SMTP host
 	 */
 	private String smtpHost;
@@ -112,6 +116,10 @@ public class MailCradleConfiguration {
 
 	public long getImapCrawlIntervalHours() {
 		return imapCrawlIntervalHours;
+	}
+
+	public long getImapCrawlRateSeconds() {
+		return imapCrawlRateSeconds;
 	}
 
 	public String getImapHost() {
@@ -191,6 +199,7 @@ public class MailCradleConfiguration {
 			imapTLS = configuration.get(Boolean.class, "imap.tls");
 			imapKeepaliveMinutes = configuration.get(Integer.class, "imap.keepaliveminutes");
 			imapCrawlIntervalHours = configuration.get(Integer.class, "imap.crawlintervalhours");
+			imapCrawlRateSeconds = configuration.get(Integer.class, "imap.crawlRateSeconds");
 			mailsortFile = configuration.get(String.class, "mailsortFile");
 			smtpHost = configuration.get(String.class, "smtp.host");
 			smtpUsername = configuration.get(String.class, "smtp.username");
@@ -210,6 +219,10 @@ public class MailCradleConfiguration {
 
 	public void setImapCrawlIntervalHours(long imapCrawlIntervalHours) {
 		this.imapCrawlIntervalHours = imapCrawlIntervalHours;
+	}
+
+	public void setImapCrawlRateSeconds(long imapCrawlRateSeconds) {
+		this.imapCrawlRateSeconds = imapCrawlRateSeconds;
 	}
 
 	public void setImapHost(String imapHost) {
