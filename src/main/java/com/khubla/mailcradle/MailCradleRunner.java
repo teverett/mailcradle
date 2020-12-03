@@ -46,7 +46,7 @@ public class MailCradleRunner implements IMAPMessageCallback {
 	 * @throws IOException
 	 */
 	private void filterAllFolders() throws MessagingException, IOException {
-		for (final String folderName : MailCradleConfiguration.getInstance().getImapFolders()) {
+		for (final String folderName : MailCradleConfiguration.getInstance().getImapCrawlFolders()) {
 			if (folderName.endsWith(".*")) {
 				final String fn = folderName.substring(0, folderName.length() - 2);
 				runFilters(fn);

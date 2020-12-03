@@ -62,7 +62,11 @@ public class MailCradleConfiguration {
 	/**
 	 * IMAP folder
 	 */
-	private String[] imapFolders;
+	private String[] imapCrawlFolders;
+	/**
+	 * IMAP crawl interval (hours)
+	 */
+	private long imapCrawlIntervalHours;
 	/**
 	 * SMTP host
 	 */
@@ -102,8 +106,12 @@ public class MailCradleConfiguration {
 	private MailCradleConfiguration() {
 	}
 
-	public String[] getImapFolders() {
-		return imapFolders;
+	public String[] getImapCrawlFolders() {
+		return imapCrawlFolders;
+	}
+
+	public long getImapCrawlIntervalHours() {
+		return imapCrawlIntervalHours;
 	}
 
 	public String getImapHost() {
@@ -178,10 +186,11 @@ public class MailCradleConfiguration {
 			imapINBOX = configuration.get(String.class, "imap.inbox");
 			imapUsername = configuration.get(String.class, "imap.username");
 			imapPassword = configuration.get(String.class, "imap.password");
-			imapFolders = configuration.get(String[].class, "imap.folders");
+			imapCrawlFolders = configuration.get(String[].class, "imap.crawlfolders");
 			imapPort = configuration.get(Integer.class, "imap.port");
 			imapTLS = configuration.get(Boolean.class, "imap.tls");
 			imapKeepaliveMinutes = configuration.get(Integer.class, "imap.keepaliveminutes");
+			imapCrawlIntervalHours = configuration.get(Integer.class, "imap.crawlintervalhours");
 			mailsortFile = configuration.get(String.class, "mailsortFile");
 			smtpHost = configuration.get(String.class, "smtp.host");
 			smtpUsername = configuration.get(String.class, "smtp.username");
@@ -195,8 +204,12 @@ public class MailCradleConfiguration {
 		}
 	}
 
-	public void setImapFolders(String[] imapFolders) {
-		this.imapFolders = imapFolders;
+	public void setImapCrawlFolders(String[] imapCrawlFolders) {
+		this.imapCrawlFolders = imapCrawlFolders;
+	}
+
+	public void setImapCrawlIntervalHours(long imapCrawlIntervalHours) {
+		this.imapCrawlIntervalHours = imapCrawlIntervalHours;
 	}
 
 	public void setImapHost(String imapHost) {
