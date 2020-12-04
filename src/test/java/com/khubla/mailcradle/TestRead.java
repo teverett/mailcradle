@@ -6,7 +6,6 @@ import java.io.*;
 
 import org.junit.jupiter.api.*;
 
-import com.khubla.mailcradle.*;
 import com.khubla.mailcradle.domain.*;
 
 public class TestRead {
@@ -70,6 +69,34 @@ public class TestRead {
 	public void test5() {
 		try {
 			final File file = new File("src/test/resources/example5.txt");
+			final Mailcradle mailsort = MailCradleMarshaller.importRules(file);
+			/*
+			 * mailsort
+			 */
+			assertNotNull(mailsort);
+		} catch (final Exception e) {
+			e.printStackTrace();
+		}
+	}
+
+	@Test
+	public void test6() {
+		try {
+			final File file = new File("src/test/resources/example6.txt");
+			final Mailcradle mailsort = MailCradleMarshaller.importRules(file);
+			/*
+			 * mailsort
+			 */
+			assertNotNull(mailsort);
+		} catch (final Exception e) {
+			e.printStackTrace();
+		}
+	}
+
+	@Test
+	public void test7() {
+		try {
+			final File file = new File("src/test/resources/example7.txt");
 			final Mailcradle mailsort = MailCradleMarshaller.importRules(file);
 			/*
 			 * mailsort

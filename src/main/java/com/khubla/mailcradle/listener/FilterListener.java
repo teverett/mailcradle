@@ -21,14 +21,12 @@ public class FilterListener extends AbstractListener {
 			}
 		}
 		/*
-		 * conditions
+		 * expression
 		 */
-		if (null != ctx.condition()) {
-			for (final ConditionContext conditionContext : ctx.condition()) {
-				final ConditionListener conditionListener = new ConditionListener();
-				conditionListener.enterCondition(conditionContext);
-				filter.addCondition(conditionListener.condition);
-			}
+		if (null != ctx.expression()) {
+			final ExpressionListener expressionListener = new ExpressionListener();
+			expressionListener.enterExpression(ctx.expression());
+			filter.setExpression(expressionListener.expression);
 		}
 	}
 }

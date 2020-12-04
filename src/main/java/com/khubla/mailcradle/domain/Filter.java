@@ -8,15 +8,11 @@ import javax.mail.*;
 import com.khubla.mailcradle.imap.*;
 
 public class Filter {
-	private final List<Condition> conditions = new ArrayList<Condition>();
+	private Expression expression;
 	private final List<Action> actions = new ArrayList<Action>();
 
 	public void addAction(Action action) {
 		actions.add(action);
-	}
-
-	public void addCondition(Condition condition) {
-		conditions.add(condition);
 	}
 
 	/**
@@ -27,17 +23,13 @@ public class Filter {
 	 * @throws IOException
 	 */
 	public void execute(IMAPMessageData messageData, Mailcradle mailsort) throws MessagingException, IOException {
-		boolean conditionsPass = true;
-		for (final Condition condition : conditions) {
-			if (false == condition.evaluate(messageData, mailsort)) {
-				conditionsPass = false;
-				break;
-			}
-		}
 		/*
-		 * actions
+		 * evaluate expression
 		 */
-		if (true == conditionsPass) {
+		if (expression.evaluate(messageData, mailsort)) {
+			/*
+			 * actions
+			 */
 			for (final Action action : actions) {
 				final boolean continueProcessiing = action.execute(messageData, mailsort);
 				if (false == continueProcessiing) {
@@ -52,7 +44,11 @@ public class Filter {
 		return actions;
 	}
 
-	public List<Condition> getConditions() {
-		return conditions;
+	public Expression getExpression() {
+		return expression;
+	}
+
+	public void setExpression(Expression expression) {
+		this.expression = expression;
 	}
 }

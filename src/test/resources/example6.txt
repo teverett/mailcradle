@@ -1,0 +1,9 @@
+
+if ((me contains from) and (me contains to)){
+	moveto "INBOX.Me";
+};
+
+list me
+
+"tom@khubla.com",
+"tom@0x544745.com";

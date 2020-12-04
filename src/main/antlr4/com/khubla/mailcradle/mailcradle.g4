@@ -44,7 +44,19 @@ list
    ;
 
 filter
-   : 'if' '(' condition+ ')' '{' action+ '}' ';'
+   : 'if' '(' expression ')' '{' action* '}' ';'
+   ;
+
+expression
+   : expression logical expression
+   | '(' expression ')'
+   | NOT expression
+   | condition
+   ;
+
+logical
+   : AND
+   | OR
    ;
 
 condition
@@ -138,6 +150,18 @@ moveaction
 
 forwardaction
    : 'forwardto' string ';'
+   ;
+
+AND
+   : 'and'
+   ;
+
+OR
+   : 'or'
+   ;
+
+NOT
+   : '!'
    ;
 
 identifier

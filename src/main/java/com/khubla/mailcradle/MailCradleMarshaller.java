@@ -7,7 +7,6 @@ import org.antlr.v4.runtime.*;
 import org.apache.logging.log4j.*;
 
 import com.khubla.mailcradle.domain.*;
-import com.khubla.mailcradle.domain.condition.*;
 import com.khubla.mailcradle.listener.*;
 
 public class MailCradleMarshaller {
@@ -21,20 +20,19 @@ public class MailCradleMarshaller {
 	 *
 	 * @param mailsort Mailsort
 	 */
-	private static void checkLists(Mailcradle mailsort) {
-		for (final Filter filter : mailsort.getFilters()) {
-			for (final Condition condition : filter.getConditions()) {
-				if (condition instanceof ListCondition) {
-					final String listname = ((ListCondition) condition).getListname();
-					final StringList stringList = mailsort.getList(listname);
-					if (null == stringList) {
-						throw new RuntimeException("List " + listname + " is referred to but does not exist");
-					}
-				}
-			}
-		}
-	}
-
+	// private static void checkLists(Mailcradle mailsort) {
+	// for (final Filter filter : mailsort.getFilters()) {
+	// for (final Condition condition : filter.getConditions()) {
+	// if (condition instanceof ListCondition) {
+	// final String listname = ((ListCondition) condition).getListname();
+	// final StringList stringList = mailsort.getList(listname);
+	// if (null == stringList) {
+	// throw new RuntimeException("List " + listname + " is referred to but does not exist");
+	// }
+	// }
+	// }
+	// }
+	// }
 	public static Mailcradle importRules(File file) throws IOException {
 		/*
 		 * list of imported files
@@ -47,7 +45,7 @@ public class MailCradleMarshaller {
 		/*
 		 * check list names
 		 */
-		checkLists(ret);
+		// checkLists(ret);
 		/*
 		 * done
 		 */

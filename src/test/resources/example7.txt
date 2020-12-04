@@ -1,0 +1,9 @@
+
+if (!(me contains to)) {
+	// do stuff
+};
+
+list me
+
+"tom@khubla.com",
+"tom@0x544745.com";

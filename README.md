@@ -38,20 +38,32 @@ The mail `mailcradle.properties` contains IMAP login properties, and the name of
 
 Here's an example:
 
-<pre>
+```java
+# IMAP settings
 imap.host=mail.example.com
 imap.username=uuu
 imap.password=ppp
-imap.folders=INBOX
+imap.inbox=INBOX
+imap.crawlfolders=INBOX
+imap.crawlintervalhours=24
+imap.crawlRateSeconds=10
+imap.port=993
+imap.tls=true
+imap.keepaliveminutes=5
+
+# SMTP settings
 smtp.host=mail.example.com
 smtp.username=uuu
 smtp.password=ppp
 smtp.from=me@example.com
 smtp.port=465
-mailsortFile=mailcradle.txt
-</pre>
+smtp.tls=true
 
-`imap.folders` is a comma-delimited list
+# rules file
+mailsortFile=mailcradle.txt
+```
+
+`imap.folders` is a comma-delimited list.  A trailing splat symbol `*` indicates to recurse folders under the parent folder.
 
 
 # Rules
@@ -62,6 +74,8 @@ There are two types of rules that MailCradle can process:
 * List Rules
 
 The full rule syntax in [ANTLR](https://www.antlr.org/) format is [here](https://github.com/teverett/mailcradle/blob/master/src/main/antlr4/com/khubla/mailcradle/mailcradle.g4).
+
+Rules are run in the order that they are read from rule files, from top to bottom, including included rule files.
 
 ## Simple Rules
 
@@ -107,11 +121,41 @@ List rules require that a named list be defined to use. Lists are defined as:
 list <listname> "value1", "value2", "value3", ... ;
 ```
 
+## Expressions
+
+Rules can be combined with the `and` and `or` operators and rule negation is supported via the `not` operator.
+
+This rule finds all mail that is from me, to me, and moves it to a folder:
+
+```java
+if ((me contains from) and (me contains to)) {
+	moveto "INBOX.Me";
+};
+
+list me
+
+"tom@khubla.com",
+"tom@0x544745.com";
+```
+
+This rule finds all mail that is not addressed to me
+
+```java
+if (!(me contains to)) {
+	// do stuff
+};
+
+list me
+
+"tom@khubla.com",
+"tom@0x544745.com";
+```
+
 ## Actions
 
-There are 5 actions which can be run
+There are numerous actions which can be run
 
-### moveto
+## moveto
 
 Move the message to an IMAP folder
 
@@ -121,7 +165,7 @@ moveto <foldername>
 
 **foldername** must be a quoted string such as "me@example.com".  If the target IMAP folder does not exists it is created and subscribed to.
 
-### replywith
+## replywith
 
 Reply to the message
 
@@ -132,7 +176,7 @@ replywith <content>
 **content** must be a quoted string such as "This mailbox is not monitored"
 
 
-### forwardto
+## forwardto
 
 Forward the message to an email address
 
@@ -142,7 +186,11 @@ forwardto <address>
 
 **address** must be a quoted string such as "someone@example.com"
 
-### flag
+## stop
+
+The `stop` action stops all rule processing for a message.  It can be used to ensure that once a rule is run further rules are not run which would result in scenarios such as moving a message many times.
+
+## flag
 
 Add an IMAP flag to the message.
 
@@ -153,7 +201,7 @@ flag <flagname>
 **flagname** must be a quoted string such as "flagged"
 
 
-### unflag
+## unflag
 
 Remove an IMAP flag from the message.
 
@@ -192,64 +240,64 @@ The source tree contains example rule files in the directory [/examples](https:/
 
 A rule to move all email from "@github.com" to a folder called "INBOX.github"
 
-<pre>
+```java
 if (from contains "@github.com") {
 	moveto "INBOX.github";
 };
-</pre>
+```
 
 A rule to move all "Free Money" spam to the trash
 
-<pre>
+```java
 if (subject contains "Free Money") {
 	moveto "INBOX.Trash";
 };
-</pre>
+```
 
 An out of office email
 
-<pre>
+```java
 if (from contains "@example.com") {
 	replywith "I am out of office";
 };
-</pre>
+```
 
 Move all messages with the `X-Spam-Flag` header to "YES" to a folder
 
-<pre>
+```java
 if (header["X-Spam-Flag"] is "YES") {
 	moveto "INBOX.Spam";
 };
-</pre>
+```
 
 ## Example List rules
 
 A blackhole for spammers, using the subject field
 
-<pre>
+```java
 list badsubjects "$", "Money", "Free";
 if (badsubjects contains subject) {
 	moveto "INBOX.Trash";
 };
-</pre>
+```
 
 Mark all emails from a special list of senders with the IMAP "flagged" flag.
 
-<pre>
+```java
 list importantpeople "person1@example.com", "person2@example.com", "person3@example.com";
 if (importantpeople contains from) {
 	flag "flagged";
 };
-</pre>
+```
 
 Forward all emails from certain domains and then save then in a folder
 
-<pre>
+```java
 list domainlist "@domain1.com", "@domain2.com";
 if (domainlist contains from) {
 	forwardto "address@example.com";
 	moveto "INBOX.AutoForwarded";
 };
-</pre>
+```
 
 
