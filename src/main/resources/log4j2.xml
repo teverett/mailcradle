@@ -1,29 +1,31 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<Configuration status="warn" strict="true" name="XMLConfigTest" packages="org.apache.logging.log4j.test">
+<Configuration status="warn">
 	<Properties>
-		<Property name="filename">mailcradle.log</Property>
+		<Property name="filename">mailcradle</Property>
+		<Property name="pattern">[%-5level] %d{yyyy-MM-dd HH:mm:ss.SSS} [%t] %c{1} - %msg%n</Property>
 	</Properties>
-	<Filter type="ThresholdFilter" level="trace" />
-
 	<Appenders>
-		<Appender type="Console" name="STDOUT">
-			<Layout type="PatternLayout" pattern="%m MDC%X%n" />
-		</Appender>
-		<Appender type="File" name="File" fileName="${filename}">
-			<Layout type="PatternLayout">
-				<Pattern>%d %p %C{1.} [%t] %m%n</Pattern>
-			</Layout>
-		</Appender>
+		<Console name="console" target="SYSTEM_OUT">
+			<PatternLayout pattern="${pattern}" />
+		</Console>
+		<RollingFile name="fileLogger" fileName="${filename}.log" filePattern="${filename}.%i.log.gz">
+			<PatternLayout>
+				<pattern>${pattern}</pattern>
+			</PatternLayout>
+			<Policies>
+				<SizeBasedTriggeringPolicy size="1MB" />
+			</Policies>
+		</RollingFile>
 	</Appenders>
 	<Loggers>
 		<Logger name="com.khubla.mailcradle" level="debug" additivity="false">
-			<AppenderRef ref="File" />
+			<AppenderRef ref="fileLogger" />
 		</Logger>
 		<Logger name="org.apache.commons.configuration2" level="debug" additivity="false">
-			<AppenderRef ref="File" />
+			<AppenderRef ref="fileLogger" />
 		</Logger>
 		<Root level="FATAL">
-			<AppenderRef ref="STDOUT" />
+			<AppenderRef ref="console" />
 		</Root>
 	</Loggers>
 </Configuration>
