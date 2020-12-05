@@ -52,7 +52,11 @@ public class MailCradleRunner implements IMAPMessageCallback {
 				runFilters(fn);
 				final IMAPFolderUtil imapFolderUtil = FolderFactory.getInstance().getFolder(fn);
 				final List<String> subFolders = imapFolderUtil.getChildFolders();
-				if (null != subFolders) {
+				if ((null != subFolders) && (subFolders.size() > 0)) {
+					System.out.println("Folders to crawl include: ");
+					for (final String n : subFolders) {
+						System.out.println(n);
+					}
 					for (final String name : subFolders) {
 						runFilters(name);
 					}

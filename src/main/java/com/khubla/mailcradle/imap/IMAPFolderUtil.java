@@ -251,7 +251,7 @@ public class IMAPFolderUtil implements Closeable {
 
 	private List<String> getChildFolders(IMAPFolder imapFolder) throws MessagingException {
 		final List<String> ret = new ArrayList<String>();
-		final Folder[] folders = imapFolder.list();
+		final Folder[] folders = imapFolder.list("*");
 		if ((null != folders) && (folders.length > 0)) {
 			for (final Folder folder : folders) {
 				ret.add(folder.getFullName());
