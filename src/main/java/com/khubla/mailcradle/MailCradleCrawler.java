@@ -59,6 +59,7 @@ public class MailCradleCrawler {
 				runFilters(folderName);
 			}
 		}
+		System.out.println("Mail crawl complete");
 	}
 
 	/**

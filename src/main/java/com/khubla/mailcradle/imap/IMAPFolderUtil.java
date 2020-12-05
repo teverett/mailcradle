@@ -266,6 +266,7 @@ public class IMAPFolderUtil implements Closeable {
 				ret.addAll(getChildFolders((IMAPFolder) folder));
 			}
 		}
+		java.util.Collections.sort(ret);
 		return ret;
 	}
 
@@ -280,10 +281,15 @@ public class IMAPFolderUtil implements Closeable {
 			final IMAPFolder root = getRootFolder();
 			thisFolder = (IMAPFolder) root.getFolder(folderName);
 		}
-		if (false == thisFolder.isOpen()) {
-			thisFolder.open(Folder.READ_WRITE);
+		if (thisFolder.exists()) {
+			if (false == thisFolder.isOpen()) {
+				thisFolder.open(Folder.READ_WRITE);
+			}
+			return thisFolder;
+		} else {
+			thisFolder = null;
+			return null;
 		}
-		return thisFolder;
 	}
 
 	public String getFolderName() {
@@ -443,21 +449,25 @@ public class IMAPFolderUtil implements Closeable {
 		 * folder
 		 */
 		imapFolder = getFolder();
-		/*
-		 * get messages
-		 */
-		final Message[] messages = imapFolder.getMessages();
-		if (null != messages) {
-			final ProgressCallback progressCallback = new DefaultProgressCallbackImpl(messages.length);
-			System.out.println("Processing " + messages.length + " messages");
-			for (final Message message : messages) {
-				if (message instanceof IMAPMessage) {
-					if (true == filter((IMAPMessage) message)) {
-						final IMAPMessageData imapMessageData = new IMAPMessageData(folderName, imapFolder.getUID(message), (IMAPMessage) message);
-						imapMessageCallback.message(imapMessageData);
-						progressCallback.progress();
-					} else {
-						logger.info("Ignoring deleted message " + message.getMessageNumber() + " in folder " + folderName);
+		if (null != imapFolder) {
+			/*
+			 * get messages
+			 */
+			final Message[] messages = imapFolder.getMessages();
+			if (null != imapFolder) {
+				if (null != messages) {
+					final ProgressCallback progressCallback = new DefaultProgressCallbackImpl(messages.length);
+					System.out.println("Processing " + messages.length + " messages");
+					for (final Message message : messages) {
+						if (message instanceof IMAPMessage) {
+							if (true == filter((IMAPMessage) message)) {
+								final IMAPMessageData imapMessageData = new IMAPMessageData(folderName, imapFolder.getUID(message), (IMAPMessage) message);
+								imapMessageCallback.message(imapMessageData);
+								progressCallback.progress();
+							} else {
+								logger.info("Ignoring deleted message " + message.getMessageNumber() + " in folder " + folderName);
+							}
+						}
 					}
 				}
 			}
