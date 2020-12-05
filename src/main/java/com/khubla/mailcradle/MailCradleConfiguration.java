@@ -56,6 +56,10 @@ public class MailCradleConfiguration {
 	 */
 	private String imapPassword;
 	/**
+	 * IMAP remove empty
+	 */
+	private boolean imapRmoveempty;
+	/**
 	 * mailsort file
 	 */
 	private String mailsortFile;
@@ -178,6 +182,10 @@ public class MailCradleConfiguration {
 		return smtpUsername;
 	}
 
+	public boolean isImapRmoveempty() {
+		return imapRmoveempty;
+	}
+
 	private void load(String propertiesFile) throws Exception {
 		try {
 			final Parameters params = new Parameters();
@@ -194,12 +202,13 @@ public class MailCradleConfiguration {
 			imapINBOX = configuration.get(String.class, "imap.inbox");
 			imapUsername = configuration.get(String.class, "imap.username");
 			imapPassword = configuration.get(String.class, "imap.password");
-			imapCrawlFolders = configuration.get(String[].class, "imap.crawlfolders");
+			imapCrawlFolders = configuration.get(String[].class, "imap.crawl.folders");
 			imapPort = configuration.get(Integer.class, "imap.port");
 			imapTLS = configuration.get(Boolean.class, "imap.tls");
 			imapKeepaliveMinutes = configuration.get(Integer.class, "imap.keepaliveminutes");
-			imapCrawlIntervalHours = configuration.get(Integer.class, "imap.crawlintervalhours");
-			imapCrawlRateSeconds = configuration.get(Integer.class, "imap.crawlRateSeconds");
+			imapCrawlIntervalHours = configuration.get(Integer.class, "imap.crawl.intervalhours");
+			imapCrawlRateSeconds = configuration.get(Integer.class, "imap.crawl.RateSeconds");
+			imapRmoveempty = configuration.get(Boolean.class, "imap.crawl.Removeempty");
 			mailsortFile = configuration.get(String.class, "mailsortFile");
 			smtpHost = configuration.get(String.class, "smtp.host");
 			smtpUsername = configuration.get(String.class, "smtp.username");
@@ -243,6 +252,10 @@ public class MailCradleConfiguration {
 
 	public void setImapPort(Integer imapPort) {
 		this.imapPort = imapPort;
+	}
+
+	public void setImapRmoveempty(boolean imapRmoveempty) {
+		this.imapRmoveempty = imapRmoveempty;
 	}
 
 	public void setImapTLS(Boolean imapTLS) {
