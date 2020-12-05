@@ -19,8 +19,8 @@ public class ReplyAction extends Action {
 
 	@Override
 	public boolean execute(IMAPMessageData messageData, Mailcradle mailsort) throws MessagingException {
-		System.out.println("Replying to message " + messageData.getId() + " with: " + reply);
-		logger.info("Replying to message " + messageData.getId() + " with: " + reply);
+		System.out.println("Replying to message " + messageData.getId() + " in folder " + messageData.getFolderName() + " with: " + reply);
+		logger.info("Replying to message " + messageData.getId() + " in folder " + messageData.getFolderName() + " with: " + reply);
 		FolderFactory.getInstance().getFolder(messageData.getFolderName()).replyMessage(messageData.getUid(), reply);
 		return true;
 	}

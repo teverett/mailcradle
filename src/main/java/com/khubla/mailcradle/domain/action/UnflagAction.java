@@ -19,8 +19,8 @@ public class UnflagAction extends Action {
 
 	@Override
 	public boolean execute(IMAPMessageData messageData, Mailcradle mailsort) throws MessagingException {
-		System.out.println("Unflagging message " + messageData.getId() + " from: " + flag);
-		logger.info("Unflagging message " + messageData.getId() + " from: " + flag);
+		System.out.println("Unflagging message " + messageData.getId() + " in folder " + messageData.getFolderName() + " from: " + flag);
+		logger.info("Unflagging message " + messageData.getId() + " in folder " + messageData.getFolderName() + " from: " + flag);
 		FolderFactory.getInstance().getFolder(messageData.getFolderName()).flagMessage(messageData.getUid(), flag, false);
 		return true;
 	}

@@ -19,8 +19,8 @@ public class FlagAction extends Action {
 
 	@Override
 	public boolean execute(IMAPMessageData messageData, Mailcradle mailsort) throws MessagingException {
-		System.out.println("Flagging message " + messageData.getId() + " with: " + flag);
-		logger.info("Flagging message " + messageData.getId() + " with: " + flag);
+		System.out.println("Flagging message " + messageData.getId() + " in folder " + messageData.getFolderName() + " with: " + flag);
+		logger.info("Flagging message " + messageData.getId() + " in folder " + messageData.getFolderName() + " with: " + flag);
 		FolderFactory.getInstance().getFolder(messageData.getFolderName()).flagMessage(messageData.getUid(), flag, true);
 		return true;
 	}
