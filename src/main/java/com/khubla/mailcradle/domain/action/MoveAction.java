@@ -24,7 +24,8 @@ public class MoveAction extends Action {
 			logger.info("Moving message " + messageData.getId() + " in folder " + messageData.getFolderName() + " to folder: " + targetFolderName);
 			FolderFactory.getInstance().getFolder(messageData.getFolderName()).moveMessage(messageData.getUid(), targetFolderName);
 		} else {
-			System.out.println("Message " + messageData.getId() + " is already in folder " + messageData.getFolderName());
+			// System.out.println("Message " + messageData.getId() + " is already in folder " +
+			// messageData.getFolderName());
 			logger.info("Message " + messageData.getId() + " is already in folder " + messageData.getFolderName());
 		}
 		return true;
