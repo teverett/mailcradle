@@ -130,7 +130,9 @@ public class IMAPFolderUtil implements Closeable {
 		/*
 		 * expunge
 		 */
-		imapFolder.expunge();
+		if (null != imapFolder) {
+			imapFolder.expunge();
+		}
 	}
 
 	/**
@@ -262,8 +264,9 @@ public class IMAPFolderUtil implements Closeable {
 		final Folder[] folders = imapFolder.list("*");
 		if ((null != folders) && (folders.length > 0)) {
 			for (final Folder folder : folders) {
-				ret.add(folder.getFullName());
-				ret.addAll(getChildFolders((IMAPFolder) folder));
+				if ((folder.getType() & Folder.HOLDS_MESSAGES) > 0) {
+					ret.add(folder.getFullName());
+				}
 			}
 		}
 		java.util.Collections.sort(ret);
@@ -283,7 +286,14 @@ public class IMAPFolderUtil implements Closeable {
 		}
 		if (thisFolder.exists()) {
 			if (false == thisFolder.isOpen()) {
-				thisFolder.open(Folder.READ_WRITE);
+				if ((thisFolder.getType() & Folder.HOLDS_MESSAGES) > 0) {
+					thisFolder.open(Folder.READ_WRITE);
+				} else {
+					/*
+					 * folder doesnt hold messages
+					 */
+					return null;
+				}
 			}
 			return thisFolder;
 		} else {
