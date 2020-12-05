@@ -43,6 +43,16 @@ public class MailCradleCrawler {
 					 */
 					for (final String name : subFolders) {
 						runFilters(name);
+						/*
+						 * delete empty folder?
+						 */
+						if (true == MailCradleConfiguration.getInstance().isImapRmoveempty()) {
+							final IMAPFolderUtil thisIMAPFolderUtil = FolderFactory.getInstance().getFolder(name);
+							if (0 == thisIMAPFolderUtil.getMessageCount()) {
+								System.out.println("Deleting empty folder: " + name);
+								thisIMAPFolderUtil.deleteFolder();
+							}
+						}
 					}
 				}
 			} else {

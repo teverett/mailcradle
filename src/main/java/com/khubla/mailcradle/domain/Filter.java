@@ -22,7 +22,7 @@ public class Filter {
 	 * @throws MessagingException messaging exception
 	 * @throws IOException
 	 */
-	public void execute(IMAPMessageData messageData, Mailcradle mailsort) throws MessagingException, IOException {
+	public boolean execute(IMAPMessageData messageData, Mailcradle mailsort) throws MessagingException, IOException {
 		/*
 		 * evaluate expression
 		 */
@@ -34,10 +34,11 @@ public class Filter {
 				final boolean continueProcessiing = action.execute(messageData, mailsort);
 				if (false == continueProcessiing) {
 					// we done!
-					break;
+					return false;
 				}
 			}
 		}
+		return true;
 	}
 
 	public List<Action> getActions() {

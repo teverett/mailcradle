@@ -25,7 +25,9 @@ public class MessageFilter implements IMAPMessageCallback {
 		 */
 		if (null != imapMessageData) {
 			for (final Filter filter : mailsort.getFilters()) {
-				filter.execute(imapMessageData, mailsort);
+				if (false == filter.execute(imapMessageData, mailsort)) {
+					break;
+				}
 			}
 		}
 	}

@@ -108,6 +108,14 @@ public class IMAPFolderUtil implements Closeable {
 		}
 	}
 
+	public void deleteFolder() throws MessagingException {
+		if (folderName.trim().compareTo(MailCradleConfiguration.getInstance().getImapINBOX()) != 0) {
+			final IMAPFolder imapFolder = getFolder();
+			imapFolder.close();
+			imapFolder.delete(false);
+		}
+	}
+
 	/**
 	 * expunge the folder
 	 *
