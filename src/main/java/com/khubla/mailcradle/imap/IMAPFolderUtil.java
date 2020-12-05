@@ -271,11 +271,9 @@ public class IMAPFolderUtil implements Closeable {
 		if (null == thisFolder) {
 			final IMAPFolder root = getRootFolder();
 			thisFolder = (IMAPFolder) root.getFolder(folderName);
-			if (null != thisFolder) {
-				if (false == thisFolder.isOpen()) {
-					thisFolder.open(Folder.READ_WRITE);
-				}
-			}
+		}
+		if (false == thisFolder.isOpen()) {
+			thisFolder.open(Folder.READ_WRITE);
 		}
 		return thisFolder;
 	}

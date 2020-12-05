@@ -15,6 +15,7 @@
 			<Policies>
 				<SizeBasedTriggeringPolicy size="1MB" />
 			</Policies>
+			<DefaultRolloverStrategy max="5" />
 		</RollingFile>
 	</Appenders>
 	<Loggers>
@@ -29,4 +30,3 @@
 		</Root>
 	</Loggers>
 </Configuration>
-
