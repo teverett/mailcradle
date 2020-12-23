@@ -550,7 +550,7 @@ public class IMAPFolderUtil implements Closeable {
 					 * create target if we need to
 					 */
 					if (false == targetFolder.exists()) {
-						targetFolder.create(Folder.HOLDS_MESSAGES | Folder.HOLDS_FOLDERS);
+						targetFolder.create(Folder.HOLDS_MESSAGES | Folder.HOLDS_FOLDERS | Folder.READ_WRITE);
 						targetFolder.setSubscribed(true);
 					}
 					/*
