@@ -34,13 +34,18 @@ public class IMAPMessageData {
 	private final String[] cc;
 	private final String[] bcc;
 	private final long uid;
+	private final String contentType;
+
+	public String getContentType() {
+		return contentType;
+	}
 
 	/**
 	 * ctor
 	 *
 	 * @param message Javamail message
 	 * @throws MessagingException exception
-	 * @throws IOException exception
+	 * @throws IOException        exception
 	 */
 	public IMAPMessageData(String folderName, long uid, IMAPMessage message) throws MessagingException, IOException {
 		/*
@@ -103,6 +108,10 @@ public class IMAPMessageData {
 		 * flags
 		 */
 		flags = message.getFlags();
+		/*
+		 * content type
+		 */
+		contentType = message.getContentType();
 	}
 
 	public String[] getBcc() {
@@ -110,15 +119,22 @@ public class IMAPMessageData {
 	}
 
 	public String getBody() throws MessagingException, IOException {
-		if (null != body) {
+		if (null == body) {
 			/*
 			 * get the content
 			 */
 			final Object content = FolderFactory.getInstance().getFolder(folderName).getMessageContent(uid);
-			/*
-			 * body
-			 */
-			body = content.toString();
+			if (null != content) {
+				if (contentType.contains("text/plain")) {
+					body = content.toString();
+				} else if (contentType.contains("multipart")) {
+					body = getTextFromMimeMultipart((MimeMultipart) content);
+				} else {
+					// unknown content type
+					body = content.toString();
+				}
+			}
+
 		}
 		return body;
 	}
@@ -174,19 +190,20 @@ public class IMAPMessageData {
 	public String getSubject() {
 		return subject;
 	}
-	/*
-	 * private String getTextFromMessage(Object content, String mimeType) throws MessagingException,
-	 * IOException { String result = ""; if (message.isMimeType("text/plain")) { result =
-	 * message.getContent().toString(); } else if (message.isMimeType("multipart/*")) { final
-	 * MimeMultipart mimeMultipart = (MimeMultipart) message.getContent(); result =
-	 * getTextFromMimeMultipart(mimeMultipart); } return result; } private String
-	 * getTextFromMimeMultipart(MimeMultipart mimeMultipart) throws MessagingException, IOException {
-	 * String result = ""; final int count = mimeMultipart.getCount(); for (int i = 0; i < count;
-	 * i++) { final BodyPart bodyPart = mimeMultipart.getBodyPart(i); if (bodyPart.getContent()
-	 * instanceof MimeMultipart) { result = result + getTextFromMimeMultipart((MimeMultipart)
-	 * bodyPart.getContent()); } else { result = result + "\n" + bodyPart.getContent(); } } return
-	 * result; }
-	 */
+
+	private String getTextFromMimeMultipart(MimeMultipart mimeMultipart) throws MessagingException, IOException {
+		String result = "";
+		final int count = mimeMultipart.getCount();
+		for (int i = 0; i < count; i++) {
+			final BodyPart bodyPart = mimeMultipart.getBodyPart(i);
+			if (bodyPart.getContent() instanceof MimeMultipart) {
+				result = result + getTextFromMimeMultipart((MimeMultipart) bodyPart.getContent());
+			} else {
+				result = result + "\n" + bodyPart.getContent();
+			}
+		}
+		return result;
+	}
 
 	public String[] getTo() {
 		return to;
