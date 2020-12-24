@@ -1,16 +1,16 @@
 package com.khubla.mailcradle.domain;
 
-import javax.mail.*;
+import javax.mail.MessagingException;
 
-import com.khubla.mailcradle.imap.*;
+import com.khubla.mailcradle.imap.IMAPMessageData;
 
 public abstract class Action {
-	/**
-	 * execute the action on a message
-	 *
-	 * @param message Message to execute with
-	 * @throws MessagingException oops
-	 * @return true if continue processing rules, false if we want to stop processing rules
-	 */
-	abstract public boolean execute(IMAPMessageData messageData, Mailcradle mailsort) throws MessagingException;
+   /**
+    * execute the action on a message
+    *
+    * @param message Message to execute with
+    * @throws MessagingException oops
+    * @return true if continue processing rules, false if we want to stop processing rules
+    */
+   abstract public boolean execute(IMAPMessageData messageData, Mailcradle mailsort) throws MessagingException;
 }

@@ -1,15 +1,15 @@
 package com.khubla.mailcradle.domain.term;
 
-import java.io.*;
+import java.io.IOException;
 
-import javax.mail.*;
+import javax.mail.MessagingException;
 
-import com.khubla.mailcradle.domain.*;
-import com.khubla.mailcradle.imap.*;
+import com.khubla.mailcradle.domain.Term;
+import com.khubla.mailcradle.imap.IMAPMessageData;
 
 public class ToTerm extends Term {
-	@Override
-	public String[] resolve(IMAPMessageData messageData) throws MessagingException, IOException {
-		return messageData.getTo();
-	}
+   @Override
+   public String[] resolve(IMAPMessageData messageData) throws MessagingException, IOException {
+      return messageData.getTo();
+   }
 }

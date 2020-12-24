@@ -1,9 +1,10 @@
 package com.khubla.mailcradle.imap;
 
-import java.io.*;
+import java.io.IOException;
 
-import javax.mail.*;
+import javax.mail.Message;
+import javax.mail.MessagingException;
 
 public interface IMAPEventNotification {
-	void event(Message[] messages) throws MessagingException, IOException;
+   void event(Message[] messages) throws MessagingException, IOException;
 }

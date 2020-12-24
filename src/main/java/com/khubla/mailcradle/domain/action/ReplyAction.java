@@ -1,35 +1,42 @@
 package com.khubla.mailcradle.domain.action;
 
-import javax.mail.*;
+import javax.mail.MessagingException;
 
-import org.apache.logging.log4j.*;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 
-import com.khubla.mailcradle.domain.*;
-import com.khubla.mailcradle.imap.*;
+import com.khubla.mailcradle.domain.Action;
+import com.khubla.mailcradle.domain.Mailcradle;
+import com.khubla.mailcradle.imap.FolderFactory;
+import com.khubla.mailcradle.imap.IMAPMessageData;
 
 public class ReplyAction extends Action {
-	/**
-	 * logger
-	 */
-	private static final Logger logger = LogManager.getLogger(ReplyAction.class);
-	/**
-	 * reply text
-	 */
-	private String reply;
+   /**
+    * logger
+    */
+   private static final Logger logger = LogManager.getLogger(ReplyAction.class);
+   /**
+    * reply text
+    */
+   private String reply;
 
-	@Override
-	public boolean execute(IMAPMessageData messageData, Mailcradle mailsort) throws MessagingException {
-		System.out.println("Replying to message " + messageData.getId() + " in folder " + messageData.getFolderName() + " with: " + reply);
-		logger.info("Replying to message " + messageData.getId() + " in folder " + messageData.getFolderName() + " with: " + reply);
-		FolderFactory.getInstance().getFolder(messageData.getFolderName()).replyMessage(messageData.getUid(), reply);
-		return true;
-	}
+   @Override
+   public boolean execute(IMAPMessageData messageData, Mailcradle mailsort) throws MessagingException {
+      System.out.println("Replying to message " + messageData.getId() + " in folder " + messageData.getFolderName() + " with: " + reply);
+      logger.info("Replying to message " + messageData.getId() + " in folder " + messageData.getFolderName() + " with: " + reply);
+      FolderFactory.getInstance().getFolder(messageData.getFolderName()).replyMessage(messageData.getUid(), reply);
+      /*
+       * mark as replied
+       */
+      FolderFactory.getInstance().getFolder(messageData.getFolderName()).setFlag(messageData.getUid(), javax.mail.Flags.Flag.ANSWERED, true);
+      return true;
+   }
 
-	public String getReply() {
-		return reply;
-	}
+   public String getReply() {
+      return reply;
+   }
 
-	public void setReply(String reply) {
-		this.reply = reply;
-	}
+   public void setReply(String reply) {
+      this.reply = reply;
+   }
 }

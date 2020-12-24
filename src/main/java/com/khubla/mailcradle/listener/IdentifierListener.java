@@ -1,14 +1,14 @@
 package com.khubla.mailcradle.listener;
 
-import com.khubla.mailcradle.*;
+import com.khubla.mailcradle.mailcradleParser;
 
 public class IdentifierListener extends AbstractListener {
-	public String identifier;
+   public String identifier;
 
-	@Override
-	public void enterIdentifier(mailcradleParser.IdentifierContext ctx) {
-		if (null != ctx.IDENTIFIER()) {
-			identifier = ctx.IDENTIFIER().getText();
-		}
-	}
+   @Override
+   public void enterIdentifier(mailcradleParser.IdentifierContext ctx) {
+      if (null != ctx.IDENTIFIER()) {
+         identifier = ctx.IDENTIFIER().getText();
+      }
+   }
 }
