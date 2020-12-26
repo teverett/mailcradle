@@ -7,6 +7,8 @@ import javax.mail.*;
 import javax.mail.Message.*;
 import javax.mail.internet.*;
 
+import org.apache.logging.log4j.*;
+
 import com.sun.mail.imap.*;
 
 /**
@@ -20,6 +22,10 @@ public class IMAPMessageData {
 		public String value;
 	}
 
+	/**
+	 * logger
+	 */
+	private static final Logger logger = LogManager.getLogger(IMAPMessageData.class);
 	private final String subject;
 	private final String[] from;
 	private final List<HeaderEntry> headers = new ArrayList<HeaderEntry>();
@@ -212,7 +218,7 @@ public class IMAPMessageData {
 				// this can fail for example with unsupported encoding
 				o = bodyPart.getContent();
 			} catch (Exception e) {
-				e.printStackTrace();
+				logger.error("Exception gettting message content for message " + uid, e);
 			}
 			if (null != o) {
 				if (bodyPart.getContent() instanceof MimeMultipart) {
