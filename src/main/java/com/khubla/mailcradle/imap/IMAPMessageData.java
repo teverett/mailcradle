@@ -209,26 +209,27 @@ public class IMAPMessageData {
 	}
 
 	private String getTextFromMimeMultipart(MimeMultipart mimeMultipart) throws MessagingException, IOException {
-		String result = "";
-		final int count = mimeMultipart.getCount();
-		for (int i = 0; i < count; i++) {
-			final BodyPart bodyPart = mimeMultipart.getBodyPart(i);
-			Object o = null;
-			try {
+		try {
+			String result = "";
+			final int count = mimeMultipart.getCount();
+			for (int i = 0; i < count; i++) {
+				final BodyPart bodyPart = mimeMultipart.getBodyPart(i);
+				Object o = null;
 				// this can fail for example with unsupported encoding
 				o = bodyPart.getContent();
-			} catch (Exception e) {
-				logger.error("Exception gettting message content for message " + uid, e);
-			}
-			if (null != o) {
-				if (bodyPart.getContent() instanceof MimeMultipart) {
-					result = result + getTextFromMimeMultipart((MimeMultipart) bodyPart.getContent());
-				} else {
-					result = result + "\n" + bodyPart.getContent();
+				if (null != o) {
+					if (bodyPart.getContent() instanceof MimeMultipart) {
+						result = result + getTextFromMimeMultipart((MimeMultipart) bodyPart.getContent());
+					} else {
+						result = result + "\n" + bodyPart.getContent();
+					}
 				}
 			}
+			return result;
+		} catch (Exception e) {
+			logger.error("Exception gettting message content for message " + uid, e);
+			return null;
 		}
-		return result;
 	}
 
 	public String[] getTo() {
