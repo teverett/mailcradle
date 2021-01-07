@@ -1,15 +1,15 @@
 package com.khubla.mailcradle.listener.term;
 
-import com.khubla.mailcradle.mailcradleParser;
-import com.khubla.mailcradle.domain.Term;
-import com.khubla.mailcradle.domain.term.FromTerm;
-import com.khubla.mailcradle.listener.AbstractListener;
+import com.khubla.mailcradle.*;
+import com.khubla.mailcradle.domain.*;
+import com.khubla.mailcradle.domain.term.*;
+import com.khubla.mailcradle.listener.*;
 
 public class FromTermListener extends AbstractListener {
-   public Term term;
+	public Term term;
 
-   @Override
-   public void enterFromterm(mailcradleParser.FromtermContext ctx) {
-      term = new FromTerm();
-   }
+	@Override
+	public void enterFromterm(mailcradleParser.FromtermContext ctx) {
+		term = new FromTerm();
+	}
 }

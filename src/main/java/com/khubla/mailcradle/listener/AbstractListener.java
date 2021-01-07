@@ -1,6 +1,6 @@
 package com.khubla.mailcradle.listener;
 
-import com.khubla.mailcradle.mailcradleBaseListener;
+import com.khubla.mailcradle.*;
 
 public abstract class AbstractListener extends mailcradleBaseListener {
 }

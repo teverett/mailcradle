@@ -1,27 +1,26 @@
 package com.khubla.mailcradle.domain.expression;
 
-import java.io.IOException;
+import java.io.*;
 
-import javax.mail.MessagingException;
+import javax.mail.*;
 
-import com.khubla.mailcradle.domain.Expression;
-import com.khubla.mailcradle.domain.Mailcradle;
-import com.khubla.mailcradle.imap.IMAPMessageData;
+import com.khubla.mailcradle.domain.*;
+import com.khubla.mailcradle.imap.*;
 
 public class ParentheticalExpression extends Expression {
-   private final Expression expression;
+	private final Expression expression;
 
-   public ParentheticalExpression(Expression expression) {
-      super();
-      this.expression = expression;
-   }
+	public ParentheticalExpression(Expression expression) {
+		super();
+		this.expression = expression;
+	}
 
-   @Override
-   public boolean evaluate(IMAPMessageData messageData, Mailcradle mailsort) throws MessagingException, IOException {
-      return expression.evaluate(messageData, mailsort);
-   }
+	@Override
+	public boolean evaluate(IMAPMessageData messageData, Mailcradle mailsort) throws MessagingException, IOException {
+		return expression.evaluate(messageData, mailsort);
+	}
 
-   public Expression getExpression() {
-      return expression;
-   }
+	public Expression getExpression() {
+		return expression;
+	}
 }

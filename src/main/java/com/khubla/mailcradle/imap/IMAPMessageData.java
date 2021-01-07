@@ -226,7 +226,7 @@ public class IMAPMessageData {
 				}
 			}
 			return result;
-		} catch (Exception e) {
+		} catch (final Exception e) {
 			logger.error("Exception gettting message content for message " + uid, e);
 			return null;
 		}

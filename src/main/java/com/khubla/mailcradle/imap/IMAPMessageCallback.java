@@ -1,9 +1,9 @@
 package com.khubla.mailcradle.imap;
 
-import java.io.IOException;
+import java.io.*;
 
-import javax.mail.MessagingException;
+import javax.mail.*;
 
 public interface IMAPMessageCallback {
-   void message(IMAPMessageData imapMessageData) throws MessagingException, IOException;
+	void message(IMAPMessageData imapMessageData) throws MessagingException, IOException;
 }

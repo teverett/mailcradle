@@ -1,28 +1,26 @@
 package com.khubla.mailcradle.domain.expression;
 
-import java.io.IOException;
+import java.io.*;
 
-import javax.mail.MessagingException;
+import javax.mail.*;
 
-import com.khubla.mailcradle.domain.Condition;
-import com.khubla.mailcradle.domain.Expression;
-import com.khubla.mailcradle.domain.Mailcradle;
-import com.khubla.mailcradle.imap.IMAPMessageData;
+import com.khubla.mailcradle.domain.*;
+import com.khubla.mailcradle.imap.*;
 
 public class ConditionExpression extends Expression {
-   private final Condition condition;
+	private final Condition condition;
 
-   public ConditionExpression(Condition condition) {
-      super();
-      this.condition = condition;
-   }
+	public ConditionExpression(Condition condition) {
+		super();
+		this.condition = condition;
+	}
 
-   @Override
-   public boolean evaluate(IMAPMessageData messageData, Mailcradle mailsort) throws MessagingException, IOException {
-      return condition.evaluate(messageData, mailsort);
-   }
+	@Override
+	public boolean evaluate(IMAPMessageData messageData, Mailcradle mailsort) throws MessagingException, IOException {
+		return condition.evaluate(messageData, mailsort);
+	}
 
-   public Condition getCondition() {
-      return condition;
-   }
+	public Condition getCondition() {
+		return condition;
+	}
 }

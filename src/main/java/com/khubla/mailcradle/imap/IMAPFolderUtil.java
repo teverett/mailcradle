@@ -290,24 +290,29 @@ public class IMAPFolderUtil implements Closeable {
 	 * @throws MessagingException
 	 */
 	private IMAPFolder getFolder() throws MessagingException {
-		if (null == thisFolder) {
-			final IMAPFolder root = getRootFolder();
-			thisFolder = (IMAPFolder) root.getFolder(folderName);
-		}
-		if (thisFolder.exists()) {
-			if (false == thisFolder.isOpen()) {
-				if ((thisFolder.getType() & Folder.HOLDS_MESSAGES) > 0) {
-					thisFolder.open(Folder.READ_WRITE);
-				} else {
-					/*
-					 * folder doesnt hold messages
-					 */
-					return null;
-				}
+		try {
+			if (null == thisFolder) {
+				final IMAPFolder root = getRootFolder();
+				thisFolder = (IMAPFolder) root.getFolder(folderName);
 			}
-			return thisFolder;
-		} else {
-			thisFolder = null;
+			if (thisFolder.exists()) {
+				if (false == thisFolder.isOpen()) {
+					if ((thisFolder.getType() & Folder.HOLDS_MESSAGES) > 0) {
+						thisFolder.open(Folder.READ_WRITE);
+					} else {
+						/*
+						 * folder doesnt hold messages
+						 */
+						return null;
+					}
+				}
+				return thisFolder;
+			} else {
+				thisFolder = null;
+				return null;
+			}
+		} catch (final Exception e) {
+			logger.error("Unable to get folder " + folderName, e);
 			return null;
 		}
 	}
@@ -331,7 +336,7 @@ public class IMAPFolderUtil implements Closeable {
 		if (null != imapMessage) {
 			try {
 				return imapMessage.getContent();
-			} catch (Exception e) {
+			} catch (final Exception e) {
 				logger.error("Exception gettting message content for message " + uid, e);
 			}
 		}

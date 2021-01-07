@@ -1,11 +1,11 @@
 package com.khubla.mailcradle.domain;
 
-import java.io.IOException;
+import java.io.*;
 
-import javax.mail.MessagingException;
+import javax.mail.*;
 
-import com.khubla.mailcradle.imap.IMAPMessageData;
+import com.khubla.mailcradle.imap.*;
 
 public abstract class Term {
-   abstract public String[] resolve(IMAPMessageData messageData) throws MessagingException, IOException;
+	abstract public String[] resolve(IMAPMessageData messageData) throws MessagingException, IOException;
 }
