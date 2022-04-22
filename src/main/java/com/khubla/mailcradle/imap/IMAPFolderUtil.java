@@ -458,8 +458,10 @@ public class IMAPFolderUtil implements Closeable {
 			/*
 			 * Shutdown keep alive thread
 			 */
-			if (keepAliveThread.isAlive()) {
-				keepAliveThread.interrupt();
+			if (null != keepAliveThread) {
+				if (keepAliveThread.isAlive()) {
+					keepAliveThread.interrupt();
+				}
 			}
 		}
 	}
