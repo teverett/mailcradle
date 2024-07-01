@@ -13,7 +13,7 @@
 		<junit.version>5.9.3</junit.version>
 		<antlr.version>4.13.0</antlr.version>
 		<javamail.version>1.6.2</javamail.version>
-		<commons-cli.version>1.5.0</commons-cli.version>
+		<commons-cli.version>1.8.0</commons-cli.version>
 		<commons-configuration2.version>2.9.0</commons-configuration2.version>
 		<commons-beanutils.version>1.9.4</commons-beanutils.version>
 		<commons-io.version>2.11.0</commons-io.version>
