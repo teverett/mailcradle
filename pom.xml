@@ -11,13 +11,13 @@
 		<required-maven-version>3.3.1</required-maven-version>
 		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
 		<junit.version>5.9.3</junit.version>
-		<antlr.version>4.13.0</antlr.version>
+		<antlr.version>4.13.2</antlr.version>
 		<javamail.version>1.6.2</javamail.version>
 		<commons-cli.version>1.9.0</commons-cli.version>
 		<commons-configuration2.version>2.9.0</commons-configuration2.version>
 		<commons-beanutils.version>1.9.4</commons-beanutils.version>
 		<commons-io.version>2.17.0</commons-io.version>
-		<log4j.version>2.20.0</log4j.version>
+		<log4j.version>2.24.1</log4j.version>
 	</properties>
 	<developers>
 		<developer>
@@ -112,7 +112,7 @@
 			<plugin>
 				<groupId>org.apache.maven.plugins</groupId>
 				<artifactId>maven-compiler-plugin</artifactId>
-				<version>3.11.0</version>
+				<version>3.13.0</version>
 				<configuration>
 					<source>${target.jvm}</source>
 					<target>${target.jvm}</target>
@@ -141,7 +141,7 @@
 			<plugin>
 				<groupId>org.apache.maven.plugins</groupId>
 				<artifactId>maven-enforcer-plugin</artifactId>
-				<version>3.3.0</version>
+				<version>3.5.0</version>
 				<executions>
 					<execution>
 						<id>enforce-maven</id>
@@ -179,7 +179,7 @@
 					<plugin>
 						<groupId>org.apache.maven.plugins</groupId>
 						<artifactId>maven-source-plugin</artifactId>
-						<version>3.3.0</version>
+						<version>3.3.1</version>
 						<executions>
 							<execution>
 								<id>attach-sources</id>

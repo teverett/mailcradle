@@ -37,6 +37,8 @@ public class ListCondition extends Condition {
 						for (final String str : strs) {
 							if (null != str) {
 								if (stringList.contains(str.toLowerCase())) {
+									System.out.print("Term 'list contains' Condition  '"+stringList.getName()+"' matches '"+str+"'");
+									logger.info("Term 'list contains' Condition  '"+stringList.getName()+"' matches '"+str+"'");
 									return true;
 								}
 							}

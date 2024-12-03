@@ -5,7 +5,10 @@ import java.io.*;
 import javax.mail.*;
 
 import com.khubla.mailcradle.domain.*;
+import com.khubla.mailcradle.domain.action.MoveAction;
 import com.khubla.mailcradle.imap.*;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 
 public class TermCondition extends Condition {
 	/**
@@ -16,6 +19,10 @@ public class TermCondition extends Condition {
 	 * relation to use
 	 */
 	private TermRelation termRelation;
+	/**
+	 * logger
+	 */
+	private static final Logger logger = LogManager.getLogger(TermCondition.class);
 
 	@Override
 	public boolean evaluate(IMAPMessageData messageData, Mailcradle mailsort) throws MessagingException, IOException {
@@ -26,6 +33,8 @@ public class TermCondition extends Condition {
 					for (final String str : strs) {
 						if (null != str) {
 							if (value.toLowerCase().compareTo(str.toLowerCase()) == 0) {
+								System.out.print("Term 'is' Condition  '"+str+"' matches '"+value+"'");
+								logger.info("Term 'is' Condition  '"+str+"' matches '"+value+"'");
 								return true;
 							}
 						}
@@ -35,6 +44,8 @@ public class TermCondition extends Condition {
 					for (final String str : strs) {
 						if (null != str) {
 							if (value.toLowerCase().contains(str.toLowerCase())) {
+								System.out.print("Term 'contains' Condition  '"+str+"' matches '"+value+"'");
+								logger.info("Term 'is' Condition  '"+str+"' matches '"+value+"'");
 								return true;
 							}
 						}
