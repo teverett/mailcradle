@@ -153,6 +153,9 @@
 								<requireMavenVersion>
 									<version>${required-maven-version}</version>
 								</requireMavenVersion>
+								<requireJavaVersion>
+									<version>${target.jvm}</version>
+								</requireJavaVersion>
 							</rules>
 						</configuration>
 					</execution>
