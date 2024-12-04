@@ -7,6 +7,8 @@ import org.apache.logging.log4j.*;
 import com.khubla.mailcradle.domain.*;
 import com.khubla.mailcradle.imap.*;
 
+import java.util.List;
+
 public class ForwardAction extends Action {
 	/**
 	 * logger
@@ -18,7 +20,7 @@ public class ForwardAction extends Action {
 	private String address;
 
 	@Override
-	public boolean execute(IMAPMessageData messageData, Mailcradle mailsort) throws MessagingException {
+	public boolean execute(IMAPMessageData messageData, Mailcradle mailsort, List<String> expressionSteps) throws MessagingException {
 		System.out.println("Forwarding message " + messageData.getId() + " in folder " + messageData.getFolderName() + " to address: " + address);
 		logger.info("Forwarding message " + messageData.getId() + " in folder " + messageData.getFolderName() + " to address: " + address);
 		FolderFactory.getInstance().getFolder(messageData.getFolderName()).forwardMessage(messageData.getUid(), address);

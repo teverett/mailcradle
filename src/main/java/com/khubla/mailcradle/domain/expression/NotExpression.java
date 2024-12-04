@@ -1,26 +1,27 @@
 package com.khubla.mailcradle.domain.expression;
 
-import java.io.*;
+import com.khubla.mailcradle.domain.Expression;
+import com.khubla.mailcradle.domain.Mailcradle;
+import com.khubla.mailcradle.imap.IMAPMessageData;
 
-import javax.mail.*;
-
-import com.khubla.mailcradle.domain.*;
-import com.khubla.mailcradle.imap.*;
+import javax.mail.MessagingException;
+import java.io.IOException;
+import java.util.List;
 
 public class NotExpression extends Expression {
-	private final Expression expression;
+   private final Expression expression;
 
-	public NotExpression(Expression expression) {
-		super();
-		this.expression = expression;
-	}
+   public NotExpression(Expression expression) {
+      super();
+      this.expression = expression;
+   }
 
-	@Override
-	public boolean evaluate(IMAPMessageData messageData, Mailcradle mailsort) throws MessagingException, IOException {
-		return !(expression.evaluate(messageData, mailsort));
-	}
+   @Override
+   public boolean evaluate(IMAPMessageData messageData, Mailcradle mailsort, List<String> expressionSteps) throws MessagingException, IOException {
+      return !(expression.evaluate(messageData, mailsort, expressionSteps));
+   }
 
-	public Expression getExpression() {
-		return expression;
-	}
+   public Expression getExpression() {
+      return expression;
+   }
 }

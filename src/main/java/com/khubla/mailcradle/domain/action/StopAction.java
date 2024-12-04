@@ -7,6 +7,8 @@ import org.apache.logging.log4j.*;
 import com.khubla.mailcradle.domain.*;
 import com.khubla.mailcradle.imap.*;
 
+import java.util.List;
+
 public class StopAction extends Action {
 	/**
 	 * logger
@@ -14,7 +16,7 @@ public class StopAction extends Action {
 	private static final Logger logger = LogManager.getLogger(StopAction.class);
 
 	@Override
-	public boolean execute(IMAPMessageData messageData, Mailcradle mailsort) throws MessagingException {
+	public boolean execute(IMAPMessageData messageData, Mailcradle mailsort, List<String> expressionSteps) throws MessagingException {
 		// System.out.println("Stopping rule processing for message " + messageData.getId() + " in
 		// folder " + messageData.getFolderName());
 		logger.info("Stopping rule processing for message " + messageData.getId() + " in folder " + messageData.getFolderName());

@@ -7,6 +7,8 @@ import org.apache.logging.log4j.*;
 import com.khubla.mailcradle.domain.*;
 import com.khubla.mailcradle.imap.*;
 
+import java.util.List;
+
 public class ReplyAction extends Action {
 	/**
 	 * logger
@@ -18,7 +20,7 @@ public class ReplyAction extends Action {
 	private String reply;
 
 	@Override
-	public boolean execute(IMAPMessageData messageData, Mailcradle mailsort) throws MessagingException {
+	public boolean execute(IMAPMessageData messageData, Mailcradle mailsort, List<String> expressionSteps) throws MessagingException {
 		System.out.println("Replying to message " + messageData.getId() + " in folder " + messageData.getFolderName() + " with: " + reply);
 		logger.info("Replying to message " + messageData.getId() + " in folder " + messageData.getFolderName() + " with: " + reply);
 		FolderFactory.getInstance().getFolder(messageData.getFolderName()).replyMessage(messageData.getUid(), reply);
