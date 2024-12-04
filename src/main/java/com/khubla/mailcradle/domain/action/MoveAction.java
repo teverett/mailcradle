@@ -23,12 +23,8 @@ public class MoveAction extends Action {
    @Override
    public boolean execute(IMAPMessageData messageData, Mailcradle mailsort, List<String> expressionSteps) throws MessagingException {
       if (targetFolderName.trim().compareTo(messageData.getFolderName().trim()) != 0) {
-         if ((null != expressionSteps) && (!expressionSteps.isEmpty())) {
-            for (String expressionStep : expressionSteps) {
-               System.out.println("/t " + expressionStep);
-            }
-         }
-         System.out.println("Moving message " + messageData.getId() + " in folder " + messageData.getFolderName() + " to folder: " + targetFolderName);
+         dumpExpressionSteps(expressionSteps);
+         System.out.println("\tMoving message " + messageData.getId() + " in folder " + messageData.getFolderName() + " to folder: " + targetFolderName);
          logger.info("Moving message " + messageData.getId() + " in folder " + messageData.getFolderName() + " to folder: " + targetFolderName);
          FolderFactory.getInstance().getFolder(messageData.getFolderName()).moveMessage(messageData.getUid(), targetFolderName);
       } else {

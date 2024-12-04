@@ -17,9 +17,10 @@ public class StopAction extends Action {
 
 	@Override
 	public boolean execute(IMAPMessageData messageData, Mailcradle mailsort, List<String> expressionSteps) throws MessagingException {
+		dumpExpressionSteps(expressionSteps);
 		// System.out.println("Stopping rule processing for message " + messageData.getId() + " in
 		// folder " + messageData.getFolderName());
-		logger.info("Stopping rule processing for message " + messageData.getId() + " in folder " + messageData.getFolderName());
+		logger.info("\tStopping rule processing for message " + messageData.getId() + " in folder " + messageData.getFolderName());
 		return false;
 	}
 }

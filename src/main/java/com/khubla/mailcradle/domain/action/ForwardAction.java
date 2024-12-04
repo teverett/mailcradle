@@ -21,7 +21,8 @@ public class ForwardAction extends Action {
 
 	@Override
 	public boolean execute(IMAPMessageData messageData, Mailcradle mailsort, List<String> expressionSteps) throws MessagingException {
-		System.out.println("Forwarding message " + messageData.getId() + " in folder " + messageData.getFolderName() + " to address: " + address);
+		dumpExpressionSteps(expressionSteps);
+		System.out.println("\tForwarding message " + messageData.getId() + " in folder " + messageData.getFolderName() + " to address: " + address);
 		logger.info("Forwarding message " + messageData.getId() + " in folder " + messageData.getFolderName() + " to address: " + address);
 		FolderFactory.getInstance().getFolder(messageData.getFolderName()).forwardMessage(messageData.getUid(), address);
 		return true;

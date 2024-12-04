@@ -14,4 +14,12 @@ public abstract class Action {
     * @throws MessagingException oops
     */
    abstract public boolean execute(IMAPMessageData messageData, Mailcradle mailsort, List<String> expressionSteps) throws MessagingException;
+
+   protected void dumpExpressionSteps(List<String> expressionSteps) {
+      if ((null != expressionSteps) && (!expressionSteps.isEmpty())) {
+         for (String expressionStep : expressionSteps) {
+            System.out.println(expressionStep);
+         }
+      }
+   }
 }

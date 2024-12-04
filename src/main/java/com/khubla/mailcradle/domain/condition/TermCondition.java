@@ -34,8 +34,8 @@ public class TermCondition extends Condition {
                for (final String str : strs) {
                   if (null != str) {
                      if (value.toLowerCase().compareTo(str.toLowerCase()) == 0) {
-                        expressionSteps.add("Term 'is' Condition  '" + str + "' matches '" + value + "'");
-                        logger.info("Term 'is' Condition  '" + str + "' matches '" + value + "'");
+                        expressionSteps.add("Term 'is' Condition '" + str + "' matches '" + value + "'");
+                        logger.info("Term 'is' Condition '" + str + "' matches '" + value + "'");
                         return true;
                      }
                   }
@@ -45,8 +45,8 @@ public class TermCondition extends Condition {
                for (final String str : strs) {
                   if (null != str) {
                      if (value.toLowerCase().contains(str.toLowerCase())) {
-                        expressionSteps.add("Term 'contains' Condition  '" + str + "' matches '" + value + "'");
-                        logger.info("Term 'is' Condition  '" + str + "' matches '" + value + "'");
+                        expressionSteps.add("Term 'contains' Condition '" + str + "' matches '" + value + "'");
+                        logger.info("Term 'is' Condition '" + str + "' matches '" + value + "'");
                         return true;
                      }
                   }
