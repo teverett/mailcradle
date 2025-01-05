@@ -17,7 +17,7 @@
 		<commons-configuration2.version>2.9.0</commons-configuration2.version>
 		<commons-beanutils.version>1.9.4</commons-beanutils.version>
 		<commons-io.version>2.18.0</commons-io.version>
-		<log4j.version>2.24.2</log4j.version>
+		<log4j.version>2.24.3</log4j.version>
 	</properties>
 	<developers>
 		<developer>
