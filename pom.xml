@@ -15,7 +15,7 @@
 		<javamail.version>1.6.2</javamail.version>
 		<commons-cli.version>1.9.0</commons-cli.version>
 		<commons-configuration2.version>2.11.0</commons-configuration2.version>
-		<commons-beanutils.version>1.10.0</commons-beanutils.version>
+		<commons-beanutils.version>1.10.1</commons-beanutils.version>
 		<commons-io.version>2.18.0</commons-io.version>
 		<log4j.version>2.24.3</log4j.version>
 	</properties>
