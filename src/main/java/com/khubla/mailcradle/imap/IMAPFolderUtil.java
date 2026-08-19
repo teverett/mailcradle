@@ -424,6 +424,7 @@ public class IMAPFolderUtil implements Closeable {
 			 * folder
 			 */
 			imapFolder = getFolder();
+			if (null!=imapFolder){
 			/*
 			 * Spin the keepAliveThread
 			 */
@@ -433,6 +434,7 @@ public class IMAPFolderUtil implements Closeable {
 			 * listener
 			 */
 			imapFolder.addMessageCountListener(new IMAPMessageCountListener(imapFolder.getFullName(), imapMessageCallback));
+			}
 			/*
 			 * spin on idle
 			 */
