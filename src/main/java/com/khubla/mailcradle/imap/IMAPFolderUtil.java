@@ -66,7 +66,7 @@ public class IMAPFolderUtil implements Closeable {
 		/*
 		 * IMAP
 		 */
-		properties.put("mail.imap.host", MailCradleConfiguration.getInstance().getImapPort());
+		properties.put("mail.imap.host", MailCradleConfiguration.getInstance().getImapHost());
 		properties.put("mail.imap.starttls.enable", MailCradleConfiguration.getInstance().getImapTLS());
 		properties.put("mail.imap.port", MailCradleConfiguration.getInstance().getImapPort());
 		properties.put("mail.imap.auth", "true");
@@ -290,29 +290,24 @@ public class IMAPFolderUtil implements Closeable {
 	 * @throws MessagingException
 	 */
 	private IMAPFolder getFolder() throws MessagingException {
-		try {
-			if (null == thisFolder) {
-				final IMAPFolder root = getRootFolder();
-				thisFolder = (IMAPFolder) root.getFolder(folderName);
-			}
-			if (thisFolder.exists()) {
-				if (false == thisFolder.isOpen()) {
-					if ((thisFolder.getType() & Folder.HOLDS_MESSAGES) > 0) {
-						thisFolder.open(Folder.READ_WRITE);
-					} else {
-						/*
-						 * folder doesnt hold messages
-						 */
-						return null;
-					}
+		if (null == thisFolder) {
+			final IMAPFolder root = getRootFolder();
+			thisFolder = (IMAPFolder) root.getFolder(folderName);
+		}
+		if (thisFolder.exists()) {
+			if (false == thisFolder.isOpen()) {
+				if ((thisFolder.getType() & Folder.HOLDS_MESSAGES) > 0) {
+					thisFolder.open(Folder.READ_WRITE);
+				} else {
+					/*
+					 * folder doesnt hold messages
+					 */
+					return null;
 				}
-				return thisFolder;
-			} else {
-				thisFolder = null;
-				return null;
 			}
-		} catch (final Exception e) {
-			logger.error("Unable to get folder " + folderName, e);
+			return thisFolder;
+		} else {
+			thisFolder = null;
 			return null;
 		}
 	}
@@ -424,7 +419,9 @@ public class IMAPFolderUtil implements Closeable {
 			 * folder
 			 */
 			imapFolder = getFolder();
-			if (null!=imapFolder){
+			if (null == imapFolder) {
+				throw new MessagingException("Unable to idle folder '" + folderName + "': folder does not exist or does not hold messages");
+			}
 			/*
 			 * Spin the keepAliveThread
 			 */
@@ -434,7 +431,6 @@ public class IMAPFolderUtil implements Closeable {
 			 * listener
 			 */
 			imapFolder.addMessageCountListener(new IMAPMessageCountListener(imapFolder.getFullName(), imapMessageCallback));
-			}
 			/*
 			 * spin on idle
 			 */
@@ -448,6 +444,10 @@ public class IMAPFolderUtil implements Closeable {
 					 * make sure the folder is open
 					 */
 					imapFolder = getFolder();
+					if (null == imapFolder) {
+						logger.error("Unable to continue idling folder '" + folderName + "': folder does not exist or does not hold messages");
+						break;
+					}
 					/*
 					 * idle
 					 */
