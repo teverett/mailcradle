@@ -1,0 +1,143 @@
+---
+# Installs MailCradle as a FreeBSD rc.d service, started on boot and
+# stopped on shutdown. The rc.d script supports multiple concurrently
+# running instances, one per --config file, via the mailcradle_instances
+# rc.conf(5) variable.
+#
+# Usage:
+#   ansible-playbook -i inventory.ini mailcradle.yml
+#   ansible-playbook -i inventory.ini mailcradle.yml --tags uninstall
+- hosts: mailcradle
+  become: true
+  vars:
+    mailcradle_user: mailcradle
+    mailcradle_group: mailcradle
+    mailcradle_home: /home/mailcradle
+    mailcradle_install_dir: "{{ mailcradle_home }}"
+    mailcradle_jar_name: mailcradle-1.0.0-SNAPSHOT.jar
+    mailcradle_jar_src: "{{ playbook_dir }}/../target/mailcradle-1.0.0-SNAPSHOT.jar"
+    # pkg(8) package name for the JDK; bumping the major version here is a
+    # deliberate upgrade, "latest" only tracks the latest build of this major
+    mailcradle_openjdk_package: openjdk21
+    mailcradle_java_bin: "/usr/local/{{ mailcradle_openjdk_package }}/bin/java"
+    mailcradle_config_dir: /home/tom/projects/mailsortrules
+    mailcradle_rc_script: /usr/local/etc/rc.d/mailcradle
+    # one rc.d instance per entry; the config file consumed is
+    # {{ mailcradle_config_dir }}/mailcradle_<name>.properties
+    mailcradle_instances:
+      - easymail_tom
+      - easymail_tmeverett
+
+  tasks:
+    - name: ensure latest OpenJDK is installed
+      pkgng:
+        name: "{{ mailcradle_openjdk_package }}"
+        state: latest
+        update_cache: true
+      tags: [install]
+
+    - name: ensure mailcradle group exists
+      group:
+        name: "{{ mailcradle_group }}"
+        system: true
+        state: present
+      tags: [install]
+
+    - name: ensure mailcradle service account exists
+      user:
+        name: "{{ mailcradle_user }}"
+        group: "{{ mailcradle_group }}"
+        system: true
+        create_home: true
+        home: "{{ mailcradle_home }}"
+        shell: /usr/sbin/nologin
+        state: present
+      tags: [install]
+
+    - name: ensure mailcradle install directory (service account home) exists
+      file:
+        path: "{{ mailcradle_install_dir }}"
+        state: directory
+        owner: "{{ mailcradle_user }}"
+        group: "{{ mailcradle_group }}"
+        mode: "0755"
+      tags: [install]
+
+    - name: copy mailcradle jar
+      copy:
+        src: "{{ mailcradle_jar_src }}"
+        dest: "{{ mailcradle_install_dir }}/{{ mailcradle_jar_name }}"
+        owner: "{{ mailcradle_user }}"
+        group: "{{ mailcradle_group }}"
+        mode: "0644"
+      tags: [install]
+      notify: restart mailcradle
+
+    - name: install mailcradle rc.d script
+      template:
+        src: templates/mailcradle.rc.j2
+        dest: "{{ mailcradle_rc_script }}"
+        owner: root
+        group: wheel
+        mode: "0555"
+      tags: [install]
+      notify: restart mailcradle
+
+    - name: enable mailcradle and configure instances in rc.conf
+      blockinfile:
+        path: /etc/rc.conf
+        marker: "# {mark} ANSIBLE MANAGED BLOCK (mailcradle)"
+        block: |
+          mailcradle_enable="YES"
+          mailcradle_instances="{{ mailcradle_instances | join(' ') }}"
+          mailcradle_user="{{ mailcradle_user }}"
+          mailcradle_group="{{ mailcradle_group }}"
+      tags: [install]
+      notify: restart mailcradle
+
+    - name: flush handlers so rc.conf/jar/script are in place before starting
+      meta: flush_handlers
+
+    - name: start mailcradle
+      service:
+        name: mailcradle
+        state: started
+      tags: [install]
+
+    - name: stop mailcradle
+      service:
+        name: mailcradle
+        state: stopped
+      tags: [uninstall, never]
+
+    - name: remove mailcradle rc.conf block
+      blockinfile:
+        path: /etc/rc.conf
+        marker: "# {mark} ANSIBLE MANAGED BLOCK (mailcradle)"
+        state: absent
+      tags: [uninstall, never]
+
+    - name: remove mailcradle rc.d script
+      file:
+        path: "{{ mailcradle_rc_script }}"
+        state: absent
+      tags: [uninstall, never]
+
+    - name: remove mailcradle service account
+      user:
+        name: "{{ mailcradle_user }}"
+        state: absent
+        remove: true
+      tags: [uninstall, never]
+
+    - name: remove mailcradle group
+      group:
+        name: "{{ mailcradle_group }}"
+        state: absent
+      tags: [uninstall, never]
+
+  handlers:
+    - name: restart mailcradle
+      service:
+        name: mailcradle
+        state: restarted

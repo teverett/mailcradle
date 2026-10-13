@@ -1,0 +1,93 @@
+#!/bin/sh
+#
+# PROVIDE: mailcradle
+# REQUIRE: NETWORKING DAEMON
+# KEYWORD: shutdown
+#
+# Add the following to /etc/rc.conf to enable mailcradle:
+#
+# mailcradle_enable="YES"
+# mailcradle_instances="easymail_tom easymail_tmeverett"
+#
+# One instance is started per name in mailcradle_instances, running
+# {{ mailcradle_config_dir }}/mailcradle_<instance>.properties
+
+. /etc/rc.subr
+
+name="mailcradle"
+rcvar="mailcradle_enable"
+
+load_rc_config "${name}"
+
+: ${mailcradle_enable:="NO"}
+: ${mailcradle_instances:=""}
+: ${mailcradle_user:="{{ mailcradle_user }}"}
+: ${mailcradle_group:="{{ mailcradle_group }}"}
+: ${mailcradle_java:="{{ mailcradle_java_bin }}"}
+: ${mailcradle_jar:="{{ mailcradle_install_dir }}/{{ mailcradle_jar_name }}"}
+: ${mailcradle_config_dir:="{{ mailcradle_config_dir }}"}
+: ${mailcradle_pidfile_dir:="/var/run/mailcradle"}
+
+start_cmd="mailcradle_start"
+stop_cmd="mailcradle_stop"
+status_cmd="mailcradle_status"
+restart_cmd="mailcradle_restart"
+extra_commands="status restart"
+
+mailcradle_running()
+{
+	# $1 = instance
+	pidfile="${mailcradle_pidfile_dir}/$1.pid"
+	[ -f "${pidfile}" ] && kill -0 "$(cat "${pidfile}")" 2>/dev/null
+}
+
+mailcradle_start()
+{
+	install -d -o "${mailcradle_user}" -g "${mailcradle_group}" -m 0755 "${mailcradle_pidfile_dir}"
+	for instance in ${mailcradle_instances}; do
+		pidfile="${mailcradle_pidfile_dir}/${instance}.pid"
+		if mailcradle_running "${instance}"; then
+			echo "mailcradle (${instance}) already running as pid $(cat "${pidfile}")."
+			continue
+		fi
+		rm -f "${pidfile}"
+		echo "Starting mailcradle (${instance})."
+		/usr/sbin/daemon -u "${mailcradle_user}" -p "${pidfile}" -f \
+			"${mailcradle_java}" -jar "${mailcradle_jar}" \
+			--config="${mailcradle_config_dir}/mailcradle_${instance}.properties"
+	done
+}
+
+mailcradle_stop()
+{
+	for instance in ${mailcradle_instances}; do
+		pidfile="${mailcradle_pidfile_dir}/${instance}.pid"
+		if mailcradle_running "${instance}"; then
+			echo "Stopping mailcradle (${instance})."
+			kill "$(cat "${pidfile}")"
+		else
+			echo "mailcradle (${instance}) is not running."
+		fi
+		rm -f "${pidfile}"
+	done
+}
+
+mailcradle_status()
+{
+	for instance in ${mailcradle_instances}; do
+		pidfile="${mailcradle_pidfile_dir}/${instance}.pid"
+		if mailcradle_running "${instance}"; then
+			echo "mailcradle (${instance}) is running as pid $(cat "${pidfile}")."
+		else
+			echo "mailcradle (${instance}) is not running."
+		fi
+	done
+}
+
+mailcradle_restart()
+{
+	mailcradle_stop
+	mailcradle_start
+}
+
+run_rc_command "$1"
