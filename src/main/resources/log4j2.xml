@@ -8,7 +8,7 @@
 		<Console name="console" target="SYSTEM_OUT">
 			<PatternLayout pattern="${pattern}" />
 		</Console>
-		<RollingFile name="fileLogger" fileName="${filename}.log" filePattern="${filename}.%i.log.gz">
+		<RollingFile name="fileLogger" fileName="${sys:user.home}/${filename}.log" filePattern="${sys:user.home}/${filename}.%i.log.gz">
 			<PatternLayout>
 				<pattern>${pattern}</pattern>
 			</PatternLayout>
