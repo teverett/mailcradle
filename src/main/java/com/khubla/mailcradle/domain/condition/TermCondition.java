@@ -44,7 +44,7 @@ public class TermCondition extends Condition {
             case contains:
                for (final String str : strs) {
                   if (null != str) {
-                     if (value.toLowerCase().contains(str.toLowerCase())) {
+                     if (str.toLowerCase().contains(value.toLowerCase())) {
                         expressionSteps.add("Term 'contains' Condition '" + str + "' matches '" + value + "'");
                         logger.info("Term 'is' Condition '" + str + "' matches '" + value + "'");
                         return true;
